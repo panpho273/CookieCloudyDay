@@ -1,31 +1,67 @@
 import os
+import sys
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
-api_key = os.getenv("GEMINI_API_KEY")
+api_key = os.getenv("GOOGLE_API_KEY")
 
 if not api_key:
-    print("ไม่พบ GEMINI_API_KEY กรุณาตรวจสอบไฟล์ .env")
-    exit()
+    print("ไม่พบ GOOGLE_API_KEY กรุณาตรวจสอบไฟล์ .env")
+    sys.exit()
 
-genai.configure(api_key=api_key)
+if len(sys.argv) < 3:
+    print('วิธีใช้: python caption.py "ชื่อเมนู" "ราคา"')
+    print('ตัวอย่าง: python caption.py "คุกกี้ช็อกโกแลตชิพ" "45"')
+    sys.exit()
 
-mmodel = genai.GenerativeModel("gemini-2.5-flash")
+menu_name = sys.argv[1]
+price = sys.argv[2]
 
-product_name = input("ใส่ชื่อสินค้า/รสชาติคุกกี้: ")
+client = genai.Client(api_key=api_key)
 
 prompt = f"""
-ช่วยเขียนแคปชันขายคุกกี้สำหรับร้าน CookieCloudyDay
-สินค้า: {product_name}
+คุณคือ AI Marketing Assistant ของร้าน CookieCloudyDay
 
-ขอแคปชันภาษาไทย 3 แบบ
-สไตล์น่ารัก อบอุ่น เหมาะกับการโพสต์ Instagram
-ใส่อีโมจิพอดี ๆ และมี hashtag ท้ายแคปชัน
+คอนเซปต์ร้าน:
+CookieCloudyDay เป็นร้านคุกกี้โฮมเมดสไตล์น่ารัก ละมุน อบอุ่น
+คุกกี้ของร้านพกง่าย กินได้ทุกเวลา เหมาะกับวันเรียนหนัก วันทำงานเหนื่อย
+หรือวันที่อยากมีของหวานติดกระเป๋าไว้เติมความสุขระหว่างวัน
+
+ข้อมูลสินค้า:
+ชื่อเมนู: {menu_name}
+ราคา: {price} บาท
+
+ช่วยเขียนแคปชันภาษาไทย 3 แบบสำหรับโพสต์ขายคุกกี้
+
+รูปแบบ:
+1. cute = น่ารัก สดใส
+2. minimal = สั้น เรียบง่าย ดูละมุน
+3. gen-z = วัยรุ่น สนุก ๆ น่าแชร์
+
+เงื่อนไข:
+- ต้องมีชื่อเมนูในทุกแคปชัน
+- แต่ละแคปชันต้องสั้น ไม่เกิน 1 ประโยค
+- แต่ละแคปชันไม่เกิน 12 คำ
+- ไม่ต้องใส่รายละเอียดเยอะ
+- ไม่จำเป็นต้องใส่ราคาในทุกแคปชัน
+- ถ้าจะใส่ราคา ให้ใส่แบบธรรมชาติ
+- เข้ากับแบรนด์ CookieCloudyDay
+- ใส่อีโมจิได้พอดี ๆ
+- ตอบกลับเป็น JSON เท่านั้น ห้ามอธิบายเพิ่ม
+
+รูปแบบคำตอบ:
+{{
+  "cute": "...",
+  "minimal": "...",
+  "gen-z": "..."
+}}
 """
 
-response = model.generate_content(prompt)
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents=prompt
+)
 
-print("\n=== Caption ที่ AI สร้างให้ ===\n")
 print(response.text)
