@@ -13,7 +13,7 @@ def get_sheet():
     """รองรับทั้งโหมดไฟล์ local และโหมด JSON string สำหรับ GitHub Actions"""
     json_str = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
     file_path = os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE")
-    sheet_id = os.getenv("GOOGLE_SHEETS_ID")
+    sheet_id = os.getenv("GOOGLE_SHEETS_ID", "").strip()
 
     if json_str:
         info = json.loads(json_str)
