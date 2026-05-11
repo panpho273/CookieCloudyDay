@@ -3,3 +3,6 @@ python-dotenv
 gspread
 google-auth
 requests
+streamlit
+sentence-transformers
+faiss-cpu
