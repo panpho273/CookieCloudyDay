@@ -1,3 +1,4 @@
+# app.py
 import os
 
 import streamlit as st
@@ -8,13 +9,43 @@ from rag_engine import RAGEngine
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 MODEL = "gemini-2.5-flash"
+KB_PATH = "knowledge/cookiecloudyday_kb.txt"
+
+api_key = os.getenv("GOOGLE_API_KEY")
+client = genai.Client(api_key=api_key) if api_key else None
 
 
 @st.cache_resource
 def load_rag():
-    return RAGEngine("knowledge/cookiecloudyday_kb.txt")
+    return RAGEngine(KB_PATH)
+
+
+def build_prompt(user_question: str, context: str) -> str:
+    return f"""คุณคือ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay
+หน้าที่ของคุณคือช่วยตอบคำถามลูกค้าเกี่ยวกับเมนู ราคา เวลาเปิดร้าน การจัดส่ง และช่องทางสั่งซื้อ
+
+ให้ตอบโดยอ้างอิงจากข้อมูลร้านด้านล่างเป็นหลัก
+ถ้าลูกค้าถามกว้าง ๆ เช่น "ขอเมนูหน่อย", "มีอะไรขายบ้าง", "แนะนำเมนูหน่อย"
+ให้สรุปรายการเมนูหรือแนะนำเมนูจากข้อมูลที่มีได้
+ถ้าลูกค้าถามเรื่องเมนู ให้ตอบเป็นรายการที่อ่านง่าย ไม่ต้องยาวเกินไป
+ถ้าลูกค้าถามเรื่องราคา ให้บอกราคาตามข้อมูลที่มี
+ถ้าลูกค้าถามเรื่องสุขภาพ แพ้อาหาร หรือส่วนผสมที่ไม่มีในข้อมูล ให้บอกว่าไม่ทราบและแนะนำให้ติดต่อร้านโดยตรง
+ถ้าไม่พบข้อมูลจริง ๆ ให้บอกว่าไม่ทราบ อย่าแต่งข้อมูลเอง
+
+ข้อมูลร้าน:
+{context}
+
+คำถาม: {user_question}
+"""
+
+
+def fallback_answer(context: str) -> str:
+    return (
+        "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว\n\n"
+        "แต่จากข้อมูลร้านที่ค้นเจอ มีข้อมูลที่เกี่ยวข้องดังนี้:\n\n"
+        f"{context}"
+    )
 
 
 rag = load_rag()
@@ -29,45 +60,38 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-if prompt := st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย..."):
+prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")
+
+if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("user"):
         st.write(prompt)
 
-    # RAG: Search
-    context_chunks = rag.search(prompt, top_k=3)
+    # เพิ่ม top_k จาก 3 เป็น 5 เพื่อให้ดึงข้อมูลได้กว้างขึ้น
+    context_chunks = rag.search(prompt, top_k=5)
     context = "\n---\n".join(context_chunks)
 
-    # Generate
-    full_prompt = f"""คุณคือ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay
-ตอบเฉพาะจากข้อมูลร้านด้านล่างเท่านั้น
-ถ้าไม่พบข้อมูล ให้บอกว่าไม่ทราบ อย่าแต่งข้อมูลเอง
+    full_prompt = build_prompt(prompt, context)
 
-ข้อมูลร้าน:
-{context}
-
-คำถาม: {prompt}
-"""
-
-    try:
-        response = client.models.generate_content(
-            model=MODEL,
-            contents=full_prompt,
-        )
-
-        answer = response.text
-
-    except Exception:
+    if client is None:
         answer = (
-            "ขออภัย ตอนนี้ระบบ AI มีผู้ใช้งานเยอะหรือโมเดลตอบไม่ทันชั่วคราวค่ะ\n\n"
-            "จากข้อมูลร้านที่ค้นเจอเบื้องต้น:\n\n"
+            "ขออภัยค่ะ ระบบยังไม่ได้ตั้งค่า GOOGLE_API_KEY\n\n"
+            "ข้อมูลที่ค้นเจอจาก knowledge base:\n\n"
             f"{context}"
         )
+    else:
+        try:
+            response = client.models.generate_content(
+                model=MODEL,
+                contents=full_prompt,
+            )
+            answer = response.text.strip() if response.text else fallback_answer(context)
 
-    st.session_state.messages.append(
-        {"role": "assistant", "content": answer}
-    )
+        except Exception:
+            answer = fallback_answer(context)
+
+    st.session_state.messages.append({"role": "assistant", "content": answer})
 
     with st.chat_message("assistant"):
         st.write(answer)
