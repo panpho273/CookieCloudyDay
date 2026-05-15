@@ -9,6 +9,60 @@ from rag_engine import RAGEngine
 
 load_dotenv()
 
+# ===== Streamlit Page Config =====
+st.set_page_config(
+    page_title="Demi - CookieCloudyDay",
+    page_icon="☁️",
+    layout="centered",
+)
+
+# ===== Custom CSS =====
+st.markdown(
+    """
+    <style>
+    .block-container {
+        max-width: 900px;
+        padding-top: 4rem;
+        padding-bottom: 6rem;
+    }
+
+    h1 {
+        font-size: 44px !important;
+        line-height: 1.15 !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.5px;
+    }
+
+    [data-testid="stCaptionContainer"] {
+        color: #9ca3af !important;
+        font-size: 15px !important;
+        margin-bottom: 22px !important;
+    }
+
+    [data-testid="stChatMessage"] {
+        border-radius: 16px;
+        padding: 8px 12px;
+        margin-bottom: 18px;
+    }
+
+    [data-testid="stChatInput"] {
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    header[data-testid="stHeader"] {
+        background: transparent;
+    }
+
+    #MainMenu, footer {
+        visibility: hidden;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ===== Config =====
 MODEL = "gemini-2.5-flash"
 KB_PATH = "knowledge/cookiecloudyday_kb.txt"
 
@@ -28,9 +82,11 @@ def build_prompt(user_question: str, context: str) -> str:
 ให้ตอบโดยอ้างอิงจากข้อมูลร้านด้านล่างเป็นหลัก
 ถ้าลูกค้าถามกว้าง ๆ เช่น "ขอเมนูหน่อย", "มีอะไรขายบ้าง", "แนะนำเมนูหน่อย"
 ให้สรุปรายการเมนูหรือแนะนำเมนูจากข้อมูลที่มีได้
+
 ถ้าลูกค้าถามเรื่องเมนู ให้ตอบเป็นรายการที่อ่านง่าย ไม่ต้องยาวเกินไป
 ถ้าลูกค้าถามเรื่องราคา ให้บอกราคาตามข้อมูลที่มี
-ถ้าลูกค้าถามเรื่องสุขภาพ แพ้อาหาร หรือส่วนผสมที่ไม่มีในข้อมูล ให้บอกว่าไม่ทราบและแนะนำให้ติดต่อร้านโดยตรง
+ถ้าลูกค้าถามเรื่องสุขภาพ แพ้อาหาร ส่วนผสมเฉพาะ หรือข้อมูลที่ไม่มีในข้อมูลร้าน
+ให้ตอบว่าไม่พบข้อมูลนี้ในข้อมูลร้าน และแนะนำให้ติดต่อร้านโดยตรง
 ถ้าไม่พบข้อมูลจริง ๆ ให้บอกว่าไม่ทราบ อย่าแต่งข้อมูลเอง
 
 ข้อมูลร้าน:
@@ -48,8 +104,10 @@ def fallback_answer(context: str) -> str:
     )
 
 
+# ===== Load RAG =====
 rag = load_rag()
 
+# ===== UI =====
 st.title("☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay")
 st.caption("ถามเรื่องเมนู เวลาเปิด หรือข้อมูลร้านได้เลย")
 
@@ -68,7 +126,7 @@ if prompt:
     with st.chat_message("user"):
         st.write(prompt)
 
-    # เพิ่ม top_k จาก 3 เป็น 5 เพื่อให้ดึงข้อมูลได้กว้างขึ้น
+    # ดึง context มากขึ้น เพื่อให้ตอบคำถามกว้าง ๆ ได้ดีขึ้น
     context_chunks = rag.search(prompt, top_k=5)
     context = "\n---\n".join(context_chunks)
 
