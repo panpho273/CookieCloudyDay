@@ -187,22 +187,21 @@ def get_sheet_client():
         "https://www.googleapis.com/auth/drive",
     ]
 
-    try:
-        if "gcp_service_account" in st.secrets:
-            creds = Credentials.from_service_account_info(
-                dict(st.secrets["gcp_service_account"]),
-                scopes=scopes,
-            )
-            return gspread.authorize(creds)
-    except Exception as e:
-        raise RuntimeError(f"ตั้งค่า gcp_service_account ใน Streamlit Secrets ไม่ถูกต้อง: {e}")
+    # Streamlit Cloud: ใช้ JSON string ใน Secrets
+    json_str = get_secret_value("GOOGLE_SERVICE_ACCOUNT_JSON")
 
-    json_str = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
     if json_str:
-        info = json.loads(json_str)
-        creds = Credentials.from_service_account_info(info, scopes=scopes)
-        return gspread.authorize(creds)
+        try:
+            info = json.loads(json_str)
+            creds = Credentials.from_service_account_info(info, scopes=scopes)
+            return gspread.authorize(creds)
+        except Exception as e:
+            raise RuntimeError(
+                "ตั้งค่า GOOGLE_SERVICE_ACCOUNT_JSON ใน Streamlit Secrets ไม่ถูกต้อง "
+                f"รายละเอียด: {e}"
+            )
 
+    # Local / Codespaces
     if os.path.exists("service-account.json"):
         creds = Credentials.from_service_account_file(
             "service-account.json",
@@ -211,13 +210,14 @@ def get_sheet_client():
         return gspread.authorize(creds)
 
     raise RuntimeError(
-        "ยังไม่ได้ตั้งค่าบัญชีสำหรับบันทึกออเดอร์ "
-        "กรุณาใส่ [gcp_service_account] ใน Streamlit Secrets"
+        "ยังไม่ได้ตั้งค่า GOOGLE_SERVICE_ACCOUNT_JSON ใน Streamlit Secrets "
+        "หรือไม่มีไฟล์ service-account.json ตอนรันในเครื่อง"
     )
 
 
 def append_order_to_sheet(menu_name: str, quantity: int, price: int):
     sheet_id = get_sheet_id()
+
     if not sheet_id:
         raise RuntimeError("ยังไม่ได้ตั้งค่า GOOGLE_SHEETS_ID ใน Secrets")
 
