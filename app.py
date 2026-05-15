@@ -218,7 +218,6 @@ def get_sheet_client():
     )
 
 
-
 def append_order_to_sheet(menu_name: str, quantity: int, price: int):
     sheet_id = get_sheet_id()
 
@@ -227,22 +226,21 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
 
     now = datetime.now(THAI_TZ)
     today = now.strftime("%Y-%m-%d")
-    time_text = now.strftime("%H:%M:%S")
     total = quantity * price
 
     client_sheet = get_sheet_client()
     spreadsheet = client_sheet.open_by_key(sheet_id)
     worksheet = spreadsheet.sheet1
 
+    # ให้ตรงกับหัวตารางเดิม:
+    # วันที่ | เมนู | จำนวน | ราคา | ยอดรวม
     worksheet.append_row(
         [
             today,
-            time_text,
             menu_name,
             quantity,
             price,
             total,
-            "Demo Order",
         ],
         value_input_option="USER_ENTERED",
     )
