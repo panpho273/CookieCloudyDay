@@ -15,55 +15,25 @@ from rag_engine import RAGEngine
 
 load_dotenv(".env")
 
-# ===== Streamlit Config =====
+# =========================
+# Page Config
+# =========================
 st.set_page_config(
     page_title="Demi - CookieCloudyDay",
     page_icon="☁️",
     layout="centered",
 )
 
-# ===== CSS =====
+# =========================
+# Style
+# =========================
 st.markdown(
     """
     <style>
     .block-container {
-        max-width: 860px;
-        padding-top: 3.5rem;
-        padding-bottom: 6rem;
-        margin: 0 auto;
-    }
-
-    .app-title {
-        font-size: 42px;
-        line-height: 1.18;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        margin-bottom: 0.4rem;
-        color: #ffffff;
-        word-break: break-word;
-    }
-
-    .app-caption {
-        color: #9ca3af;
-        font-size: 15px;
-        margin-bottom: 1.5rem;
-    }
-
-    [data-testid="stChatMessage"] {
-        border-radius: 16px;
-        padding: 8px 12px;
-        margin-bottom: 18px;
-    }
-
-    [data-testid="stChatMessageContent"],
-    [data-testid="stChatMessageContent"] p,
-    [data-testid="stChatMessageContent"] li {
-        font-size: 16px !important;
-        line-height: 1.7 !important;
-    }
-
-    [data-testid="stChatInput"] {
-        max-width: 820px;
+        max-width: 920px;
+        padding-top: 3.2rem;
+        padding-bottom: 7rem;
         margin: 0 auto;
     }
 
@@ -75,12 +45,134 @@ st.markdown(
         visibility: hidden;
     }
 
-    .order-box {
-        border: 1px solid rgba(255,255,255,0.12);
+    .hero {
+        padding: 20px 0 28px 0;
+    }
+
+    .app-title {
+        font-size: 44px;
+        line-height: 1.16;
+        font-weight: 850;
+        letter-spacing: -0.8px;
+        color: #ffffff;
+        margin-bottom: 10px;
+        word-break: break-word;
+    }
+
+    .app-caption {
+        color: #a7adba;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .divider {
+        height: 1px;
+        background: rgba(255,255,255,0.12);
+        margin: 28px 0 34px 0;
+    }
+
+    [data-testid="stChatMessage"] {
         border-radius: 18px;
-        padding: 20px;
-        margin-top: 30px;
-        background: rgba(255,255,255,0.03);
+        padding: 8px 12px;
+        margin-bottom: 18px;
+    }
+
+    [data-testid="stChatMessageContent"],
+    [data-testid="stChatMessageContent"] p,
+    [data-testid="stChatMessageContent"] li {
+        font-size: 16px !important;
+        line-height: 1.75 !important;
+    }
+
+    [data-testid="stChatInput"] {
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    .order-card {
+        margin-top: 14px;
+        padding: 26px;
+        border-radius: 26px;
+        background:
+            radial-gradient(circle at top left, rgba(255, 197, 94, 0.18), transparent 34%),
+            linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+    }
+
+    .order-title {
+        font-size: 34px;
+        font-weight: 850;
+        margin-bottom: 8px;
+        color: #ffffff;
+        letter-spacing: -0.4px;
+    }
+
+    .order-subtitle {
+        color: #a7adba;
+        font-size: 15px;
+        margin-bottom: 22px;
+        line-height: 1.7;
+    }
+
+    .summary-box {
+        margin-top: 20px;
+        padding: 20px 22px;
+        border-radius: 22px;
+        background: rgba(0,0,0,0.24);
+        border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .summary-title {
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        color: #ffffff;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 8px 0;
+        color: #d8dce7;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .summary-row:last-child {
+        border-bottom: none;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding-top: 16px;
+        margin-top: 10px;
+        font-size: 24px;
+        font-weight: 850;
+        color: #ffffff;
+    }
+
+    .tiny-note {
+        color: #8f96a8;
+        font-size: 13px;
+        margin-top: 14px;
+        line-height: 1.6;
+    }
+
+    div.stButton > button {
+        border-radius: 999px;
+        padding: 0.65rem 1.25rem;
+        font-weight: 750;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: linear-gradient(135deg, #ffb547, #ff7a45);
+        color: #111827;
+    }
+
+    div.stButton > button:hover {
+        border: 1px solid rgba(255,255,255,0.3);
+        transform: translateY(-1px);
     }
 
     @media (max-width: 768px) {
@@ -91,7 +183,15 @@ st.markdown(
         }
 
         .app-title {
-            font-size: 32px;
+            font-size: 31px;
+        }
+
+        .order-title {
+            font-size: 27px;
+        }
+
+        .summary-total {
+            font-size: 21px;
         }
     }
     </style>
@@ -99,7 +199,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ===== Config =====
+# =========================
+# Config
+# =========================
 MODEL = "gemini-2.5-flash"
 KB_PATH = "knowledge/cookiecloudyday_kb.txt"
 THAI_TZ = ZoneInfo("Asia/Bangkok")
@@ -124,6 +226,9 @@ api_key = os.getenv("GOOGLE_API_KEY")
 client = genai.Client(api_key=api_key) if api_key else None
 
 
+# =========================
+# RAG / Chatbot
+# =========================
 @st.cache_resource
 def load_rag():
     return RAGEngine(KB_PATH)
@@ -216,9 +321,11 @@ def fallback_answer(user_question: str) -> str:
     return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
 
 
+# =========================
+# Google Sheets
+# =========================
 def get_secret_value(name: str) -> str:
     value = os.getenv(name, "").strip()
-
     if value:
         return value
 
@@ -242,7 +349,7 @@ def get_sheet_client():
         "https://www.googleapis.com/auth/drive",
     ]
 
-    # Streamlit Cloud: ใช้ secrets แบบ table
+    # Streamlit Cloud: ใช้ Secrets
     try:
         if "gcp_service_account" in st.secrets:
             creds = Credentials.from_service_account_info(
@@ -250,10 +357,10 @@ def get_sheet_client():
                 scopes=scopes,
             )
             return gspread.authorize(creds)
-    except Exception:
-        pass
+    except Exception as e:
+        raise RuntimeError(f"ตั้งค่า gcp_service_account ใน Streamlit Secrets ไม่ถูกต้อง: {e}")
 
-    # GitHub Actions / env JSON string
+    # Env JSON string
     json_str = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
     if json_str:
         info = json.loads(json_str)
@@ -261,18 +368,23 @@ def get_sheet_client():
         return gspread.authorize(creds)
 
     # Local / Codespaces
-    creds = Credentials.from_service_account_file(
-        "service-account.json",
-        scopes=scopes,
+    if os.path.exists("service-account.json"):
+        creds = Credentials.from_service_account_file(
+            "service-account.json",
+            scopes=scopes,
+        )
+        return gspread.authorize(creds)
+
+    raise RuntimeError(
+        "ยังไม่ได้ตั้งค่าบัญชีสำหรับบันทึกออเดอร์ "
+        "กรุณาใส่ [gcp_service_account] ใน Streamlit Secrets หรือมีไฟล์ service-account.json ตอนรันในเครื่อง"
     )
-    return gspread.authorize(creds)
 
 
 def append_order_to_sheet(menu_name: str, quantity: int, price: int):
     sheet_id = get_sheet_id()
-
     if not sheet_id:
-        raise RuntimeError("ยังไม่ได้ตั้งค่า GOOGLE_SHEETS_ID")
+        raise RuntimeError("ยังไม่ได้ตั้งค่า GOOGLE_SHEETS_ID ใน Secrets")
 
     now = datetime.now(THAI_TZ)
     today = now.strftime("%Y-%m-%d")
@@ -291,7 +403,7 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
             quantity,
             price,
             total,
-            "Streamlit Demo Order",
+            "Demo Order",
         ],
         value_input_option="USER_ENTERED",
     )
@@ -299,19 +411,22 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
     return total
 
 
-# ===== Load RAG =====
+# =========================
+# UI
+# =========================
 rag = load_rag()
 
-# ===== UI Header =====
 st.markdown(
     """
-    <div class="app-title">☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay</div>
-    <div class="app-caption">ถามเรื่องเมนู เวลาเปิด หรือข้อมูลร้านได้เลย</div>
+    <div class="hero">
+        <div class="app-title">☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay</div>
+        <div class="app-caption">ถามเรื่องเมนู เวลาเปิด ราคา หรือข้อมูลร้านได้เลย</div>
+    </div>
     """,
     unsafe_allow_html=True,
 )
 
-# ===== Chatbot =====
+# Chatbot
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -329,7 +444,6 @@ if prompt:
 
     context_chunks = rag.search(prompt, top_k=5)
     context = "\n---\n".join(context_chunks)
-
     full_prompt = build_prompt(prompt, context)
 
     if client is None:
@@ -351,10 +465,20 @@ if prompt:
     with st.chat_message("assistant"):
         st.write(answer)
 
-# ===== Demo Order Form =====
-st.markdown("---")
-st.markdown("## 🛒 ทดลองสั่งซื้อคุกกี้")
-st.caption("โหมดทดลองสำหรับ Demo Day: เลือกเมนูแล้วบันทึกยอดขายลง Google Sheets")
+# Order Form
+st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+
+st.markdown(
+    """
+    <div class="order-card">
+        <div class="order-title">🛒 สั่งซื้อคุกกี้</div>
+        <div class="order-subtitle">
+            เลือกเมนูและจำนวนที่ต้องการ ระบบจะคำนวณยอดรวมให้อัตโนมัติ
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 selected_menu = st.selectbox(
     "เลือกเมนู",
@@ -372,10 +496,39 @@ quantity = st.number_input(
 price = MENU_PRICES[selected_menu]
 total = int(price) * int(quantity)
 
-st.write(f"ราคา: {price} บาท")
-st.write(f"ยอดรวม: {total} บาท")
+st.markdown(
+    f"""
+    <div class="summary-box">
+        <div class="summary-title">สรุปรายการสั่งซื้อ</div>
 
-if st.button("บันทึกออเดอร์ลง Google Sheets"):
+        <div class="summary-row">
+            <span>เมนู</span>
+            <b>{selected_menu}</b>
+        </div>
+
+        <div class="summary-row">
+            <span>จำนวน</span>
+            <b>{quantity} ชิ้น</b>
+        </div>
+
+        <div class="summary-row">
+            <span>ราคาต่อชิ้น</span>
+            <b>{price} บาท</b>
+        </div>
+
+        <div class="summary-total">
+            <span>ยอดรวม</span>
+            <span>{total} บาท</span>
+        </div>
+    </div>
+    <div class="tiny-note">
+        * เป็นคำสั่งซื้อจำลองสำหรับเดโม ระบบจะบันทึกยอดขายเพื่อใช้สรุปรายงาน
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+if st.button("ยืนยันคำสั่งซื้อ"):
     try:
         saved_total = append_order_to_sheet(
             selected_menu,
@@ -383,7 +536,7 @@ if st.button("บันทึกออเดอร์ลง Google Sheets"):
             int(price),
         )
         st.success(
-            f"บันทึกออเดอร์สำเร็จ: {selected_menu} จำนวน {quantity} ชิ้น รวม {saved_total} บาท"
+            f"รับออเดอร์แล้วค่ะ: {selected_menu} จำนวน {quantity} ชิ้น รวม {saved_total} บาท"
         )
     except Exception as e:
-        st.error(f"บันทึกไม่สำเร็จ: {e}")
+        st.error(f"ขออภัยค่ะ ระบบยังบันทึกออเดอร์ไม่ได้: {e}")
