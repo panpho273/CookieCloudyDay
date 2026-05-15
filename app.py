@@ -24,180 +24,18 @@ st.set_page_config(
     layout="centered",
 )
 
+
 # =========================
-# Style
+# Load CSS
 # =========================
-st.markdown(
-    """
-    <style>
-    .block-container {
-        max-width: 920px;
-        padding-top: 3.2rem;
-        padding-bottom: 7rem;
-        margin: 0 auto;
-    }
+def load_css(file_path: str):
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-    header[data-testid="stHeader"] {
-        background: transparent;
-    }
 
-    #MainMenu, footer {
-        visibility: hidden;
-    }
+load_css("styles.css")
 
-    .hero {
-        padding: 20px 0 28px 0;
-    }
-
-    .app-title {
-        font-size: 44px;
-        line-height: 1.16;
-        font-weight: 850;
-        letter-spacing: -0.8px;
-        color: #ffffff;
-        margin-bottom: 10px;
-        word-break: break-word;
-    }
-
-    .app-caption {
-        color: #a7adba;
-        font-size: 15px;
-        line-height: 1.7;
-    }
-
-    .divider {
-        height: 1px;
-        background: rgba(255,255,255,0.12);
-        margin: 28px 0 34px 0;
-    }
-
-    [data-testid="stChatMessage"] {
-        border-radius: 18px;
-        padding: 8px 12px;
-        margin-bottom: 18px;
-    }
-
-    [data-testid="stChatMessageContent"],
-    [data-testid="stChatMessageContent"] p,
-    [data-testid="stChatMessageContent"] li {
-        font-size: 16px !important;
-        line-height: 1.75 !important;
-    }
-
-    [data-testid="stChatInput"] {
-        max-width: 820px;
-        margin: 0 auto;
-    }
-
-    .order-card {
-        margin-top: 14px;
-        padding: 26px;
-        border-radius: 26px;
-        background:
-            radial-gradient(circle at top left, rgba(255, 197, 94, 0.18), transparent 34%),
-            linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
-        border: 1px solid rgba(255,255,255,0.12);
-        box-shadow: 0 18px 50px rgba(0,0,0,0.25);
-    }
-
-    .order-title {
-        font-size: 34px;
-        font-weight: 850;
-        margin-bottom: 8px;
-        color: #ffffff;
-        letter-spacing: -0.4px;
-    }
-
-    .order-subtitle {
-        color: #a7adba;
-        font-size: 15px;
-        margin-bottom: 22px;
-        line-height: 1.7;
-    }
-
-    .summary-box {
-        margin-top: 20px;
-        padding: 20px 22px;
-        border-radius: 22px;
-        background: rgba(0,0,0,0.24);
-        border: 1px solid rgba(255,255,255,0.10);
-    }
-
-    .summary-title {
-        font-size: 19px;
-        font-weight: 800;
-        margin-bottom: 12px;
-        color: #ffffff;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 8px 0;
-        color: #d8dce7;
-        border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .summary-row:last-child {
-        border-bottom: none;
-    }
-
-    .summary-total {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        padding-top: 16px;
-        margin-top: 10px;
-        font-size: 24px;
-        font-weight: 850;
-        color: #ffffff;
-    }
-
-    .tiny-note {
-        color: #8f96a8;
-        font-size: 13px;
-        margin-top: 14px;
-        line-height: 1.6;
-    }
-
-    div.stButton > button {
-        border-radius: 999px;
-        padding: 0.65rem 1.25rem;
-        font-weight: 750;
-        border: 1px solid rgba(255,255,255,0.18);
-        background: linear-gradient(135deg, #ffb547, #ff7a45);
-        color: #111827;
-    }
-
-    div.stButton > button:hover {
-        border: 1px solid rgba(255,255,255,0.3);
-        transform: translateY(-1px);
-    }
-
-    @media (max-width: 768px) {
-        .block-container {
-            padding-top: 2rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-
-        .app-title {
-            font-size: 31px;
-        }
-
-        .order-title {
-            font-size: 27px;
-        }
-
-        .summary-total {
-            font-size: 21px;
-        }
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
 # =========================
 # Config
@@ -349,7 +187,6 @@ def get_sheet_client():
         "https://www.googleapis.com/auth/drive",
     ]
 
-    # Streamlit Cloud: ใช้ Secrets
     try:
         if "gcp_service_account" in st.secrets:
             creds = Credentials.from_service_account_info(
@@ -360,14 +197,12 @@ def get_sheet_client():
     except Exception as e:
         raise RuntimeError(f"ตั้งค่า gcp_service_account ใน Streamlit Secrets ไม่ถูกต้อง: {e}")
 
-    # Env JSON string
     json_str = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
     if json_str:
         info = json.loads(json_str)
         creds = Credentials.from_service_account_info(info, scopes=scopes)
         return gspread.authorize(creds)
 
-    # Local / Codespaces
     if os.path.exists("service-account.json"):
         creds = Credentials.from_service_account_file(
             "service-account.json",
@@ -377,7 +212,7 @@ def get_sheet_client():
 
     raise RuntimeError(
         "ยังไม่ได้ตั้งค่าบัญชีสำหรับบันทึกออเดอร์ "
-        "กรุณาใส่ [gcp_service_account] ใน Streamlit Secrets หรือมีไฟล์ service-account.json ตอนรันในเครื่อง"
+        "กรุณาใส่ [gcp_service_account] ใน Streamlit Secrets"
     )
 
 
@@ -412,21 +247,17 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
 
 
 # =========================
-# UI
+# UI Header
 # =========================
 rag = load_rag()
 
-st.markdown(
-    """
-    <div class="hero">
-        <div class="app-title">☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay</div>
-        <div class="app-caption">ถามเรื่องเมนู เวลาเปิด ราคา หรือข้อมูลร้านได้เลย</div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+st.title("☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay")
+st.caption("ถามเรื่องเมนู เวลาเปิด ราคา หรือข้อมูลร้านได้เลย")
 
+
+# =========================
 # Chatbot
+# =========================
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -465,25 +296,21 @@ if prompt:
     with st.chat_message("assistant"):
         st.write(answer)
 
+
+# =========================
 # Order Form
-st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+# =========================
+st.divider()
 
 st.markdown(
-    """
-    <div class="order-card">
-        <div class="order-title">🛒 สั่งซื้อคุกกี้</div>
-        <div class="order-subtitle">
-            เลือกเมนูและจำนวนที่ต้องการ ระบบจะคำนวณยอดรวมให้อัตโนมัติ
-        </div>
-    </div>
-    """,
+    '<div class="order-section">'
+    '<div class="order-title">🛒 สั่งซื้อคุกกี้</div>'
+    '<p class="order-subtitle">เลือกเมนูและจำนวนที่ต้องการ ระบบจะคำนวณยอดรวมให้อัตโนมัติ</p>'
+    '</div>',
     unsafe_allow_html=True,
 )
 
-selected_menu = st.selectbox(
-    "เลือกเมนู",
-    list(MENU_PRICES.keys()),
-)
+selected_menu = st.selectbox("เลือกเมนู", list(MENU_PRICES.keys()))
 
 quantity = st.number_input(
     "จำนวน",
@@ -496,37 +323,24 @@ quantity = st.number_input(
 price = MENU_PRICES[selected_menu]
 total = int(price) * int(quantity)
 
-st.markdown(
-    f"""
-    <div class="summary-box">
-        <div class="summary-title">สรุปรายการสั่งซื้อ</div>
+with st.container(border=True):
+    st.subheader("สรุปรายการสั่งซื้อ")
 
-        <div class="summary-row">
-            <span>เมนู</span>
-            <b>{selected_menu}</b>
-        </div>
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("เมนู")
+        st.write("จำนวน")
+        st.write("ราคาต่อชิ้น")
 
-        <div class="summary-row">
-            <span>จำนวน</span>
-            <b>{quantity} ชิ้น</b>
-        </div>
+    with col2:
+        st.write(f"**{selected_menu}**")
+        st.write(f"**{quantity} ชิ้น**")
+        st.write(f"**{price} บาท**")
 
-        <div class="summary-row">
-            <span>ราคาต่อชิ้น</span>
-            <b>{price} บาท</b>
-        </div>
+    st.divider()
+    st.metric("ยอดรวม", f"{total} บาท")
 
-        <div class="summary-total">
-            <span>ยอดรวม</span>
-            <span>{total} บาท</span>
-        </div>
-    </div>
-    <div class="tiny-note">
-        * เป็นคำสั่งซื้อจำลองสำหรับเดโม ระบบจะบันทึกยอดขายเพื่อใช้สรุปรายงาน
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+st.caption("* เป็นคำสั่งซื้อจำลองสำหรับเดโม ระบบจะบันทึกยอดขายเพื่อใช้สรุปรายงาน")
 
 if st.button("ยืนยันคำสั่งซื้อ"):
     try:
