@@ -182,22 +182,25 @@ def get_sheet_id() -> str:
 
 
 def get_sheet_client():
+    import base64
+
     scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",
     ]
 
-    # Streamlit Cloud: ใช้ JSON string ใน Secrets
-    json_str = get_secret_value("GOOGLE_SERVICE_ACCOUNT_JSON")
+    # Streamlit Cloud: ใช้ Base64 secret เท่านั้น
+    json_b64 = get_secret_value("GOOGLE_SERVICE_ACCOUNT_JSON_B64")
 
-    if json_str:
+    if json_b64:
         try:
-            info = json.loads(json_str)
+            json_text = base64.b64decode(json_b64).decode("utf-8")
+            info = json.loads(json_text)
             creds = Credentials.from_service_account_info(info, scopes=scopes)
             return gspread.authorize(creds)
         except Exception as e:
             raise RuntimeError(
-                "ตั้งค่า GOOGLE_SERVICE_ACCOUNT_JSON ใน Streamlit Secrets ไม่ถูกต้อง "
+                "ตั้งค่า GOOGLE_SERVICE_ACCOUNT_JSON_B64 ใน Streamlit Secrets ไม่ถูกต้อง "
                 f"รายละเอียด: {e}"
             )
 
@@ -210,9 +213,10 @@ def get_sheet_client():
         return gspread.authorize(creds)
 
     raise RuntimeError(
-        "ยังไม่ได้ตั้งค่า GOOGLE_SERVICE_ACCOUNT_JSON ใน Streamlit Secrets "
+        "ยังไม่ได้ตั้งค่า GOOGLE_SERVICE_ACCOUNT_JSON_B64 ใน Streamlit Secrets "
         "หรือไม่มีไฟล์ service-account.json ตอนรันในเครื่อง"
     )
+
 
 
 def append_order_to_sheet(menu_name: str, quantity: int, price: int):
