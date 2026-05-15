@@ -1,21 +1,28 @@
 # app.py
+import json
 import os
 import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
+import gspread
 import streamlit as st
 from dotenv import load_dotenv
 from google import genai
+from google.oauth2.service_account import Credentials
 
 from rag_engine import RAGEngine
 
-load_dotenv()
+load_dotenv(".env")
 
+# ===== Streamlit Config =====
 st.set_page_config(
     page_title="Demi - CookieCloudyDay",
     page_icon="☁️",
     layout="centered",
 )
 
+# ===== CSS =====
 st.markdown(
     """
     <style>
@@ -68,6 +75,14 @@ st.markdown(
         visibility: hidden;
     }
 
+    .order-box {
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 18px;
+        padding: 20px;
+        margin-top: 30px;
+        background: rgba(255,255,255,0.03);
+    }
+
     @media (max-width: 768px) {
         .block-container {
             padding-top: 2rem;
@@ -84,8 +99,26 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ===== Config =====
 MODEL = "gemini-2.5-flash"
 KB_PATH = "knowledge/cookiecloudyday_kb.txt"
+THAI_TZ = ZoneInfo("Asia/Bangkok")
+
+MENU_PRICES = {
+    "คุกกี้ช็อกโกแลตชิพ": 45,
+    "คุกกี้เนยสด": 55,
+    "คุกกี้ช็อกโกแลตลาวา": 59,
+    "คุกกี้ดับเบิลช็อกโกแลต": 59,
+    "คุกกี้มัทฉะไวท์ช็อก": 59,
+    "คุกกี้โอรีโอ้ครีม": 50,
+    "คุกกี้คาราเมลอัลมอนด์": 55,
+    "คุกกี้โกโก้เฮเซลนัท": 59,
+    "คุกกี้เรดเวลเวต": 55,
+    "คุกกี้บราวนี่ฟัดจ์": 55,
+    "คุกกี้สตรอว์เบอร์รีชีสเค้ก": 59,
+    "คุกกี้วานิลลานมสด": 45,
+    "คุกกี้แมคคาเดเมียไวท์ช็อก": 65,
+}
 
 api_key = os.getenv("GOOGLE_API_KEY")
 client = genai.Client(api_key=api_key) if api_key else None
@@ -131,6 +164,9 @@ def build_prompt(user_question: str, context: str) -> str:
 def fallback_answer(user_question: str) -> str:
     q = user_question.lower()
 
+    if "เปิด" in q or "กี่โมง" in q or "เวลา" in q:
+        return "ร้าน CookieCloudyDay เปิดทุกวัน เวลา 10:00–20:00 น. ค่ะ"
+
     if "ราคา" in q:
         return """ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว แต่ Demi มีข้อมูลราคาของร้านดังนี้ค่ะ
 
@@ -148,10 +184,7 @@ def fallback_answer(user_question: str) -> str:
 - คุกกี้วานิลลานมสด 45 บาท
 - คุกกี้แมคคาเดเมียไวท์ช็อก 65 บาท"""
 
-    if "เปิด" in q or "กี่โมง" in q:
-        return "ร้าน CookieCloudyDay เปิดทุกวัน เวลา 10:00–20:00 น. ค่ะ"
-
-    if "เมนู" in q or "ขายอะไร" in q or "มีอะไรขาย" in q:
+    if "เมนู" in q or "ขายอะไร" in q or "มีอะไรขาย" in q or "ขอเมนู" in q:
         return """ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว แต่เมนูของร้าน CookieCloudyDay มีดังนี้ค่ะ
 
 - คุกกี้ช็อกโกแลตชิพ
@@ -174,11 +207,102 @@ def fallback_answer(user_question: str) -> str:
     if "เบอร์" in q or "โทร" in q:
         return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถติดต่อทางร้านได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
 
+    if "ส่ง" in q or "จัดส่ง" in q:
+        return "ร้าน CookieCloudyDay มีบริการจัดส่ง และสามารถรับหน้าร้านได้ค่ะ"
+
+    if "สั่งซื้อ" in q or "สั่ง" in q:
+        return "ลูกค้าสามารถสั่งซื้อได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+
     return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
 
 
+def get_secret_value(name: str) -> str:
+    value = os.getenv(name, "").strip()
+
+    if value:
+        return value
+
+    try:
+        secret_value = st.secrets.get(name, "")
+        if isinstance(secret_value, str):
+            return secret_value.strip()
+    except Exception:
+        pass
+
+    return ""
+
+
+def get_sheet_id() -> str:
+    return get_secret_value("GOOGLE_SHEETS_ID")
+
+
+def get_sheet_client():
+    scopes = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive",
+    ]
+
+    # Streamlit Cloud: ใช้ secrets แบบ table
+    try:
+        if "gcp_service_account" in st.secrets:
+            creds = Credentials.from_service_account_info(
+                dict(st.secrets["gcp_service_account"]),
+                scopes=scopes,
+            )
+            return gspread.authorize(creds)
+    except Exception:
+        pass
+
+    # GitHub Actions / env JSON string
+    json_str = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+    if json_str:
+        info = json.loads(json_str)
+        creds = Credentials.from_service_account_info(info, scopes=scopes)
+        return gspread.authorize(creds)
+
+    # Local / Codespaces
+    creds = Credentials.from_service_account_file(
+        "service-account.json",
+        scopes=scopes,
+    )
+    return gspread.authorize(creds)
+
+
+def append_order_to_sheet(menu_name: str, quantity: int, price: int):
+    sheet_id = get_sheet_id()
+
+    if not sheet_id:
+        raise RuntimeError("ยังไม่ได้ตั้งค่า GOOGLE_SHEETS_ID")
+
+    now = datetime.now(THAI_TZ)
+    today = now.strftime("%Y-%m-%d")
+    time_text = now.strftime("%H:%M:%S")
+    total = quantity * price
+
+    client_sheet = get_sheet_client()
+    spreadsheet = client_sheet.open_by_key(sheet_id)
+    worksheet = spreadsheet.sheet1
+
+    worksheet.append_row(
+        [
+            today,
+            time_text,
+            menu_name,
+            quantity,
+            price,
+            total,
+            "Streamlit Demo Order",
+        ],
+        value_input_option="USER_ENTERED",
+    )
+
+    return total
+
+
+# ===== Load RAG =====
 rag = load_rag()
 
+# ===== UI Header =====
 st.markdown(
     """
     <div class="app-title">☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay</div>
@@ -187,6 +311,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ===== Chatbot =====
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -225,3 +350,40 @@ if prompt:
 
     with st.chat_message("assistant"):
         st.write(answer)
+
+# ===== Demo Order Form =====
+st.markdown("---")
+st.markdown("## 🛒 ทดลองสั่งซื้อคุกกี้")
+st.caption("โหมดทดลองสำหรับ Demo Day: เลือกเมนูแล้วบันทึกยอดขายลง Google Sheets")
+
+selected_menu = st.selectbox(
+    "เลือกเมนู",
+    list(MENU_PRICES.keys()),
+)
+
+quantity = st.number_input(
+    "จำนวน",
+    min_value=1,
+    max_value=100,
+    value=1,
+    step=1,
+)
+
+price = MENU_PRICES[selected_menu]
+total = int(price) * int(quantity)
+
+st.write(f"ราคา: {price} บาท")
+st.write(f"ยอดรวม: {total} บาท")
+
+if st.button("บันทึกออเดอร์ลง Google Sheets"):
+    try:
+        saved_total = append_order_to_sheet(
+            selected_menu,
+            int(quantity),
+            int(price),
+        )
+        st.success(
+            f"บันทึกออเดอร์สำเร็จ: {selected_menu} จำนวน {quantity} ชิ้น รวม {saved_total} บาท"
+        )
+    except Exception as e:
+        st.error(f"บันทึกไม่สำเร็จ: {e}")
