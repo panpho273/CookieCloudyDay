@@ -10,14 +10,12 @@ from rag_engine import RAGEngine
 
 load_dotenv()
 
-# ===== Streamlit Config =====
 st.set_page_config(
     page_title="Demi - CookieCloudyDay",
     page_icon="☁️",
     layout="centered",
 )
 
-# ===== CSS =====
 st.markdown(
     """
     <style>
@@ -50,22 +48,11 @@ st.markdown(
         margin-bottom: 18px;
     }
 
-    [data-testid="stChatMessageContent"] {
-        font-size: 16px !important;
-        line-height: 1.7 !important;
-    }
-
+    [data-testid="stChatMessageContent"],
     [data-testid="stChatMessageContent"] p,
     [data-testid="stChatMessageContent"] li {
         font-size: 16px !important;
         line-height: 1.7 !important;
-    }
-
-    [data-testid="stChatMessageContent"] h1,
-    [data-testid="stChatMessageContent"] h2,
-    [data-testid="stChatMessageContent"] h3 {
-        font-size: 18px !important;
-        line-height: 1.6 !important;
     }
 
     [data-testid="stChatInput"] {
@@ -97,7 +84,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ===== Config =====
 MODEL = "gemini-2.5-flash"
 KB_PATH = "knowledge/cookiecloudyday_kb.txt"
 
@@ -111,15 +97,10 @@ def load_rag():
 
 
 def clean_answer(text: str) -> str:
-    """กันคำตอบที่มี markdown heading หรือ === แล้วทำให้ตัวใหญ่ล้นหน้า"""
     text = text.strip()
-
-    # ลบหัวข้อ markdown ที่อาจทำให้ Streamlit render ใหญ่
     text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
-
-    # ลบ === แบบหัวข้อ
     text = text.replace("===", "")
-
+    text = text.replace("\\n", "\n")
     return text.strip()
 
 
@@ -147,18 +128,57 @@ def build_prompt(user_question: str, context: str) -> str:
 """
 
 
-def fallback_answer(context: str) -> str:
-    return (
-        "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว\n\n"
-        "แต่จากข้อมูลร้านที่ค้นเจอ มีข้อมูลที่เกี่ยวข้องดังนี้:\n\n"
-        f"{context}"
-    )
+def fallback_answer(user_question: str) -> str:
+    q = user_question.lower()
+
+    if "ราคา" in q:
+        return """ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว แต่ Demi มีข้อมูลราคาของร้านดังนี้ค่ะ
+
+- คุกกี้ช็อกโกแลตชิพ 45 บาท
+- คุกกี้เนยสด 55 บาท
+- คุกกี้ช็อกโกแลตลาวา 59 บาท
+- คุกกี้ดับเบิลช็อกโกแลต 59 บาท
+- คุกกี้มัทฉะไวท์ช็อก 59 บาท
+- คุกกี้โอรีโอ้ครีม 50 บาท
+- คุกกี้คาราเมลอัลมอนด์ 55 บาท
+- คุกกี้โกโก้เฮเซลนัท 59 บาท
+- คุกกี้เรดเวลเวต 55 บาท
+- คุกกี้บราวนี่ฟัดจ์ 55 บาท
+- คุกกี้สตรอว์เบอร์รีชีสเค้ก 59 บาท
+- คุกกี้วานิลลานมสด 45 บาท
+- คุกกี้แมคคาเดเมียไวท์ช็อก 65 บาท"""
+
+    if "เปิด" in q or "กี่โมง" in q:
+        return "ร้าน CookieCloudyDay เปิดทุกวัน เวลา 10:00–20:00 น. ค่ะ"
+
+    if "เมนู" in q or "ขายอะไร" in q or "มีอะไรขาย" in q:
+        return """ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว แต่เมนูของร้าน CookieCloudyDay มีดังนี้ค่ะ
+
+- คุกกี้ช็อกโกแลตชิพ
+- คุกกี้เนยสด
+- คุกกี้ช็อกโกแลตลาวา
+- คุกกี้ดับเบิลช็อกโกแลต
+- คุกกี้มัทฉะไวท์ช็อก
+- คุกกี้โอรีโอ้ครีม
+- คุกกี้คาราเมลอัลมอนด์
+- คุกกี้โกโก้เฮเซลนัท
+- คุกกี้เรดเวลเวต
+- คุกกี้บราวนี่ฟัดจ์
+- คุกกี้สตรอว์เบอร์รีชีสเค้ก
+- คุกกี้วานิลลานมสด
+- คุกกี้แมคคาเดเมียไวท์ช็อก"""
+
+    if "ทุเรียน" in q:
+        return "จากข้อมูลเมนูของทางร้านในตอนนี้ ยังไม่มีคุกกี้รสทุเรียนในเมนูนะคะ"
+
+    if "เบอร์" in q or "โทร" in q:
+        return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถติดต่อทางร้านได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+
+    return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
 
 
-# ===== Load RAG =====
 rag = load_rag()
 
-# ===== UI =====
 st.markdown(
     """
     <div class="app-title">☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay</div>
@@ -188,20 +208,16 @@ if prompt:
     full_prompt = build_prompt(prompt, context)
 
     if client is None:
-        answer = (
-            "ขออภัยค่ะ ระบบยังไม่ได้ตั้งค่า GOOGLE_API_KEY\n\n"
-            "ข้อมูลที่ค้นเจอจาก knowledge base:\n\n"
-            f"{context}"
-        )
+        answer = fallback_answer(prompt)
     else:
         try:
             response = client.models.generate_content(
                 model=MODEL,
                 contents=full_prompt,
             )
-            answer = response.text.strip() if response.text else fallback_answer(context)
+            answer = response.text.strip() if response.text else fallback_answer(prompt)
         except Exception:
-            answer = fallback_answer(context)
+            answer = fallback_answer(prompt)
 
     answer = clean_answer(answer)
 
