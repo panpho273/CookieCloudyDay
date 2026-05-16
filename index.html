@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CookieCloudyDay — คุกกี้โฮมเมด</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <header class="nav" id="navbar">
+      <div class="nav-inner container">
+        <a class="brand" href="#">☁️ CookieCloudyDay</a>
+
+        <button id="nav-toggle" aria-label="เมนู">☰</button>
+
+        <nav class="nav-links" id="nav-menu">
+          <a href="#about">About</a>
+          <a href="#menu">Menu</a>
+          <a href="#demi">Demi AI</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#contact">Contact</a>
+          <a class="cta" href="https://cookiecloudyday-demi.streamlit.app" target="_blank" rel="noopener">ลองคุยกับ Demi</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero container">
+        <div class="hero-left">
+          <h1 class="hero-title">คุกกี้โฮมเมดในวันฟ้าครึ้ม</h1>
+          <p class="hero-sub">CookieCloudyDay — คุกกี้โฮมเมดอบสด กลิ่นหอมละมุน พร้อม Demi ผู้ช่วย AI คอยตอบคำถามเรื่องเมนู ราคา และเวลาเปิดร้าน</p>
+
+          <div class="hero-ctas">
+            <a href="#menu" class="btn btn-primary">ดูเมนูแนะนำ</a>
+            <a href="https://cookiecloudyday-demi.streamlit.app" class="btn btn-outline" target="_blank" rel="noopener">ลองคุยกับ Demi</a>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-card">
+            <img src="images/cookie-hero.jpg" alt="CookieCloudyDay cookies" class="hero-image">
+            <div class="hero-card-band">โฮมเมดสดใหม่ • จัดส่งและรับหน้าร้าน</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="about container">
+        <div class="card">
+          <h2>เกี่ยวกับ CookieCloudyDay</h2>
+          <p>เราคือร้านคุกกี้โฮมเมดสไตล์อบอุ่น ให้ความรู้สึกเหมือนกินคุกกี้จากเตาที่บ้าน ทุกเมนูคัดสรรวัตถุดิบดี ใส่ใจทุกรายละเอียด และเหมาะกับการเป็นของฝาก</p>
+          <p>มี Demi ผู้ช่วย AI คอยตอบคำถามเกี่ยวกับเมนู ราคา เวลาเปิด และข้อมูลร้านจากฐานความรู้ของเรา</p>
+        </div>
+      </section>
+
+      <section id="menu" class="menu container">
+        <h2 class="section-title">เมนูของเรา</h2>
+        <div class="menu-grid">
+          <div class="menu-card"><div class="name">คุกกี้ช็อกโกแลตชิพ</div><div class="price">45 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้เนยสด</div><div class="price">55 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้ช็อกโกแลตลาวา</div><div class="price">59 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้ดับเบิลช็อกโกแลต</div><div class="price">59 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้มัทฉะไวท์ช็อก</div><div class="price">59 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้โอรีโอ้ครีม</div><div class="price">50 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้คาราเมลอัลมอนด์</div><div class="price">55 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้โกโก้เฮเซลนัท</div><div class="price">59 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้เรดเวลเวต</div><div class="price">55 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้บราวนี่ฟัดจ์</div><div class="price">55 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้สตรอว์เบอร์รีชีสเค้ก</div><div class="price">59 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้วานิลลานมสด</div><div class="price">45 ฿</div></div>
+          <div class="menu-card"><div class="name">คุกกี้แมคคาเดเมียไวท์ช็อก</div><div class="price">65 ฿</div></div>
+        </div>
+      </section>
+
+      <section id="demi" class="demi container">
+        <div class="card split">
+          <div>
+            <h2>Demi — ผู้ช่วย AI ของร้าน</h2>
+            <p>Demi ช่วยตอบคำถามจากฐานความรู้ของ CookieCloudyDay (RAG) ทั้งเมนู ราคา เวลาเปิดร้าน และข้อมูลการสั่งซื้อ หากต้องการลองคุย สามารถกดปุ่มด้านล่าง</p>
+            <p><a class="btn btn-primary" href="https://cookiecloudyday-demi.streamlit.app" target="_blank" rel="noopener">ลองคุยกับ Demi</a></p>
+          </div>
+          <div class="demi-illustration">💬☁️</div>
+        </div>
+      </section>
+
+      <section id="workflow" class="workflow container">
+        <h2 class="section-title">Workflow</h2>
+        <ol class="flow">
+          <li><strong>ลูกค้าถาม Demi</strong><span>ลูกค้าสอบถามเมนูหรือข้อมูลร้าน</span></li>
+          <li><strong>Demi ตอบจากฐานความรู้</strong><span>RAG นำ context จาก knowledge base</span></li>
+          <li><strong>ลูกค้สั่งแบบจำลอง</strong><span>สั่ง/ทดสอบการบันทึกออเดอร์</span></li>
+          <li><strong>บันทึกใน Google Sheets</strong><span>ยอดขายถูกเก็บไว้ในสเปรดชีท</span></li>
+          <li><strong>รายงานเช้าไปยัง Telegram</strong><span>Morning report ส่งสรุปยอดอัตโนมัติ</span></li>
+        </ol>
+      </section>
+
+      <section id="links" class="links container">
+        <h2 class="section-title">ลองใช้งาน / โค้ด</h2>
+        <div class="links-row">
+          <a class="btn btn-primary" href="https://cookiecloudyday-demi.streamlit.app" target="_blank" rel="noopener">Try Demi AI</a>
+          <a class="btn btn-outline" href="#" target="_blank" rel="noopener">GitHub Repository</a>
+          <a class="btn btn-outline" href="https://huggingface.co/spaces/panpho273/cookiecloudyday-demi" target="_blank" rel="noopener">HuggingFace Space</a>
+        </div>
+      </section>
+
+      <section id="contact" class="contact container">
+        <div class="card">
+          <h3>ติดต่อ</h3>
+          <p>Instagram: <a href="https://instagram.com/cookiecloudyday" target="_blank" rel="noopener">@cookiecloudyday</a></p>
+          <p>Domain: cookiecloudyday.me</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>© <span id="year"></span> CookieCloudyDay</div>
+        <div class="footer-links">Instagram: <a href="https://instagram.com/cookiecloudyday" target="_blank" rel="noopener">@cookiecloudyday</a> • <a href="https://cookiecloudyday.me" target="_blank" rel="noopener">cookiecloudyday.me</a></div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
