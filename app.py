@@ -60,6 +60,56 @@ MENU_PRICES = {
     "คุกกี้แมคคาเดเมียไวท์ช็อก": 65,
 }
 
+ORDER_KEYWORDS = ["สั่ง", "เอา", "ขอ", "อยากได้", "อยากสั่ง", "ซื้อ"]
+IGNORE_ORDER_TERMS = ["ราคา", "กี่บาท", "กี่โมง", "เวลา", "เมนู", "มีอะไรขาย", "มีอะไร"]
+
+THAI_NUMBERS = str.maketrans(
+    "๐๑๒๓๔๕๖๗๘๙",
+    "0123456789",
+)
+
+
+def normalize_thai_numbers(text: str) -> str:
+    return text.translate(THAI_NUMBERS)
+
+
+def parse_order_from_message(message: str):
+    normalized = normalize_thai_numbers(message).lower()
+    menu_name = None
+    price = None
+
+    for name in sorted(MENU_PRICES.keys(), key=lambda x: -len(x)):
+        if name.lower() in normalized:
+            menu_name = name
+            price = MENU_PRICES[name]
+            break
+
+    if not menu_name:
+        return None
+
+    if any(term in normalized for term in IGNORE_ORDER_TERMS):
+        return None
+
+    order_intent = any(keyword in normalized for keyword in ORDER_KEYWORDS)
+    quantity_match = re.search(r"(\d+)\s*(?:ชิ้น)?", normalized)
+    quantity = int(quantity_match.group(1)) if quantity_match else None
+
+    if quantity is not None:
+        return {
+            "menu": menu_name,
+            "quantity": quantity,
+            "price": price,
+        }
+
+    if order_intent:
+        return {
+            "menu": menu_name,
+            "quantity": None,
+            "price": price,
+        }
+
+    return None
+
 api_key = os.getenv("GOOGLE_API_KEY")
 client = genai.Client(api_key=api_key) if api_key else None
 
@@ -275,84 +325,45 @@ if prompt:
     with st.chat_message("user"):
         st.write(prompt)
 
-    context_chunks = rag.search(prompt, top_k=5)
-    context = "\n---\n".join(context_chunks)
-    full_prompt = build_prompt(prompt, context)
-
-    if client is None:
-        answer = fallback_answer(prompt)
-    else:
+    order_data = parse_order_from_message(prompt)
+    if order_data and order_data["quantity"] is None:
+        answer = (
+            f"รบกวนระบุจำนวนที่ต้องการด้วยนะคะ เช่น \"{order_data['menu']} 2 ชิ้น\""
+        )
+    elif order_data:
         try:
-            response = client.models.generate_content(
-                model=MODEL,
-                contents=full_prompt,
+            saved_total = append_order_to_sheet(
+                order_data["menu"],
+                order_data["quantity"],
+                order_data["price"],
             )
-            answer = response.text.strip() if response.text else fallback_answer(prompt)
+            answer = (
+                f"รับออเดอร์แล้วค่ะ: {order_data['menu']} จำนวน {order_data['quantity']} ชิ้น รวม {saved_total} บาท"
+            )
         except Exception:
-            answer = fallback_answer(prompt)
+            answer = (
+                "ขออภัยค่ะ ระบบบันทึกออเดอร์ยังไม่สำเร็จ ลองใหม่อีกครั้งหรือติดต่อร้านผ่าน Demi AI ค่ะ"
+            )
+    else:
+        context_chunks = rag.search(prompt, top_k=5)
+        context = "\n---\n".join(context_chunks)
+        full_prompt = build_prompt(prompt, context)
 
-    answer = clean_answer(answer)
+        if client is None:
+            answer = fallback_answer(prompt)
+        else:
+            try:
+                response = client.models.generate_content(
+                    model=MODEL,
+                    contents=full_prompt,
+                )
+                answer = response.text.strip() if response.text else fallback_answer(prompt)
+            except Exception:
+                answer = fallback_answer(prompt)
+
+        answer = clean_answer(answer)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
     with st.chat_message("assistant"):
         st.write(answer)
-
-
-# =========================
-# Order Form
-# =========================
-st.divider()
-
-st.markdown(
-    '<div class="order-section">'
-    '<div class="order-title">🛒 สั่งซื้อคุกกี้</div>'
-    '<p class="order-subtitle">เลือกเมนูและจำนวนที่ต้องการ ระบบจะคำนวณยอดรวมให้อัตโนมัติ</p>'
-    '</div>',
-    unsafe_allow_html=True,
-)
-
-selected_menu = st.selectbox("เลือกเมนู", list(MENU_PRICES.keys()))
-
-quantity = st.number_input(
-    "จำนวน",
-    min_value=1,
-    max_value=100,
-    value=1,
-    step=1,
-)
-
-price = MENU_PRICES[selected_menu]
-total = int(price) * int(quantity)
-
-with st.container(border=True):
-    st.subheader("สรุปรายการสั่งซื้อ")
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("เมนู")
-        st.write("จำนวน")
-        st.write("ราคาต่อชิ้น")
-
-    with col2:
-        st.write(f"**{selected_menu}**")
-        st.write(f"**{quantity} ชิ้น**")
-        st.write(f"**{price} บาท**")
-
-    st.divider()
-    st.metric("ยอดรวม", f"{total} บาท")
-
-st.caption("* เป็นคำสั่งซื้อจำลองสำหรับเดโม ระบบจะบันทึกยอดขายเพื่อใช้สรุปรายงาน")
-
-if st.button("ยืนยันคำสั่งซื้อ"):
-    try:
-        saved_total = append_order_to_sheet(
-            selected_menu,
-            int(quantity),
-            int(price),
-        )
-        st.success(
-            f"รับออเดอร์แล้วค่ะ: {selected_menu} จำนวน {quantity} ชิ้น รวม {saved_total} บาท"
-        )
-    except Exception as e:
-        st.error(f"ขออภัยค่ะ ระบบยังบันทึกออเดอร์ไม่ได้: {e}")
