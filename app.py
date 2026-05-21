@@ -16,6 +16,16 @@ from tarot import render_lucky_cookie_tarot
 
 load_dotenv(".env")
 
+
+def build_customer_order_reply(menu_name, quantity, total):
+    return (
+        f"รับออเดอร์เรียบร้อยค่ะ 🍪\n\n"
+        f"รายการ: {menu_name}\n"
+        f"จำนวน: {quantity} ชิ้น\n"
+        f"ยอดรวม: {total} บาท\n\n"
+        f"ขอบคุณที่สั่งคุกกี้กับ CookieCloudyDay นะคะ ☁️"
+    )
+
 # =========================
 # Page Config
 # =========================
@@ -125,7 +135,7 @@ def load_rag():
 
 def clean_answer(text: str) -> str:
     text = text.strip()
-    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTIDemi AI)
+    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
     text = text.replace("===", "")
     text = text.replace("\\n", "\n")
     return text.strip()
@@ -211,7 +221,7 @@ def fallback_answer(user_question: str) -> str:
 
 
 # =========================
-# Google Sheets
+# Google ระบบร้าน
 # =========================
 def get_secret_value(name: str) -> str:
     value = os.getenv(name, "").strip()
@@ -383,6 +393,6 @@ answer = (
         st.write(answer)
 
 
-DEMI_EXTRA_RULES = '\nกฎสำคัญของ Demi:\n- ห้ามบอกให้ลูกค้าไปติดต่อ Demi AI, Demi AI, Demi AI หรือช่องทางอื่น\n- Demi ต้องรับบทเป็นพนักงานร้าน CookieCloudyDay โดยตรง\n- ถ้าลูกค้าบอกว่าอยากสั่งซื้อ ให้ถามว่า "รับคุกกี้อะไรดีคะ" แล้วแนะนำเมนูยอดฮิต\n- ถ้าลูกค้าถามเมนู ให้แนะนำเมนูยอดฮิตพร้อมราคา\n- ถ้าลูกค้าถามโปรโมชัน ให้ตอบโปรโมชันของร้าน\n- ถ้าลูกค้าขอคำทำนาย ให้สุ่มคุกกี้พร้อมคำทำนายประจำวันแบบน่ารัก ๆ\n- ถ้าข้อมูลสั่งซื้อครบ ให้บันทึกลง Google Sheets\n'
+DEMI_EXTRA_RULES = '\nกฎสำคัญของ Demi:\n- ห้ามบอกให้ลูกค้าไปติดต่อ Demi AI, Demi AI, Demi AI หรือช่องทางอื่น\n- Demi ต้องรับบทเป็นพนักงานร้าน CookieCloudyDay โดยตรง\n- ถ้าลูกค้าบอกว่าอยากสั่งซื้อ ให้ถามว่า "รับคุกกี้อะไรดีคะ" แล้วแนะนำเมนูยอดฮิต\n- ถ้าลูกค้าถามเมนู ให้แนะนำเมนูยอดฮิตพร้อมราคา\n- ถ้าลูกค้าถามโปรโมชัน ให้ตอบโปรโมชันของร้าน\n- ถ้าลูกค้าขอคำทำนาย ให้สุ่มคุกกี้พร้อมคำทำนายประจำวันแบบน่ารัก ๆ\n- ถ้าข้อมูลสั่งซื้อครบ ให้บันทึกลง Google ระบบร้าน\n'
 
 render_lucky_cookie_tarot()
