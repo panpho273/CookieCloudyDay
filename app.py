@@ -403,6 +403,237 @@ def direct_customer_answer(message: str):
 
     return None
 
+
+# ===== Dynamic best-seller menus from Google Sheets =====
+
+DEFAULT_HOT_MENUS = [
+    {"menu": "คุกกี้ช็อกโกแลตชิพ", "price": 45, "quantity": 0},
+    {"menu": "คุกกี้แมคคาเดเมียไวท์ช็อก", "price": 65, "quantity": 0},
+    {"menu": "คุกกี้เนยสด", "price": 55, "quantity": 0},
+    {"menu": "คุกกี้สตรอว์เบอร์รีชีสเค้ก", "price": 59, "quantity": 0},
+    {"menu": "คุกกี้ช็อกโกแลตลาวา", "price": 59, "quantity": 0},
+]
+
+MENU_PRICE_MAP = {
+    "คุกกี้ช็อกโกแลตชิพ": 45,
+    "คุกกี้เนยสด": 55,
+    "คุกกี้ช็อกโกแลตลาวา": 59,
+    "คุกกี้ดับเบิลช็อกโกแลต": 59,
+    "คุกกี้มัทฉะไวท์ช็อก": 59,
+    "คุกกี้โอรีโอ้ครีม": 50,
+    "คุกกี้คาราเมลอัลมอนด์": 55,
+    "คุกกี้โกโก้เฮเซลนัท": 59,
+    "คุกกี้เรดเวลเวต": 55,
+    "คุกกี้บราวนี่ฟัดจ์": 55,
+    "คุกกี้สตรอว์เบอร์รีชีสเค้ก": 59,
+    "คุกกี้วานิลลานมสด": 45,
+    "คุกกี้แมคคาเดเมียไวท์ช็อก": 65,
+}
+
+def _to_int(value, default=0):
+    try:
+        if value is None or value == "":
+            return default
+        return int(float(str(value).replace(",", "").strip()))
+    except Exception:
+        return default
+
+@st.cache_data(ttl=300)
+def get_top_selling_menus(limit=5):
+    """
+    อ่านยอดขายจาก Google Sheets แล้วสรุป Top menu ตามจำนวนขายจริง
+    cache 5 นาที เพื่อไม่ให้โหลดชีทถี่เกินไป
+    """
+    try:
+        import os
+        import gspread
+        from collections import defaultdict
+
+        sheet_id = os.getenv("GOOGLE_SHEETS_ID", "").strip()
+        cred_file = (
+            os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "").strip()
+            or "service-account.json"
+        )
+
+        if not sheet_id:
+            return DEFAULT_HOT_MENUS[:limit]
+
+        gc = gspread.service_account(filename=cred_file)
+        sh = gc.open_by_key(sheet_id)
+        ws = sh.sheet1
+        rows = ws.get_all_records()
+
+        summary = defaultdict(lambda: {"quantity": 0, "total": 0, "price": 0})
+
+        for row in rows:
+            menu = (
+                row.get("เมนู")
+                or row.get("menu")
+                or row.get("Menu")
+                or row.get("ชื่อเมนู")
+                or ""
+            )
+            menu = str(menu).strip()
+            if not menu:
+                continue
+
+            quantity = _to_int(
+                row.get("จำนวน")
+                or row.get("quantity")
+                or row.get("Quantity")
+                or 0
+            )
+
+            price = _to_int(
+                row.get("ราคา")
+                or row.get("price")
+                or row.get("Price")
+                or MENU_PRICE_MAP.get(menu, 0)
+            )
+
+            total = _to_int(
+                row.get("ยอดรวม")
+                or row.get("total")
+                or row.get("Total")
+                or (quantity * price)
+            )
+
+            summary[menu]["quantity"] += quantity
+            summary[menu]["total"] += total
+            summary[menu]["price"] = price or MENU_PRICE_MAP.get(menu, 0)
+
+        if not summary:
+            return DEFAULT_HOT_MENUS[:limit]
+
+        top = sorted(
+            summary.items(),
+            key=lambda item: (item[1]["quantity"], item[1]["total"]),
+            reverse=True
+        )
+
+        result = []
+        for menu, data in top[:limit]:
+            result.append({
+                "menu": menu,
+                "price": data["price"] or MENU_PRICE_MAP.get(menu, 0),
+                "quantity": data["quantity"],
+            })
+
+        return result or DEFAULT_HOT_MENUS[:limit]
+
+    except Exception:
+        return DEFAULT_HOT_MENUS[:limit]
+
+def get_hot_menu_reply():
+    top_menus = get_top_selling_menus(limit=5)
+
+    lines = ["ได้เลยค่ะ รับคุกกี้อะไรดีคะ 🍪", "", "วันนี้เมนูยอดฮิตของ CookieCloudyDay คือ:"]
+
+    for index, item in enumerate(top_menus, start=1):
+        menu = item["menu"]
+        price = item["price"] or MENU_PRICE_MAP.get(menu, 0)
+        if price:
+            lines.append(f"{index}. {menu} — {price} บาท")
+        else:
+            lines.append(f"{index}. {menu}")
+
+    lines += [
+        "",
+        "ลูกค้าพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น",
+        "“เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”",
+        "",
+        "หรือพิมพ์เป็นเลขเมนูก็ได้ เช่น “รับเมนู 1 จำนวน 3 ชิ้น”"
+    ]
+
+    return "\n".join(lines)
+
+def get_dynamic_menu_number_map():
+    top_menus = get_top_selling_menus(limit=5)
+    return {
+        str(index): item["menu"]
+        for index, item in enumerate(top_menus, start=1)
+    }
+
+def normalize_menu_number_order(message: str) -> str:
+    text = str(message or "").strip()
+    menu_map = get_dynamic_menu_number_map()
+
+    # รองรับ:
+    # รับเมนู 1 รับ 4 ชิ้น
+    # เมนู 2 3 ชิ้น
+    # เอาเมนูที่ 3 จำนวน 2 ชิ้น
+    # ขอเบอร์ 1 5 ชิ้น
+    pattern = r"(?:เมนูที่|เมนู|เบอร์|ตัวที่)\s*(\d+).*?(\d+)\s*(?:ชิ้น|อัน|กล่อง)?"
+    match = re.search(pattern, text)
+
+    if match:
+        menu_no = match.group(1)
+        quantity = match.group(2)
+        menu_name = menu_map.get(menu_no)
+
+        if menu_name:
+            return f"เอา{menu_name} {quantity} ชิ้น"
+
+    return text
+
+def direct_customer_answer(message: str):
+    q = str(message or "").strip().lower()
+
+    order_intents = [
+        "สั่งของ", "อยากสั่ง", "อยากสั่งซื้อ", "ขอสั่ง", "สั่งยังไง",
+        "ซื้อยังไง", "สั่งซื้อ", "order", "ซื้อคุกกี้"
+    ]
+
+    menu_intents = [
+        "มีเมนู", "เมนูอะไร", "เมนูทั้งหมด", "ขายอะไร", "มีอะไรขาย",
+        "แนะนำเมนู", "แนะนำหน่อย", "เมนูแนะนำ", "เมนูยอดฮิต"
+    ]
+
+    promo_intents = [
+        "โปร", "โปรโมชั่น", "โปรโมชัน", "ลดราคา", "มีโปรไหม", "มีโปรอะไร"
+    ]
+
+    time_intents = [
+        "เปิดกี่โมง", "ร้านเปิด", "ปิดกี่โมง", "เวลาเปิด", "เปิดไหม"
+    ]
+
+    tarot_intents = [
+        "สุ่มไพ่", "คำทำนาย", "ดูดวง", "ไพ่คุกกี้", "วันนี้เหมาะกับคุกกี้อะไร"
+    ]
+
+    if any(word in q for word in promo_intents):
+        return (
+            "ตอนนี้ CookieCloudyDay มีโปรน่ารัก ๆ ค่ะ ☁️🍪\n\n"
+            "1. Cloudy Set\n"
+            "ซื้อคุกกี้ครบ 3 ชิ้น ลด 10 บาท\n\n"
+            "2. Sweet Pair\n"
+            "ซื้อคุกกี้ช็อกโกแลตชิพ 2 ชิ้น เหลือ 85 บาท\n\n"
+            "3. Premium Treat\n"
+            "ซื้อคุกกี้แมคคาเดเมียไวท์ช็อก 2 ชิ้น เหลือ 125 บาท\n\n"
+            "4. Lucky Cookie Tarot\n"
+            "ซื้อคุกกี้ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป รับสิทธิ์สุ่มไพ่คุกกี้พร้อมคำทำนายฟรี 🔮\n\n"
+            "รับโปรไหนดีคะ"
+        )
+
+    if any(word in q for word in time_intents):
+        return "ร้าน CookieCloudyDay เปิดทุกวัน เวลา 10:00–20:00 น. ค่ะ ☁️🍪"
+
+    if any(word in q for word in tarot_intents):
+        return (
+            "ได้เลยค่ะ 🔮🍪\n\n"
+            "Lucky Cookie Tarot คือโปรสุ่มไพ่คุกกี้พร้อมคำทำนายประจำวัน\n"
+            "เมื่อสั่งคุกกี้ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป "
+            "ลูกค้าจะได้รับสิทธิ์สุ่มไพ่ฟรีค่ะ"
+        )
+
+    if any(word in q for word in order_intents):
+        return get_hot_menu_reply()
+
+    if any(word in q for word in menu_intents):
+        return get_hot_menu_reply()
+
+    return None
+
 rag = load_rag()
 
 st.title("☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay")
@@ -427,7 +658,8 @@ if prompt:
     with st.chat_message("user"):
         st.write(prompt)
 
-    order_data = parse_order_from_message(prompt)
+    normalized_prompt = normalize_menu_number_order(prompt)
+    order_data = parse_order_from_message(normalized_prompt)
     direct_answer = direct_customer_answer(prompt)
 
     if order_data:
