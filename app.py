@@ -12,6 +12,7 @@ from google import genai
 from google.oauth2.service_account import Credentials
 
 from rag_engine import RAGEngine
+from tarot import render_lucky_cookie_tarot
 
 load_dotenv(".env")
 
@@ -676,6 +677,27 @@ if prompt:
                 answer = "ขออภัยค่ะ Demi ยังอ่านออเดอร์ไม่ครบ รบกวนพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ เช่น “เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"
             else:
                 saved_total = append_order_to_sheet(menu_name, quantity, price)
+
+                # Lucky Cookie Tarot promo: ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป
+                try:
+                    _promo_quantity = int(quantity)
+                except Exception:
+                    _promo_quantity = 0
+                try:
+                    _promo_total = int(saved_total)
+                except Exception:
+                    _promo_total = 0
+                if _promo_quantity >= 3 and _promo_total >= 150:
+                    st.session_state['lucky_cookie_promo'] = {
+                        'quantity': _promo_quantity,
+                        'total': _promo_total,
+                    }
+                    st.session_state['show_lucky_tarot'] = False
+                    st.session_state.pop('lucky_tarot_card', None)
+                else:
+                    st.session_state.pop('lucky_cookie_promo', None)
+                    st.session_state['show_lucky_tarot'] = False
+
                 answer = build_order_success_reply(menu_name, quantity, saved_total)
 
         except Exception:
@@ -718,3 +740,5 @@ DEMI_CUSTOMER_RULES = """
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
 
+
+render_lucky_cookie_tarot()
