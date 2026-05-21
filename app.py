@@ -12,19 +12,8 @@ from google import genai
 from google.oauth2.service_account import Credentials
 
 from rag_engine import RAGEngine
-from tarot import render_lucky_cookie_tarot
 
 load_dotenv(".env")
-
-
-def build_customer_order_reply(menu_name, quantity, total):
-    return (
-        f"รับออเดอร์เรียบร้อยค่ะ 🍪\n\n"
-        f"รายการ: {menu_name}\n"
-        f"จำนวน: {quantity} ชิ้น\n"
-        f"ยอดรวม: {total} บาท\n\n"
-        f"ขอบคุณที่สั่งคุกกี้กับ CookieCloudyDay นะคะ ☁️"
-    )
 
 # =========================
 # Page Config
@@ -155,7 +144,7 @@ def build_prompt(user_question: str, context: str) -> str:
 
 ถ้าลูกค้าถามเรื่องราคา ให้บอกราคาตามข้อมูลที่มีแบบสั้นและอ่านง่าย
 ถ้าลูกค้าถามเรื่องสุขภาพ แพ้อาหาร ส่วนผสมเฉพาะ หรือข้อมูลที่ไม่มีในข้อมูลร้าน
-ให้ตอบว่าไม่พบข้อมูลนี้ในข้อมูลร้าน และแนะนำให้สั่งซื้อหรือสอบถามผ่าน Demi ได้เลย
+ให้ตอบว่าไม่พบข้อมูลนี้ในข้อมูลร้าน และแนะนำให้ติดต่อร้านโดยตรง
 ถ้าไม่พบข้อมูลจริง ๆ ให้บอกว่าไม่ทราบ อย่าแต่งข้อมูลเอง
 
 ข้อมูลร้าน:
@@ -209,19 +198,19 @@ def fallback_answer(user_question: str) -> str:
         return "จากข้อมูลเมนูของทางร้านในตอนนี้ ยังไม่มีคุกกี้รสทุเรียนในเมนูนะคะ"
 
     if "เบอร์" in q or "โทร" in q:
-        return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถสั่งซื้อหรือสอบถามผ่าน Demi ได้เลยได้ทาง Demi AI หรือ Demi AI ค่ะ"
+        return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถติดต่อทางร้านได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
 
     if "ส่ง" in q or "จัดส่ง" in q:
         return "ร้าน CookieCloudyDay มีบริการจัดส่ง และสามารถรับหน้าร้านได้ค่ะ"
 
     if "สั่งซื้อ" in q or "สั่ง" in q:
-        return "ลูกค้าสามารถสั่งซื้อได้ทาง Demi AI หรือ Demi AI ค่ะ"
+        return "ลูกค้าสามารถสั่งซื้อได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
 
-    return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน Demi AI หรือ Demi AI ค่ะ"
+    return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
 
 
 # =========================
-# Google ระบบร้าน
+# Google Sheets
 # =========================
 def get_secret_value(name: str) -> str:
     value = os.getenv(name, "").strip()
@@ -348,54 +337,7 @@ if prompt:
                 order_data["quantity"],
                 order_data["price"],
             )
-            
-
-            if order_quantity_for_promo >= 3 and saved_total >= 150:
-                st.session_state["lucky_cookie_available"] = True
-                st.session_state["show_lucky_tarot"] = False
-            else:
-                st.session_state["lucky_cookie_available"] = False
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-except Exception as e:
-    pass
-answer = (
+            answer = (
                 f"รับออเดอร์แล้วค่ะ: {order_data['menu']} จำนวน {order_data['quantity']} ชิ้น รวม {saved_total} บาท"
             )
         except Exception:
@@ -425,8 +367,3 @@ answer = (
 
     with st.chat_message("assistant"):
         st.write(answer)
-
-
-DEMI_EXTRA_RULES = '\nกฎสำคัญของ Demi:\n- ห้ามบอกให้ลูกค้าไปติดต่อ Demi AI, Demi AI, Demi AI หรือช่องทางอื่น\n- Demi ต้องรับบทเป็นพนักงานร้าน CookieCloudyDay โดยตรง\n- ถ้าลูกค้าบอกว่าอยากสั่งซื้อ ให้ถามว่า "รับคุกกี้อะไรดีคะ" แล้วแนะนำเมนูยอดฮิต\n- ถ้าลูกค้าถามเมนู ให้แนะนำเมนูยอดฮิตพร้อมราคา\n- ถ้าลูกค้าถามโปรโมชัน ให้ตอบโปรโมชันของร้าน\n- ถ้าลูกค้าขอคำทำนาย ให้สุ่มคุกกี้พร้อมคำทำนายประจำวันแบบน่ารัก ๆ\n- ถ้าข้อมูลสั่งซื้อครบ ให้บันทึกลง Google ระบบร้าน\n'
-
-# render_lucky_cookie_tarot()  # temporarily disabled until order flow is stable
