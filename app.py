@@ -61,7 +61,7 @@ MENU_PRICES = {
 }
 
 ORDER_KEYWORDS = ["สั่ง", "เอา", "ขอ", "อยากได้", "อยากสั่ง", "ซื้อ"]
-IGNORE_ORDER_TERMS = ["ราคา", "กี่บาท", "กี่โมง", "เวลา", "เมนู", "มีอะไรขาย", "มีอะไร"]
+Demi AINORE_ORDER_TERMS = ["ราคา", "กี่บาท", "กี่โมง", "เวลา", "เมนู", "มีอะไรขาย", "มีอะไร"]
 
 THAI_NUMBERS = str.maketrans(
     "๐๑๒๓๔๕๖๗๘๙",
@@ -87,7 +87,7 @@ def parse_order_from_message(message: str):
     if not menu_name:
         return None
 
-    if any(term in normalized for term in IGNORE_ORDER_TERMS):
+    if any(term in normalized for term in Demi AINORE_ORDER_TERMS):
         return None
 
     order_intent = any(keyword in normalized for keyword in ORDER_KEYWORDS)
@@ -124,7 +124,7 @@ def load_rag():
 
 def clean_answer(text: str) -> str:
     text = text.strip()
-    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
+    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTIDemi AI)
     text = text.replace("===", "")
     text = text.replace("\\n", "\n")
     return text.strip()
@@ -144,7 +144,7 @@ def build_prompt(user_question: str, context: str) -> str:
 
 ถ้าลูกค้าถามเรื่องราคา ให้บอกราคาตามข้อมูลที่มีแบบสั้นและอ่านง่าย
 ถ้าลูกค้าถามเรื่องสุขภาพ แพ้อาหาร ส่วนผสมเฉพาะ หรือข้อมูลที่ไม่มีในข้อมูลร้าน
-ให้ตอบว่าไม่พบข้อมูลนี้ในข้อมูลร้าน และแนะนำให้ติดต่อร้านโดยตรง
+ให้ตอบว่าไม่พบข้อมูลนี้ในข้อมูลร้าน และแนะนำให้สั่งซื้อหรือสอบถามผ่าน Demi ได้เลย
 ถ้าไม่พบข้อมูลจริง ๆ ให้บอกว่าไม่ทราบ อย่าแต่งข้อมูลเอง
 
 ข้อมูลร้าน:
@@ -198,15 +198,15 @@ def fallback_answer(user_question: str) -> str:
         return "จากข้อมูลเมนูของทางร้านในตอนนี้ ยังไม่มีคุกกี้รสทุเรียนในเมนูนะคะ"
 
     if "เบอร์" in q or "โทร" in q:
-        return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถติดต่อทางร้านได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+        return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถสั่งซื้อหรือสอบถามผ่าน Demi ได้เลยได้ทาง Demi AI หรือ Demi AI ค่ะ"
 
     if "ส่ง" in q or "จัดส่ง" in q:
         return "ร้าน CookieCloudyDay มีบริการจัดส่ง และสามารถรับหน้าร้านได้ค่ะ"
 
     if "สั่งซื้อ" in q or "สั่ง" in q:
-        return "ลูกค้าสามารถสั่งซื้อได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+        return "ลูกค้าสามารถสั่งซื้อได้ทาง Demi AI หรือ Demi AI ค่ะ"
 
-    return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+    return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน Demi AI หรือ Demi AI ค่ะ"
 
 
 # =========================
@@ -367,3 +367,6 @@ if prompt:
 
     with st.chat_message("assistant"):
         st.write(answer)
+
+
+DEMI_EXTRA_RULES = '\nกฎสำคัญของ Demi:\n- ห้ามบอกให้ลูกค้าไปติดต่อ Instagram, IG, LINE หรือช่องทางอื่น\n- Demi ต้องรับบทเป็นพนักงานร้าน CookieCloudyDay โดยตรง\n- ถ้าลูกค้าบอกว่าอยากสั่งซื้อ ให้ถามว่า "รับคุกกี้อะไรดีคะ" แล้วแนะนำเมนูยอดฮิต\n- ถ้าลูกค้าถามเมนู ให้แนะนำเมนูยอดฮิตพร้อมราคา\n- ถ้าลูกค้าถามโปรโมชัน ให้ตอบโปรโมชันของร้าน\n- ถ้าลูกค้าขอคำทำนาย ให้สุ่มคุกกี้พร้อมคำทำนายประจำวันแบบน่ารัก ๆ\n- ถ้าข้อมูลสั่งซื้อครบ ให้บันทึกลง Google Sheets\n'
