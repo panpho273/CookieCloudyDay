@@ -61,7 +61,7 @@ MENU_PRICES = {
 }
 
 ORDER_KEYWORDS = ["สั่ง", "เอา", "ขอ", "อยากได้", "อยากสั่ง", "ซื้อ"]
-Demi AINORE_ORDER_TERMS = ["ราคา", "กี่บาท", "กี่โมง", "เวลา", "เมนู", "มีอะไรขาย", "มีอะไร"]
+IGNORE_ORDER_TERMS = ["ราคา", "กี่บาท", "กี่โมง", "เวลา", "เมนู", "มีอะไรขาย", "มีอะไร"]
 
 THAI_NUMBERS = str.maketrans(
     "๐๑๒๓๔๕๖๗๘๙",
@@ -87,7 +87,7 @@ def parse_order_from_message(message: str):
     if not menu_name:
         return None
 
-    if any(term in normalized for term in Demi AINORE_ORDER_TERMS):
+    if any(term in normalized for term in IGNORE_ORDER_TERMS):
         return None
 
     order_intent = any(keyword in normalized for keyword in ORDER_KEYWORDS)
@@ -337,7 +337,20 @@ if prompt:
                 order_data["quantity"],
                 order_data["price"],
             )
-            answer = (
+            
+            # Lucky Cookie Tarot Promo:
+            # เงื่อนไข: ซื้อครบ 3 ชิ้นขึ้นไป และยอดรวมตั้งแต่ 150 บาทขึ้นไป
+            try:
+                order_quantity_for_promo = int(quantity)
+            except Exception:
+                order_quantity_for_promo = 0
+
+            if order_quantity_for_promo >= 3 and saved_total >= 150:
+                st.session_state["lucky_cookie_available"] = True
+                st.session_state["show_lucky_tarot"] = False
+            else:
+                st.session_state["lucky_cookie_available"] = False
+answer = (
                 f"รับออเดอร์แล้วค่ะ: {order_data['menu']} จำนวน {order_data['quantity']} ชิ้น รวม {saved_total} บาท"
             )
         except Exception:
@@ -370,3 +383,163 @@ if prompt:
 
 
 DEMI_EXTRA_RULES = '\nกฎสำคัญของ Demi:\n- ห้ามบอกให้ลูกค้าไปติดต่อ Demi AI, Demi AI, Demi AI หรือช่องทางอื่น\n- Demi ต้องรับบทเป็นพนักงานร้าน CookieCloudyDay โดยตรง\n- ถ้าลูกค้าบอกว่าอยากสั่งซื้อ ให้ถามว่า "รับคุกกี้อะไรดีคะ" แล้วแนะนำเมนูยอดฮิต\n- ถ้าลูกค้าถามเมนู ให้แนะนำเมนูยอดฮิตพร้อมราคา\n- ถ้าลูกค้าถามโปรโมชัน ให้ตอบโปรโมชันของร้าน\n- ถ้าลูกค้าขอคำทำนาย ให้สุ่มคุกกี้พร้อมคำทำนายประจำวันแบบน่ารัก ๆ\n- ถ้าข้อมูลสั่งซื้อครบ ให้บันทึกลง Google Sheets\n'
+
+# =========================
+# Lucky Cookie Tarot Feature
+# =========================
+import random
+
+TAROT_DECK = [
+    {
+        "name": "The Fool",
+        "emoji": "🌤️",
+        "meaning": "วันนี้เหมาะกับการเริ่มต้นอะไรใหม่ ๆ แบบไม่ต้องกดดันตัวเองมากเกินไป ลองเปิดใจให้โอกาสเล็ก ๆ ที่เข้ามา",
+        "cookie": "คุกกี้ช็อกโกแลตชิพ"
+    },
+    {
+        "name": "The Magician",
+        "emoji": "✨",
+        "meaning": "วันนี้คุณมีพลังในการจัดการสิ่งต่าง ๆ ได้ดี ถ้าตั้งใจทำอะไร มีโอกาสเห็นผลชัดเจน",
+        "cookie": "คุกกี้แมคคาเดเมียไวท์ช็อก"
+    },
+    {
+        "name": "The Empress",
+        "emoji": "🌷",
+        "meaning": "วันนี้เป็นวันที่เหมาะกับการดูแลตัวเอง พักใจ และให้รางวัลเล็ก ๆ กับตัวเอง",
+        "cookie": "คุกกี้เนยสด"
+    },
+    {
+        "name": "The Lovers",
+        "emoji": "💗",
+        "meaning": "วันนี้มีพลังของความสัมพันธ์ดี ๆ อาจได้รับกำลังใจจากคนรอบตัว หรือได้เลือกสิ่งที่ทำให้ใจฟู",
+        "cookie": "คุกกี้สตรอว์เบอร์รีชีสเค้ก"
+    },
+    {
+        "name": "Strength",
+        "emoji": "🦁",
+        "meaning": "วันนี้คุณแข็งแรงกว่าที่คิด ค่อย ๆ ทำไปทีละอย่าง ไม่ต้องรีบร้อน แล้วจะผ่านไปได้ดี",
+        "cookie": "คุกกี้โกโก้เฮเซลนัท"
+    },
+    {
+        "name": "The Star",
+        "emoji": "⭐",
+        "meaning": "วันนี้มีสัญญาณดี ๆ เรื่องความหวังและแรงบันดาลใจ เหมาะกับการเริ่มวางแผนสิ่งที่อยากทำ",
+        "cookie": "คุกกี้วานิลลานมสด"
+    },
+    {
+        "name": "The Sun",
+        "emoji": "☀️",
+        "meaning": "วันนี้เป็นวันที่สดใส เหมาะกับการทำเรื่องง่าย ๆ ให้สำเร็จ และแบ่งปันพลังดี ๆ ให้คนอื่น",
+        "cookie": "คุกกี้คาราเมลอัลมอนด์"
+    },
+    {
+        "name": "Wheel of Fortune",
+        "emoji": "🎡",
+        "meaning": "วันนี้อาจมีเรื่องเปลี่ยนแปลงเล็ก ๆ แต่เป็นจังหวะที่พาคุณไปเจอสิ่งใหม่ที่ดีขึ้น",
+        "cookie": "คุกกี้ช็อกโกแลตลาวา"
+    },
+    {
+        "name": "Temperance",
+        "emoji": "🍵",
+        "meaning": "วันนี้ควรทำทุกอย่างแบบพอดี ๆ ไม่เร่ง ไม่ฝืน แล้วใจจะนิ่งขึ้น",
+        "cookie": "คุกกี้มัทฉะไวท์ช็อก"
+    },
+    {
+        "name": "The Moon",
+        "emoji": "🌙",
+        "meaning": "วันนี้อาจมีเรื่องให้คิดเยอะนิดหน่อย แต่ไม่ต้องกลัว ค่อย ๆ ดูข้อมูลให้ชัดก่อนตัดสินใจ",
+        "cookie": "คุกกี้โอรีโอ้ครีม"
+    },
+]
+
+def draw_lucky_cookie_tarot():
+    card = random.choice(TAROT_DECK)
+    return card
+
+@st.dialog("🍪 Lucky Cookie Tarot")
+def lucky_cookie_tarot_dialog():
+    st.markdown(
+        """
+        <style>
+        .tarot-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            text-align: center;
+            padding: 10px 4px 4px;
+        }
+        .tarot-card {
+            width: 190px;
+            height: 280px;
+            border-radius: 22px;
+            background: linear-gradient(145deg, #fff7ef, #f0c7bd);
+            box-shadow: 0 20px 50px rgba(90, 50, 35, .22);
+            border: 1px solid rgba(130, 80, 55, .18);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: flipCard .75s ease both;
+        }
+        .tarot-emoji {
+            font-size: 58px;
+            margin-bottom: 14px;
+        }
+        .tarot-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: #4a2a1d;
+        }
+        @keyframes flipCard {
+            0% { transform: rotateY(90deg) scale(.92); opacity: 0; }
+            55% { transform: rotateY(-10deg) scale(1.02); opacity: 1; }
+            100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    if "lucky_tarot_card" not in st.session_state:
+        st.session_state.lucky_tarot_card = draw_lucky_cookie_tarot()
+
+    card = st.session_state.lucky_tarot_card
+
+    st.markdown(
+        f"""
+        <div class="tarot-wrap">
+            <div class="tarot-card">
+                <div class="tarot-emoji">{card["emoji"]}</div>
+                <div class="tarot-name">{card["name"]}</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(f"### คำทำนายของคุณ")
+    st.write(card["meaning"])
+    st.success(f"เมนูที่เหมาะกับวันนี้: {card['cookie']}")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔄 สุ่มใหม่", use_container_width=True):
+            st.session_state.lucky_tarot_card = draw_lucky_cookie_tarot()
+            st.rerun()
+    with col2:
+        if st.button("ปิด", use_container_width=True):
+            st.session_state.pop("show_lucky_tarot", None)
+            st.rerun()
+
+def show_lucky_cookie_button():
+    if st.session_state.get("lucky_cookie_available"):
+        st.info("🎁 ออเดอร์นี้เข้าเงื่อนไขโปร Lucky Cookie Tarot: ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป")
+        if st.button("🔮 รับไพ่คุกกี้และคำทำนาย", use_container_width=True):
+            st.session_state.show_lucky_tarot = True
+            st.session_state.lucky_tarot_card = draw_lucky_cookie_tarot()
+
+    if st.session_state.get("show_lucky_tarot"):
+        lucky_cookie_tarot_dialog()
+
+show_lucky_cookie_button()
