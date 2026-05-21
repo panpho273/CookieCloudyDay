@@ -125,7 +125,7 @@ def load_rag():
 
 def clean_answer(text: str) -> str:
     text = text.strip()
-    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTIDemi)
+    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
     text = text.replace("===", "")
     text = text.replace("\\n", "\n")
     return text.strip()
