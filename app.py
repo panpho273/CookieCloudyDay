@@ -301,6 +301,108 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
 # =========================
 # UI Header
 # =========================
+
+# ===== Demi deterministic customer replies =====
+
+MENU_ITEMS = {
+    "คุกกี้ช็อกโกแลตชิพ": 45,
+    "คุกกี้เนยสด": 55,
+    "คุกกี้ช็อกโกแลตลาวา": 59,
+    "คุกกี้ดับเบิลช็อกโกแลต": 59,
+    "คุกกี้มัทฉะไวท์ช็อก": 59,
+    "คุกกี้โอรีโอ้ครีม": 50,
+    "คุกกี้คาราเมลอัลมอนด์": 55,
+    "คุกกี้โกโก้เฮเซลนัท": 59,
+    "คุกกี้เรดเวลเวต": 55,
+    "คุกกี้บราวนี่ฟัดจ์": 55,
+    "คุกกี้สตรอว์เบอร์รีชีสเค้ก": 59,
+    "คุกกี้วานิลลานมสด": 45,
+    "คุกกี้แมคคาเดเมียไวท์ช็อก": 65,
+}
+
+HOT_MENU_REPLY = """ได้เลยค่ะ รับคุกกี้อะไรดีคะ 🍪
+
+วันนี้เมนูยอดฮิตของ CookieCloudyDay มี:
+1. คุกกี้ช็อกโกแลตชิพ — 45 บาท
+2. คุกกี้แมคคาเดเมียไวท์ช็อก — 65 บาท
+3. คุกกี้เนยสด — 55 บาท
+4. คุกกี้สตรอว์เบอร์รีชีสเค้ก — 59 บาท
+5. คุกกี้ช็อกโกแลตลาวา — 59 บาท
+
+ลูกค้าพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น
+“เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"""
+
+PROMO_REPLY = """ตอนนี้ CookieCloudyDay มีโปรน่ารัก ๆ ค่ะ ☁️🍪
+
+1. Cloudy Set
+ซื้อคุกกี้ครบ 3 ชิ้น ลด 10 บาท
+
+2. Sweet Pair
+ซื้อคุกกี้ช็อกโกแลตชิพ 2 ชิ้น เหลือ 85 บาท
+
+3. Premium Treat
+ซื้อคุกกี้แมคคาเดเมียไวท์ช็อก 2 ชิ้น เหลือ 125 บาท
+
+4. Lucky Cookie Tarot
+ซื้อคุกกี้ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป รับสิทธิ์สุ่มไพ่คุกกี้พร้อมคำทำนายฟรี 🔮
+
+รับโปรไหนดีคะ"""
+
+def normalize_thai_text(text: str) -> str:
+    return str(text or "").strip().lower()
+
+def build_order_success_reply(menu_name: str, quantity: int, total: int) -> str:
+    return (
+        "รับออเดอร์เรียบร้อยค่ะ 🍪\n\n"
+        f"รายการ: {menu_name}\n"
+        f"จำนวน: {quantity} ชิ้น\n"
+        f"ยอดรวม: {total} บาท\n\n"
+        "ขอบคุณที่สั่งคุกกี้กับ CookieCloudyDay นะคะ ☁️"
+    )
+
+def direct_customer_answer(message: str):
+    q = normalize_thai_text(message)
+
+    order_intents = [
+        "สั่งของ", "อยากสั่ง", "อยากสั่งซื้อ", "ขอสั่ง", "สั่งยังไง",
+        "ซื้อยังไง", "สั่งซื้อ", "order", "ซื้อคุกกี้"
+    ]
+    menu_intents = [
+        "มีเมนู", "เมนูอะไร", "เมนูทั้งหมด", "ขายอะไร", "มีอะไรขาย",
+        "แนะนำเมนู", "แนะนำหน่อย", "เมนูแนะนำ", "เมนูยอดฮิต"
+    ]
+    promo_intents = [
+        "โปร", "โปรโมชั่น", "โปรโมชัน", "ลดราคา", "มีโปรไหม", "มีโปรอะไร"
+    ]
+    time_intents = [
+        "เปิดกี่โมง", "ร้านเปิด", "ปิดกี่โมง", "เวลาเปิด", "เปิดไหม"
+    ]
+    tarot_intents = [
+        "สุ่มไพ่", "คำทำนาย", "ดูดวง", "ไพ่คุกกี้", "วันนี้เหมาะกับคุกกี้อะไร"
+    ]
+
+    if any(word in q for word in promo_intents):
+        return PROMO_REPLY
+
+    if any(word in q for word in time_intents):
+        return "ร้าน CookieCloudyDay เปิดทุกวัน เวลา 10:00–20:00 น. ค่ะ ☁️🍪"
+
+    if any(word in q for word in tarot_intents):
+        return (
+            "ได้เลยค่ะ 🔮🍪\n\n"
+            "Lucky Cookie Tarot คือโปรสุ่มไพ่คุกกี้พร้อมคำทำนายประจำวัน\n"
+            "เมื่อสั่งคุกกี้ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป "
+            "ลูกค้าจะได้รับสิทธิ์สุ่มไพ่ฟรีค่ะ"
+        )
+
+    if any(word in q for word in order_intents):
+        return HOT_MENU_REPLY
+
+    if any(word in q for word in menu_intents):
+        return HOT_MENU_REPLY
+
+    return None
+
 rag = load_rag()
 
 st.title("☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay")
@@ -326,42 +428,50 @@ if prompt:
         st.write(prompt)
 
     order_data = parse_order_from_message(prompt)
-    if order_data and order_data["quantity"] is None:
-        answer = (
-            f"รบกวนระบุจำนวนที่ต้องการด้วยนะคะ เช่น \"{order_data['menu']} 2 ชิ้น\""
-        )
-    elif order_data:
+    direct_answer = direct_customer_answer(prompt)
+
+    if order_data:
         try:
-            saved_total = append_order_to_sheet(
-                order_data["menu"],
-                order_data["quantity"],
-                order_data["price"],
+            menu_name = (
+                order_data.get("menu_name")
+                or order_data.get("menu")
+                or order_data.get("name")
             )
-            answer = (
-                f"รับออเดอร์แล้วค่ะ: {order_data['menu']} จำนวน {order_data['quantity']} ชิ้น รวม {saved_total} บาท"
-            )
+            quantity = int(order_data.get("quantity", 1))
+            price = int(order_data.get("price") or MENU_ITEMS.get(menu_name, 0))
+
+            if not menu_name or quantity <= 0 or price <= 0:
+                answer = "ขออภัยค่ะ Demi ยังอ่านออเดอร์ไม่ครบ รบกวนพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ เช่น “เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"
+            else:
+                saved_total = append_order_to_sheet(menu_name, quantity, price)
+                answer = build_order_success_reply(menu_name, quantity, saved_total)
+
         except Exception:
-            answer = (
-                "ขออภัยค่ะ ระบบบันทึกออเดอร์ยังไม่สำเร็จ ลองใหม่อีกครั้งหรือติดต่อร้านผ่าน Demi AI ค่ะ"
-            )
+            answer = "ขออภัยค่ะ ตอนนี้ Demi รับออเดอร์ไม่สำเร็จ ลองพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ"
+
+    elif direct_answer:
+        answer = direct_answer
+
     else:
         context_chunks = rag.search(prompt, top_k=5)
-        context = "\n---\n".join(context_chunks)
+        context = "
+
+".join(context_chunks)
         full_prompt = build_prompt(prompt, context)
 
-        if client is None:
+        if not client:
             answer = fallback_answer(prompt)
         else:
             try:
                 response = client.models.generate_content(
-                    model=MODEL,
+                    model=MODEL_NAME,
                     contents=full_prompt,
                 )
                 answer = response.text.strip() if response.text else fallback_answer(prompt)
             except Exception:
                 answer = fallback_answer(prompt)
 
-        answer = clean_answer(answer)
+    answer = clean_answer(answer)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
