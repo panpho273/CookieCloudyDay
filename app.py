@@ -349,12 +349,6 @@ if prompt:
                 order_data["price"],
             )
             
-            # Lucky Cookie Tarot Promo:
-            # เงื่อนไข: ซื้อครบ 3 ชิ้นขึ้นไป และยอดรวมตั้งแต่ 150 บาทขึ้นไป
-            try:
-                order_quantity_for_promo = int(quantity)
-            except Exception:
-                order_quantity_for_promo = 0
 
             if order_quantity_for_promo >= 3 and saved_total >= 150:
                 st.session_state["lucky_cookie_available"] = True
@@ -395,4 +389,4 @@ answer = (
 
 DEMI_EXTRA_RULES = '\nกฎสำคัญของ Demi:\n- ห้ามบอกให้ลูกค้าไปติดต่อ Demi AI, Demi AI, Demi AI หรือช่องทางอื่น\n- Demi ต้องรับบทเป็นพนักงานร้าน CookieCloudyDay โดยตรง\n- ถ้าลูกค้าบอกว่าอยากสั่งซื้อ ให้ถามว่า "รับคุกกี้อะไรดีคะ" แล้วแนะนำเมนูยอดฮิต\n- ถ้าลูกค้าถามเมนู ให้แนะนำเมนูยอดฮิตพร้อมราคา\n- ถ้าลูกค้าถามโปรโมชัน ให้ตอบโปรโมชันของร้าน\n- ถ้าลูกค้าขอคำทำนาย ให้สุ่มคุกกี้พร้อมคำทำนายประจำวันแบบน่ารัก ๆ\n- ถ้าข้อมูลสั่งซื้อครบ ให้บันทึกลง Google ระบบร้าน\n'
 
-render_lucky_cookie_tarot()
+# render_lucky_cookie_tarot()  # temporarily disabled until order flow is stable
