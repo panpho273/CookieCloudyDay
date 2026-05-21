@@ -10,38 +10,10 @@ FALLBACK_TAROT_CARDS = [
         "name": "The Choco Chip",
         "emoji": "🍪",
         "cookie": "คุกกี้ช็อกโกแลตชิพ",
+        "cookie_price": 45,
+        "keyword": "ความสดใส การเริ่มต้นเล็ก ๆ",
         "meaning": "วันนี้เหมาะกับการเริ่มต้นอะไรเล็ก ๆ ที่ทำให้ใจฟู ความพยายามเล็กน้อยจะพาไปสู่เรื่องดี ๆ",
-    },
-    {
-        "name": "The Butter Sun",
-        "emoji": "☀️",
-        "cookie": "คุกกี้เนยสด",
-        "meaning": "วันนี้มีพลังอบอุ่น เหมาะกับการพักใจ ให้รางวัลตัวเอง และทำสิ่งง่าย ๆ ให้สำเร็จ",
-    },
-    {
-        "name": "Strawberry Heart",
-        "emoji": "🍓",
-        "cookie": "คุกกี้สตรอว์เบอร์รีชีสเค้ก",
-        "meaning": "วันนี้มีเสน่ห์กับเรื่องเล็ก ๆ รอบตัว เหมาะกับความสดใส การคุยดี ๆ และกำลังใจจากคนใกล้ตัว",
-    },
-    {
-        "name": "Midnight Lava",
-        "emoji": "🌙",
-        "cookie": "คุกกี้ช็อกโกแลตลาวา",
-        "meaning": "วันนี้เหมาะกับการจริงจังกับเป้าหมาย แต่ต้องใจดีกับตัวเองด้วย อย่ากดดันจนเกินไป",
-    },
-    {
-        "name": "Matcha Calm",
-        "emoji": "🍵",
-        "cookie": "คุกกี้มัทฉะไวท์ช็อก",
-        "meaning": "วันนี้ควรค่อย ๆ ทำ ไม่ต้องรีบ ทุกอย่างจะค่อย ๆ เข้าที่ ถ้าใจนิ่ง ผลลัพธ์จะดีขึ้น",
-    },
-    {
-        "name": "Macadamia Luck",
-        "emoji": "🥜",
-        "cookie": "คุกกี้แมคคาเดเมียไวท์ช็อก",
-        "meaning": "วันนี้มีโอกาสดี ๆ จากสิ่งที่ตั้งใจทำ อาจมีเรื่องเล็ก ๆ ที่ทำให้รู้สึกโชคดี",
-    },
+    }
 ]
 
 @st.cache_data(ttl=300)
@@ -59,6 +31,28 @@ def load_tarot_cards():
 
 def draw_tarot_card():
     return random.choice(load_tarot_cards())
+
+def reset_order_chat():
+    keys_to_remove = [
+        "lucky_cookie_promo",
+        "show_lucky_tarot",
+        "lucky_tarot_card",
+        "last_order_total",
+        "last_order_quantity",
+        "last_order_menu",
+    ]
+
+    for key in keys_to_remove:
+        st.session_state.pop(key, None)
+
+    st.session_state.messages = []
+    st.session_state.messages.append({
+        "role": "assistant",
+        "content": (
+            "สวัสดีค่ะ Demi พร้อมรับออเดอร์ใหม่แล้วค่ะ 🍪\n\n"
+            "ลูกค้าพิมพ์ว่า “สั่งของ” หรือพิมพ์ชื่อเมนูพร้อมจำนวนได้เลยนะคะ"
+        )
+    })
 
 @st.dialog("🔮 Lucky Cookie Tarot")
 def lucky_cookie_tarot_dialog():
@@ -107,8 +101,8 @@ def lucky_cookie_tarot_dialog():
         </style>
 
         <div class="tarot-card">
-            <div class="tarot-emoji">{card["emoji"]}</div>
-            <div class="tarot-name">{card["name"]}</div>
+            <div class="tarot-emoji">{card.get("emoji", "🔮")}</div>
+            <div class="tarot-name">{card.get("name", "Lucky Cookie Tarot")}</div>
             <div class="tarot-label">Cookie Fortune Card</div>
         </div>
         """,
@@ -116,12 +110,12 @@ def lucky_cookie_tarot_dialog():
     )
 
     st.markdown("### คำทำนายของคุณ")
-    st.write(card["meaning"])
+    st.write(card.get("meaning", "วันนี้เหมาะกับการให้รางวัลตัวเองด้วยคุกกี้น่ารัก ๆ"))
 
     st.info(f"ความหมายหลักของไพ่: {card.get('keyword', '-')}")
     st.success(
         f"🎁 โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป "
-        f"รับฟรี {card['cookie']} 1 ชิ้น ตามไพ่ที่สุ่มได้"
+        f"รับฟรี {card.get('cookie', 'คุกกี้พิเศษของร้าน')} 1 ชิ้น ตามไพ่ที่สุ่มได้"
     )
 
     col1, col2 = st.columns(2)
@@ -132,8 +126,8 @@ def lucky_cookie_tarot_dialog():
             st.rerun()
 
     with col2:
-        if st.button("ปิด", use_container_width=True):
-            st.session_state["show_lucky_tarot"] = False
+        if st.button("✅ จบออเดอร์และเริ่มแชทใหม่", use_container_width=True):
+            reset_order_chat()
             st.rerun()
 
 def render_lucky_cookie_tarot():
@@ -144,13 +138,17 @@ def render_lucky_cookie_tarot():
 
     st.markdown("---")
     st.success(
-        f"🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ ครบ {promo.get('quantity')} ชิ้น "
-        f"ยอดรวม {promo.get('total')} บาท"
+        f"🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ "
+        f"ครบ {promo.get('quantity')} ชิ้น ยอดรวม {promo.get('total')} บาท"
     )
 
     if st.button("🔮 รับไพ่คุกกี้และคำทำนาย", use_container_width=True):
         st.session_state["show_lucky_tarot"] = True
         st.session_state["lucky_tarot_card"] = draw_tarot_card()
+
+    if st.button("✅ จบออเดอร์ / เริ่มแชทใหม่", use_container_width=True):
+        reset_order_chat()
+        st.rerun()
 
     if st.session_state.get("show_lucky_tarot"):
         lucky_cookie_tarot_dialog()
