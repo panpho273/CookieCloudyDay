@@ -5,10 +5,57 @@ import streamlit as st
 
 TAROT_FILE = Path(__file__).parent / "tarot_cards.json"
 
-@st.cache_data
+FALLBACK_TAROT_CARDS = [
+    {
+        "name": "The Choco Chip",
+        "emoji": "🍪",
+        "cookie": "คุกกี้ช็อกโกแลตชิพ",
+        "meaning": "วันนี้เหมาะกับการเริ่มต้นอะไรเล็ก ๆ ที่ทำให้ใจฟู ความพยายามเล็กน้อยจะพาไปสู่เรื่องดี ๆ",
+    },
+    {
+        "name": "The Butter Sun",
+        "emoji": "☀️",
+        "cookie": "คุกกี้เนยสด",
+        "meaning": "วันนี้มีพลังอบอุ่น เหมาะกับการพักใจ ให้รางวัลตัวเอง และทำสิ่งง่าย ๆ ให้สำเร็จ",
+    },
+    {
+        "name": "Strawberry Heart",
+        "emoji": "🍓",
+        "cookie": "คุกกี้สตรอว์เบอร์รีชีสเค้ก",
+        "meaning": "วันนี้มีเสน่ห์กับเรื่องเล็ก ๆ รอบตัว เหมาะกับความสดใส การคุยดี ๆ และกำลังใจจากคนใกล้ตัว",
+    },
+    {
+        "name": "Midnight Lava",
+        "emoji": "🌙",
+        "cookie": "คุกกี้ช็อกโกแลตลาวา",
+        "meaning": "วันนี้เหมาะกับการจริงจังกับเป้าหมาย แต่ต้องใจดีกับตัวเองด้วย อย่ากดดันจนเกินไป",
+    },
+    {
+        "name": "Matcha Calm",
+        "emoji": "🍵",
+        "cookie": "คุกกี้มัทฉะไวท์ช็อก",
+        "meaning": "วันนี้ควรค่อย ๆ ทำ ไม่ต้องรีบ ทุกอย่างจะค่อย ๆ เข้าที่ ถ้าใจนิ่ง ผลลัพธ์จะดีขึ้น",
+    },
+    {
+        "name": "Macadamia Luck",
+        "emoji": "🥜",
+        "cookie": "คุกกี้แมคคาเดเมียไวท์ช็อก",
+        "meaning": "วันนี้มีโอกาสดี ๆ จากสิ่งที่ตั้งใจทำ อาจมีเรื่องเล็ก ๆ ที่ทำให้รู้สึกโชคดี",
+    },
+]
+
+@st.cache_data(ttl=300)
 def load_tarot_cards():
-    with open(TAROT_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    if TAROT_FILE.exists():
+        try:
+            with open(TAROT_FILE, "r", encoding="utf-8") as f:
+                cards = json.load(f)
+            if isinstance(cards, list) and cards:
+                return cards
+        except Exception:
+            pass
+
+    return FALLBACK_TAROT_CARDS
 
 def draw_tarot_card():
     return random.choice(load_tarot_cards())
@@ -92,8 +139,8 @@ def render_lucky_cookie_tarot():
 
     st.markdown("---")
     st.success(
-        f"🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ "
-        f"ครบ {promo.get('quantity')} ชิ้น ยอดรวม {promo.get('total')} บาท"
+        f"🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ ครบ {promo.get('quantity')} ชิ้น "
+        f"ยอดรวม {promo.get('total')} บาท"
     )
 
     if st.button("🔮 รับไพ่คุกกี้และคำทำนาย", use_container_width=True):
