@@ -117,7 +117,12 @@ def lucky_cookie_tarot_dialog():
 
     st.markdown("### คำทำนายของคุณ")
     st.write(card["meaning"])
-    st.success(f"เมนูที่เหมาะกับวันนี้: {card['cookie']}")
+
+    st.info(f"ความหมายหลักของไพ่: {card.get('keyword', '-')}")
+    st.success(
+        f"🎁 โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป "
+        f"รับฟรี {card['cookie']} 1 ชิ้น ตามไพ่ที่สุ่มได้"
+    )
 
     col1, col2 = st.columns(2)
 
