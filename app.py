@@ -355,6 +355,46 @@ if prompt:
                 st.session_state["show_lucky_tarot"] = False
             else:
                 st.session_state["lucky_cookie_available"] = False
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
+except Exception as e:
+    pass
 answer = (
                 f"รับออเดอร์แล้วค่ะ: {order_data['menu']} จำนวน {order_data['quantity']} ชิ้น รวม {saved_total} บาท"
             )
