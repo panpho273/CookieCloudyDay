@@ -454,9 +454,7 @@ if prompt:
 
     else:
         context_chunks = rag.search(prompt, top_k=5)
-        context = "
-
-".join(context_chunks)
+        context = "\n\n".join(context_chunks)
         full_prompt = build_prompt(prompt, context)
 
         if not client:
