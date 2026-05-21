@@ -62,7 +62,7 @@ MENU_PRICES = {
 }
 
 ORDER_KEYWORDS = ["สั่ง", "เอา", "ขอ", "อยากได้", "อยากสั่ง", "ซื้อ"]
-IGNORE_ORDER_TERMS = ["ราคา", "กี่บาท", "กี่โมง", "เวลา", "เมนู", "มีอะไรขาย", "มีอะไร"]
+DemiNORE_ORDER_TERMS = ["ราคา", "กี่บาท", "กี่โมง", "เวลา", "เมนู", "มีอะไรขาย", "มีอะไร"]
 
 THAI_NUMBERS = str.maketrans(
     "๐๑๒๓๔๕๖๗๘๙",
@@ -88,7 +88,7 @@ def parse_order_from_message(message: str):
     if not menu_name:
         return None
 
-    if any(term in normalized for term in IGNORE_ORDER_TERMS):
+    if any(term in normalized for term in DemiNORE_ORDER_TERMS):
         return None
 
     order_intent = any(keyword in normalized for keyword in ORDER_KEYWORDS)
@@ -125,7 +125,7 @@ def load_rag():
 
 def clean_answer(text: str) -> str:
     text = text.strip()
-    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
+    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTIDemi)
     text = text.replace("===", "")
     text = text.replace("\\n", "\n")
     return text.strip()
@@ -199,15 +199,15 @@ def fallback_answer(user_question: str) -> str:
         return "จากข้อมูลเมนูของทางร้านในตอนนี้ ยังไม่มีคุกกี้รสทุเรียนในเมนูนะคะ"
 
     if "เบอร์" in q or "โทร" in q:
-        return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถติดต่อทางร้านได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+        return "ข้อมูลเบอร์โทรของร้านยังไม่ได้ระบุไว้นะคะ สามารถติดต่อทางร้านได้ทาง Demi ค่ะ"
 
     if "ส่ง" in q or "จัดส่ง" in q:
         return "ร้าน CookieCloudyDay มีบริการจัดส่ง และสามารถรับหน้าร้านได้ค่ะ"
 
     if "สั่งซื้อ" in q or "สั่ง" in q:
-        return "ลูกค้าสามารถสั่งซื้อได้ทาง DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+        return "ลูกค้าสามารถสั่งซื้อผ่าน Demi ได้เลยค่ะ รับเมนูอะไรดีคะ 🍪"
 
-    return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน DM Instagram @cookiecloudyday หรือ LINE Official ค่ะ"
+    return "ขออภัยค่ะ ตอนนี้ระบบ AI ตอบไม่ได้ชั่วคราว กรุณาลองใหม่อีกครั้ง หรือสอบถามทางร้านผ่าน Demi ค่ะ"
 
 
 # =========================
