@@ -75,19 +75,26 @@ def normalize_thai_numbers(text: str) -> str:
 
 
 def parse_order_from_message(message: str):
-    normalized = normalize_thai_numbers(message or "").lower()
+    normalized = normalize_thai_numbers(message or "").lower().strip()
 
-    ignore_terms = ["กี่บาท", "กี่โมง", "เวลาเปิด", "เมนูอะไร", "มีอะไร", "โปรโมชั่น", "โปรอะไร"]
-    if any(term in normalized for term in ignore_terms):
+    # คำถามทั่วไป ไม่ใช่ออเดอร์
+    question_terms = [
+        "กี่บาท", "กี่โมง", "เวลาเปิด", "ร้านเปิด",
+        "มีอะไร", "เมนูอะไร", "ขายอะไร", "ราคาเท่าไหร่",
+        "โปรอะไร", "โปรโมชั่นอะไร"
+    ]
+    if any(term in normalized for term in question_terms):
         return None
 
+    # ต้องมีเจตนาสั่ง หรือมีจำนวนพร้อมหน่วย
     order_intent = any(keyword in normalized for keyword in ORDER_KEYWORDS)
-    quantity_match = re.search(r"(\d+)\s*(?:ชิ้น|อัน|กล่อง)?", normalized)
+    quantity_match = re.search(r"(\d+)\s*(ชิ้น|อัน|กล่อง)?", normalized)
     quantity = int(quantity_match.group(1)) if quantity_match else None
 
     if not order_intent and quantity is None:
         return None
 
+    # อ่านเมนูจาก shop_menu.json เป็นหลัก
     menu_sources = []
 
     try:
@@ -95,11 +102,18 @@ def parse_order_from_message(message: str):
             shop_menus = json.load(f)
 
         for item in shop_menus:
-            if isinstance(item, dict) and item.get("name"):
-                menu_sources.append((str(item["name"]), int(item.get("price", 0))))
+            if not isinstance(item, dict):
+                continue
+
+            name = item.get("name") or item.get("menu") or item.get("title")
+            price = item.get("price") or item.get("cookie_price") or 0
+
+            if name:
+                menu_sources.append((str(name), int(price)))
     except Exception:
         pass
 
+    # สำรองจาก MENU_PRICES เก่า
     for name, price in MENU_PRICES.items():
         menu_sources.append((name, price))
 
@@ -111,27 +125,54 @@ def parse_order_from_message(message: str):
         value = str(value).lower()
         value = value.replace("คุกกี้", "")
         value = value.replace(" ", "")
+        value = value.replace("-", "")
+        value = value.replace("_", "")
         value = re.sub(r"\d+", "", value)
-        for word in ["ชิ้น", "อัน", "กล่อง", "จำนวน", "เอา", "รับ", "ซื้อ", "สั่ง", "ขอ"]:
+
+        for word in [
+            "ชิ้น", "อัน", "กล่อง", "จำนวน",
+            "เอา", "รับ", "ซื้อ", "สั่ง", "ขอ", "อยากได้", "อยากสั่ง"
+        ]:
             value = value.replace(word, "")
+
         return value.strip()
 
     cleaned_message = clean_text(normalized)
 
+    matched_name = None
+    matched_price = 0
+
     for name in sorted(unique_menus.keys(), key=lambda x: -len(x)):
         name_lower = name.lower()
-        short_name = clean_text(name)
+        name_clean = clean_text(name)
 
-        if name_lower in normalized or (short_name and short_name in cleaned_message):
-            return {
-                "menu": name,
-                "menu_name": name,
-                "name": name,
-                "quantity": quantity,
-                "price": unique_menus[name],
-            }
+        # รองรับทั้งพิมพ์ชื่อเต็มและพิมพ์แบบไม่มีคำว่า “คุกกี้”
+        if name_lower in normalized or (name_clean and name_clean in cleaned_message):
+            matched_name = name
+            matched_price = unique_menus[name]
+            break
 
-    return None
+    if not matched_name:
+        return None
+
+    # ถ้าระบุเมนูแต่ไม่ระบุจำนวน ให้ถามจำนวนต่อ ไม่บันทึกมั่ว
+    if quantity is None:
+        return {
+            "menu": matched_name,
+            "menu_name": matched_name,
+            "name": matched_name,
+            "quantity": None,
+            "price": matched_price,
+            "need_quantity": True,
+        }
+
+    return {
+        "menu": matched_name,
+        "menu_name": matched_name,
+        "name": matched_name,
+        "quantity": quantity,
+        "price": matched_price,
+    }
 
 api_key = os.getenv("GOOGLE_API_KEY")
 client = genai.Client(api_key=api_key) if api_key else None
