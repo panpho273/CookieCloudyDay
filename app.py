@@ -378,6 +378,30 @@ def _to_int(value, default=0):
         return default
 
 @st.cache_data(ttl=300)
+def get_default_hot_menus(limit=5):
+    try:
+        with open("shop_menu.json", "r", encoding="utf-8") as f:
+            menus = json.load(f)
+
+        result = []
+        for item in menus[:limit]:
+            result.append({
+                "menu": item.get("name"),
+                "price": int(item.get("price", 0)),
+                "quantity": 0,
+            })
+
+        if result:
+            return result
+    except Exception:
+        pass
+
+    return [
+        {"menu": "คุกกี้ช็อกโกแลตชิพ", "price": 45, "quantity": 0},
+        {"menu": "คุกกี้เนยสด", "price": 55, "quantity": 0},
+        {"menu": "คุกกี้ช็อกโกแลตลาวา", "price": 65, "quantity": 0},
+    ][:limit]
+
 def get_top_selling_menus(limit=5):
     """
     อ่านยอดขายจาก Google Sheets แล้วสรุป Top menu ตามจำนวนขายจริง
@@ -395,7 +419,7 @@ def get_top_selling_menus(limit=5):
         )
 
         if not sheet_id:
-            return DEFAULT_HOT_MENUS[:limit]
+            return get_default_hot_menus(limit)
 
         gc = gspread.service_account(filename=cred_file)
         sh = gc.open_by_key(sheet_id)
@@ -442,7 +466,7 @@ def get_top_selling_menus(limit=5):
             summary[menu]["price"] = price or MENU_PRICE_MAP.get(menu, 0)
 
         if not summary:
-            return DEFAULT_HOT_MENUS[:limit]
+            return get_default_hot_menus(limit)
 
         top = sorted(
             summary.items(),
@@ -458,10 +482,10 @@ def get_top_selling_menus(limit=5):
                 "quantity": data["quantity"],
             })
 
-        return result or DEFAULT_HOT_MENUS[:limit]
+        return result or get_default_hot_menus(limit)
 
     except Exception:
-        return DEFAULT_HOT_MENUS[:limit]
+        return get_default_hot_menus(limit)
 
 def get_hot_menu_reply():
     top_menus = get_top_selling_menus(limit=5)
