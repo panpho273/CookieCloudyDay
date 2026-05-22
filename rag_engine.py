@@ -1,38 +1,66 @@
-import faiss
-import numpy as np
-from sentence_transformers import SentenceTransformer
-
-EMBED_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+import re
+from pathlib import Path
 
 
 class RAGEngine:
-    def __init__(self, kb_path: str):
-        self.model = SentenceTransformer(EMBED_MODEL)
-        self.chunks = self._load_and_chunk(kb_path)
-        self.index, self.embeddings = self._build_index()
+    def __init__(self, file_path: str):
+        self.file_path = Path(file_path)
+        self.chunks = self._load_chunks()
 
-    def _load_and_chunk(self, path: str) -> list[str]:
-        """Load และ Chunk ข้อมูลจาก knowledge base"""
-        with open(path, encoding="utf-8") as f:
-            text = f.read()
+    def _load_chunks(self):
+        if not self.file_path.exists():
+            return []
 
-        return [chunk.strip() for chunk in text.split("\n\n") if chunk.strip()]
+        text = self.file_path.read_text(encoding="utf-8")
+        raw_blocks = re.split(r"\n\s*\n", text)
 
-    def _build_index(self):
-        """Embed ข้อมูลและสร้าง index สำหรับค้นหา"""
-        embeddings = self.model.encode(self.chunks, show_progress_bar=False)
-        embeddings = np.array(embeddings, dtype="float32")
+        chunks = []
+        for block in raw_blocks:
+            cleaned = block.strip()
+            if cleaned:
+                chunks.append(cleaned)
 
-        index = faiss.IndexFlatL2(embeddings.shape[1])
-        index.add(embeddings)
+        return chunks
 
-        return index, embeddings
+    def _tokenize(self, text: str):
+        text = (text or "").lower()
+        words = re.findall(r"[ก-๙a-zA-Z0-9]+", text)
+        return [w for w in words if len(w) >= 2]
 
-    def search(self, query: str, top_k: int = 3) -> list[str]:
-        """ค้นหาข้อมูลที่เกี่ยวข้องที่สุดจาก knowledge base"""
-        query_embedding = self.model.encode([query])
-        query_embedding = np.array(query_embedding, dtype="float32")
+    def search(self, query: str, top_k: int = 5):
+        if not self.chunks:
+            return []
 
-        _, indices = self.index.search(query_embedding, top_k)
+        query_tokens = self._tokenize(query)
+        if not query_tokens:
+            return self.chunks[:top_k]
 
-        return [self.chunks[i] for i in indices[0]]
+        scored = []
+
+        for chunk in self.chunks:
+            chunk_lower = chunk.lower()
+            score = 0
+
+            for token in query_tokens:
+                if token in chunk_lower:
+                    score += 3
+
+            # boost ถ้าคำถามตรงกับชื่อเมนู/โปร/ราคา
+            if "เมนู" in query and "เมนู" in chunk:
+                score += 2
+            if "ราคา" in query and "ราคา" in chunk:
+                score += 2
+            if "โปร" in query and ("โปร" in chunk or "Lucky Cookie Tarot" in chunk):
+                score += 4
+            if "ไพ่" in query and ("ไพ่" in chunk or "Tarot" in chunk):
+                score += 4
+
+            if score > 0:
+                scored.append((score, chunk))
+
+        scored.sort(key=lambda x: x[0], reverse=True)
+
+        if not scored:
+            return self.chunks[:top_k]
+
+        return [chunk for _, chunk in scored[:top_k]]

@@ -1,7 +1,6 @@
 streamlit
 python-dotenv
 google-genai
-sentence-transformers
 faiss-cpu
 gspread
 google-auth
