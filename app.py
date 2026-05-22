@@ -600,6 +600,157 @@ def direct_customer_answer(message: str):
 
     return None
 
+def load_popup_menu_items():
+    try:
+        with open("shop_menu.json", "r", encoding="utf-8") as f:
+            menus = json.load(f)
+
+        result = []
+        for item in menus:
+            if not isinstance(item, dict):
+                continue
+
+            name = item.get("name") or item.get("menu") or item.get("title")
+            price = item.get("price") or item.get("cookie_price") or 0
+
+            if name:
+                result.append({
+                    "name": str(name),
+                    "price": int(price),
+                })
+
+        return result
+    except Exception:
+        return []
+
+
+def send_realtime_order_to_telegram(menu_name, quantity, price, total):
+    token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
+    chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
+
+    if not token or not chat_id:
+        return False
+
+    try:
+        from urllib import parse, request
+
+        message = (
+            "🍪 CookieCloudyDay มีออเดอร์ใหม่\\n"
+            f"เมนู: {menu_name}\\n"
+            f"จำนวน: {quantity} ชิ้น\\n"
+            f"ราคา/ชิ้น: {price:,} บาท\\n"
+            f"ยอดรวม: {total:,} บาท"
+        )
+
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        payload = parse.urlencode({
+            "chat_id": chat_id,
+            "text": message,
+        }).encode("utf-8")
+
+        req = request.Request(url, data=payload, method="POST")
+        with request.urlopen(req, timeout=20) as res:
+            res.read()
+
+        return True
+    except Exception:
+        return False
+
+
+def is_menu_popup_request(message: str):
+    q = (message or "").lower().strip()
+    keywords = [
+        "เมนูทั้งหมด",
+        "ดูเมนูทั้งหมด",
+        "เปิดเมนู",
+        "เลือกเมนู",
+        "มีเมนูอะไรบ้าง",
+        "เมนูอื่น",
+        "มีเมนูใหม่",
+    ]
+    return any(k in q for k in keywords)
+
+
+@st.dialog("🍪 เลือกเมนู CookieCloudyDay")
+def render_menu_order_popup():
+    menus = load_popup_menu_items()
+
+    if not menus:
+        st.error("ยังโหลดเมนูไม่ได้ค่ะ กรุณาตรวจสอบ shop_menu.json")
+        return
+
+    menu_names = [f"{item['name']} — {item['price']} บาท" for item in menus]
+
+    selected_label = st.selectbox(
+        "เลือกเมนู",
+        menu_names,
+        key="popup_selected_menu",
+    )
+
+    selected_index = menu_names.index(selected_label)
+    selected_item = menus[selected_index]
+
+    quantity = st.number_input(
+        "จำนวน",
+        min_value=1,
+        max_value=999,
+        value=1,
+        step=1,
+        key="popup_quantity",
+    )
+
+    total = int(selected_item["price"]) * int(quantity)
+
+    st.info(
+        f"รายการ: {selected_item['name']}\\n\\n"
+        f"จำนวน: {int(quantity)} ชิ้น\\n\\n"
+        f"ยอดรวม: {total:,} บาท"
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("บันทึกออเดอร์", type="primary", use_container_width=True):
+            menu_name = selected_item["name"]
+            price = int(selected_item["price"])
+            qty = int(quantity)
+            total = price * qty
+
+            try:
+                saved_total = append_order_to_sheet(menu_name, qty, price)
+                if saved_total:
+                    total = int(saved_total)
+            except TypeError:
+                append_order_to_sheet(menu_name, qty)
+
+            send_realtime_order_to_telegram(menu_name, qty, price, total)
+
+            promo_text = ""
+            if total >= 150:
+                promo_text = "\\n\\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ สามารถกดรับไพ่และคำทำนายได้เลย"
+
+            answer = (
+                f"รับออเดอร์เรียบร้อยค่ะ 🍪\\n\\n"
+                f"รายการ: {menu_name}\\n"
+                f"จำนวน: {qty} ชิ้น\\n"
+                f"ยอดรวม: {total:,} บาท"
+                f"{promo_text}\\n\\n"
+                f"ขอบคุณที่สั่งคุกกี้กับ CookieCloudyDay นะคะ ☁️"
+            )
+
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": answer,
+            })
+
+            st.session_state.show_menu_order_popup = False
+            st.rerun()
+
+    with col2:
+        if st.button("ปิด", use_container_width=True):
+            st.session_state.show_menu_order_popup = False
+            st.rerun()
+
 # =========================
 # Chatbot
 # =========================
@@ -610,7 +761,12 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
+
+if st.session_state.get("show_menu_order_popup"):
+    render_menu_order_popup()
+
 prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")
+
 
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -619,6 +775,25 @@ if prompt:
         st.write(prompt)
 
     normalized_prompt = normalize_menu_number_order(prompt)
+
+    if is_menu_popup_request(normalized_prompt):
+        st.session_state.show_menu_order_popup = True
+
+        answer = (
+            "ได้เลยค่ะ เปิดเมนูทั้งหมดให้เลือกแล้วนะคะ 🍪\\n\\n"
+            "ลูกค้าสามารถเลือกเมนูและจำนวนจากหน้าต่าง popup ได้เลยค่ะ"
+        )
+
+        with st.chat_message("assistant", avatar="🤖"):
+            st.markdown(answer)
+
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": answer,
+        })
+
+        st.rerun()
+
     order_data = parse_order_from_message(normalized_prompt)
     direct_answer = direct_customer_answer(prompt)
 
