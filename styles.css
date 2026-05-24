@@ -707,3 +707,72 @@ div[role="dialog"] .stButton > button {
 }
 
 /* ===== FINAL POPUP RESTORE END ===== */
+
+/* ===== POPUP CENTER ALIGN FIX START ===== */
+
+/* ให้เนื้อหาใน dialog จัดกึ่งกลางทั้งหมด */
+div[role="dialog"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+/* กำหนดความกว้างหลักของทุกส่วนใน popup ให้เท่ากัน */
+div[role="dialog"] .order-popup-shell,
+div[role="dialog"] .order-summary-box,
+div[role="dialog"] [data-testid="stSelectbox"],
+div[role="dialog"] [data-testid="stNumberInput"] {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ตัวเลือกเมนูให้กว้างเต็มกรอบเดียวกัน */
+div[role="dialog"] [data-testid="stSelectbox"] > div,
+div[role="dialog"] [data-baseweb="select"] {
+  width: 100% !important;
+}
+
+/* number input ให้กว้างเท่ากับ selectbox */
+div[role="dialog"] [data-testid="stNumberInput"] > div {
+  width: 100% !important;
+}
+
+/* กล่องสรุปให้ไม่ใหญ่/ไม่ลอยออก */
+div[role="dialog"] .order-summary-box {
+  box-sizing: border-box !important;
+}
+
+/* ปุ่มล่างให้กว้างเท่ากับกล่องด้านบน */
+div[role="dialog"] [data-testid="stHorizontalBlock"] {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ปรับ label ให้เริ่มตรงกับ input */
+div[role="dialog"] [data-testid="stSelectbox"] label,
+div[role="dialog"] [data-testid="stNumberInput"] label {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* ลดความกว้างหัวด้านบนนิด ให้บาลานซ์กับ input */
+div[role="dialog"] .order-popup-shell {
+  padding: 1.25rem 1.25rem !important;
+}
+
+/* mobile */
+@media (max-width: 640px) {
+  div[role="dialog"] .order-popup-shell,
+  div[role="dialog"] .order-summary-box,
+  div[role="dialog"] [data-testid="stSelectbox"],
+  div[role="dialog"] [data-testid="stNumberInput"],
+  div[role="dialog"] [data-testid="stHorizontalBlock"] {
+    max-width: 100% !important;
+  }
+}
+
+/* ===== POPUP CENTER ALIGN FIX END ===== */
