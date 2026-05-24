@@ -727,7 +727,8 @@ def render_menu_order_popup():
         unsafe_allow_html=True,
     )
 
-    menu_names = [f"{item['name']} — {item['price']} บาท" for item in menus]
+    # แสดงแค่ชื่อเมนูใน dropdown เพราะราคาสรุปอยู่ในกล่องออเดอร์แล้ว
+    menu_names = [str(item["name"]) for item in menus]
 
     selected_label = st.selectbox(
         "เมนูที่อยากสั่ง",

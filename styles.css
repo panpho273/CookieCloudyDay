@@ -562,3 +562,59 @@ div[role="dialog"] .stButton > button:hover {
 }
 
 /* ===== ORDER POPUP COLOR FIX END ===== */
+
+/* ===== SELECTBOX DROPDOWN PASTEL FIX START ===== */
+
+/* กล่อง dropdown ที่เด้งออกมา */
+div[data-baseweb="popover"],
+div[data-baseweb="menu"],
+ul[role="listbox"] {
+  background: #fffafd !important;
+  border: 1px solid rgba(141, 114, 225, 0.22) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 40px rgba(91, 70, 145, 0.16) !important;
+  overflow: hidden !important;
+}
+
+/* รายการแต่ละเมนู */
+li[role="option"],
+div[role="option"] {
+  background: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 0.96rem !important;
+  font-weight: 500 !important;
+  padding: 0.75rem 0.95rem !important;
+}
+
+/* hover / active */
+li[role="option"]:hover,
+div[role="option"]:hover,
+li[aria-selected="true"],
+div[aria-selected="true"] {
+  background: #f0e9ff !important;
+  color: #4a2e2a !important;
+}
+
+/* ตัวเลือกที่กำลัง focus */
+li[role="option"][aria-selected="true"],
+div[role="option"][aria-selected="true"] {
+  background: linear-gradient(135deg, #efe8ff, #fff7fd) !important;
+  color: #4a2e2a !important;
+  font-weight: 700 !important;
+}
+
+/* ข้อความใน selectbox ด้านบน */
+[data-baseweb="select"] span,
+[data-baseweb="select"] div {
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+}
+
+/* ลบพื้นหลังดำของ list ชั้นใน */
+div[data-baseweb="popover"] *,
+ul[role="listbox"] * {
+  border-color: transparent !important;
+}
+
+/* ===== SELECTBOX DROPDOWN PASTEL FIX END ===== */
