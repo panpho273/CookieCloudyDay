@@ -968,3 +968,104 @@ div[role="dialog"] [data-testid="stSelectbox"] svg {
 }
 /* ===== TAROT POPUP STYLE END ===== */
 
+/* ===== SELECTBOX DROPDOWN FINAL FIX START ===== */
+
+/* กล่อง dropdown ที่เด้งออกมา: ไม่เอาแถบดำ */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
+div[data-baseweb="popover"] > div > div,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] > div,
+ul[role="listbox"],
+div[role="listbox"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  border: 1px solid rgba(125, 94, 219, 0.20) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
+  overflow: auto !important;
+  font-family: 'Mitr', sans-serif !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #b79cff #f7f0ff !important;
+}
+
+/* ทุกชั้นข้างใน dropdown ให้เป็นฟอนต์เดียวกัน */
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"] *,
+ul[role="listbox"] *,
+div[role="listbox"] * {
+  font-family: 'Mitr', sans-serif !important;
+  color: #4a2e2a !important;
+}
+
+/* รายการเมนู */
+li[role="option"],
+div[role="option"],
+ul[role="listbox"] li {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 0.96rem !important;
+  font-weight: 650 !important;
+  padding: 0.82rem 1rem !important;
+  line-height: 1.45 !important;
+}
+
+/* รายการที่ hover / selected */
+li[role="option"]:hover,
+div[role="option"]:hover,
+li[aria-selected="true"],
+div[aria-selected="true"] {
+  background: #eee7ff !important;
+  background-color: #eee7ff !important;
+  color: #4a2e2a !important;
+  border-radius: 10px !important;
+}
+
+/* scrollbar Chrome/Edge/Safari */
+div[data-baseweb="popover"]::-webkit-scrollbar,
+div[data-baseweb="popover"] *::-webkit-scrollbar,
+div[data-baseweb="menu"]::-webkit-scrollbar,
+div[data-baseweb="menu"] *::-webkit-scrollbar,
+ul[role="listbox"]::-webkit-scrollbar,
+ul[role="listbox"] *::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"] *::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-track,
+div[data-baseweb="popover"] *::-webkit-scrollbar-track,
+div[data-baseweb="menu"]::-webkit-scrollbar-track,
+div[data-baseweb="menu"] *::-webkit-scrollbar-track,
+ul[role="listbox"]::-webkit-scrollbar-track,
+ul[role="listbox"] *::-webkit-scrollbar-track,
+div[role="listbox"]::-webkit-scrollbar-track,
+div[role="listbox"] *::-webkit-scrollbar-track {
+  background: #f7f0ff !important;
+  border-radius: 999px !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
+div[data-baseweb="popover"] *::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"] *::-webkit-scrollbar-thumb,
+ul[role="listbox"]::-webkit-scrollbar-thumb,
+ul[role="listbox"] *::-webkit-scrollbar-thumb,
+div[role="listbox"]::-webkit-scrollbar-thumb,
+div[role="listbox"] *::-webkit-scrollbar-thumb {
+  background: #b79cff !important;
+  border-radius: 999px !important;
+  border: 2px solid #f7f0ff !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-thumb:hover,
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb:hover,
+ul[role="listbox"]::-webkit-scrollbar-thumb:hover,
+div[role="listbox"]::-webkit-scrollbar-thumb:hover {
+  background: #8f6df5 !important;
+}
+
+/* ===== SELECTBOX DROPDOWN FINAL FIX END ===== */
