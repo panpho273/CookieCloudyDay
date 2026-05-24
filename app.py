@@ -31,6 +31,37 @@ st.set_page_config(
     layout="centered",
 )
 
+# FORCE_MITR_FONT_FOR_APP
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
+
+    html, body, div, span, p, label, input, textarea, button,
+    [data-testid="stMarkdownContainer"],
+    [data-testid="stChatMessage"],
+    [data-testid="stChatMessageContent"],
+    [data-testid="stChatInput"],
+    [data-testid="stSelectbox"],
+    [data-testid="stSelectbox"] *,
+    [data-baseweb="select"],
+    [data-baseweb="select"] *,
+    [data-baseweb="popover"],
+    [data-baseweb="popover"] *,
+    [data-baseweb="menu"],
+    [data-baseweb="menu"] *,
+    [role="listbox"],
+    [role="listbox"] *,
+    [role="option"],
+    [role="option"] * {
+        font-family: 'Mitr', sans-serif !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 
 # =========================
 # Load CSS
