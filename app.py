@@ -665,14 +665,27 @@ st.caption("ถามเรื่องเมนู เวลาเปิด ร
 def direct_customer_answer(message: str):
     q = (message or "").lower().strip()
 
-    if q in ["ซื้อ", "สั่ง", "สั่งซื้อ", "ออเดอร์", "order"]:
-        return (
-            "ได้เลยค่ะ รับคุกกี้อะไรดีคะ 🍪\n\n"
-            "ถ้าชอบเข้ม ๆ แนะนำแนวช็อกโกแลตหรือบราวนี่\n"
-            "ถ้าชอบละมุน ๆ แนะนำแนวเนยสด วานิลลา หรือเลมอนบัตเตอร์\n"
-            "ถ้าชอบพรีเมียม แนะนำแนวแมคคาเดเมีย พิสตาชิโอ หรือบิสคอฟค่ะ\n\n"
-            "ลูกค้าพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น “เอาคุกกี้เลมอนบัตเตอร์ 3 ชิ้น”"
-        )
+    hot_menu_keywords = [
+        "เมนูขายดี",
+        "ขายดี",
+        "เมนูยอดฮิต",
+        "ยอดฮิต",
+        "เมนูยอดนิยม",
+        "ยอดนิยม",
+        "แนะนำเมนู",
+        "เมนูแนะนำ",
+        "แนะนำหน่อย",
+        "อะไรอร่อย",
+        "ตัวไหนดี",
+    ]
+
+    order_keywords = ["ซื้อ", "สั่ง", "สั่งซื้อ", "ออเดอร์", "order"]
+
+    if q in order_keywords:
+        return get_hot_menu_reply()
+
+    if any(keyword in q for keyword in hot_menu_keywords):
+        return get_hot_menu_reply()
 
     return None
 
@@ -933,7 +946,8 @@ if prompt:
             if not menu_name or quantity <= 0 or price <= 0:
                 answer = "ขออภัยค่ะ Demi ยังอ่านออเดอร์ไม่ครบ รบกวนพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ เช่น “เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"
             else:
-                saved_total = append_order_to_sheet(menu_name, quantity, price)
+                save_result = save_order(menu_name, quantity, price)
+                saved_total = int(save_result["total"])
 
                 # Lucky Cookie Tarot promo: ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป
                 try:
