@@ -204,7 +204,7 @@ def render_lucky_cookie_tarot():
                 st.rerun()
 
         with col2:
-            if st.button("จบออเดอร์และเริ่มแชทใหม่", use_container_width=True):
+            if st.button("เริ่มแชทใหม่", use_container_width=True):
                 st.session_state["show_lucky_tarot"] = False
                 st.session_state.pop("lucky_tarot_card", None)
                 st.session_state.pop("lucky_cookie_promo", None)
