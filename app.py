@@ -824,6 +824,18 @@ def render_menu_order_popup():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
+# =========================
+# Session State Init
+# =========================
+if "messages" not in st.session_state:
+    st.session_state["messages"] = []
+
+if "show_menu_order_popup" not in st.session_state:
+    st.session_state["show_menu_order_popup"] = False
+
+if "show_lucky_tarot" not in st.session_state:
+    st.session_state["show_lucky_tarot"] = False
+
 if st.session_state.get("show_menu_order_popup"):
     render_menu_order_popup()
 
