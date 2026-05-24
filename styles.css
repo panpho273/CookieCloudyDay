@@ -1,46 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap');
 
-/* ================================
-   CookieCloudyDay Clean Berry Theme
-   ไม่มีกรอบซ้อน / ไม่ใช้สีดำ / คุม popup + chat input
-================================ */
-
 :root {
-  --bg-a: #fff8fb;
-  --bg-b: #f1e8ff;
-  --bg-c: #eaf7ff;
-
-  --card: rgba(255, 255, 255, 0.82);
-  --card-strong: rgba(255, 255, 255, 0.94);
-
+  --bg1: #fff8fb;
+  --bg2: #f2e9ff;
+  --bg3: #eaf6ff;
   --text: #4a2e2a;
   --muted: rgba(74, 46, 42, 0.58);
-
-  --berry: #8758d8;
-  --berry-2: #b18cff;
-  --berry-3: #e9dcff;
-
-  --rose: #f6c4dc;
-  --mint: #cbeee5;
-
-  --border: rgba(135, 88, 216, 0.18);
+  --purple: #7d5edb;
+  --purple2: #a58bff;
+  --card: rgba(255, 255, 255, 0.82);
+  --border: rgba(125, 94, 219, 0.18);
   --shadow: 0 22px 60px rgba(86, 60, 140, 0.14);
 }
-
-/* ---------- Global ---------- */
 
 html,
 body,
 .stApp,
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"],
-main,
-section.main {
+main {
   background:
-    radial-gradient(circle at 12% 8%, rgba(177, 140, 255, 0.38), transparent 27%),
-    radial-gradient(circle at 88% 10%, rgba(246, 196, 220, 0.58), transparent 30%),
-    radial-gradient(circle at 20% 84%, rgba(203, 238, 229, 0.42), transparent 27%),
-    linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 54%, var(--bg-c) 100%) !important;
+    radial-gradient(circle at 10% 8%, rgba(165, 139, 255, 0.34), transparent 28%),
+    radial-gradient(circle at 90% 10%, rgba(255, 205, 230, 0.48), transparent 28%),
+    linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3)) !important;
   color: var(--text) !important;
   font-family: 'Mitr', sans-serif !important;
 }
@@ -54,105 +36,74 @@ header[data-testid="stHeader"] {
   background: transparent !important;
 }
 
-[data-testid="stVerticalBlock"],
-[data-testid="stVerticalBlockBorderWrapper"],
-[data-testid="stElementContainer"] {
-  background: transparent !important;
-}
-
 .block-container {
-  max-width: 980px !important;
+  max-width: 940px !important;
   padding-top: 2.2rem !important;
-  padding-bottom: 7.5rem !important;
+  padding-bottom: 7rem !important;
 }
 
-/* ---------- Hero ---------- */
-
+/* Hero */
 .hero-card {
-  width: min(920px, 100%);
-  margin: 0 auto 2.8rem auto;
-  padding: 2.4rem 2.6rem;
-  border-radius: 34px;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.88), rgba(248,241,255,0.78)),
-    radial-gradient(circle at top right, rgba(203, 238, 229, 0.38), transparent 40%);
-  border: 1px solid rgba(135, 88, 216, 0.15);
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  gap: 1.35rem;
+  max-width: 840px !important;
+  margin: 1.6rem auto 2.4rem auto !important;
+  padding: 2rem 2.3rem !important;
+  border-radius: 32px !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.2rem !important;
   backdrop-filter: blur(16px);
 }
 
 .hero-icon {
-  width: 74px;
-  height: 74px;
-  display: grid;
-  place-items: center;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #ffffff, #e8ddff);
-  box-shadow: 0 14px 34px rgba(86, 60, 140, 0.15);
-  font-size: 2.45rem;
-  flex: 0 0 auto;
+  width: 62px !important;
+  height: 62px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 22px !important;
+  background: linear-gradient(135deg, #ffffff, #eadfff) !important;
+  box-shadow: 0 12px 30px rgba(86, 60, 140, 0.13) !important;
+  font-size: 2rem !important;
+  flex: 0 0 auto !important;
 }
 
 .hero-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.8rem;
-  border-radius: 999px;
-  background: rgba(135, 88, 216, 0.10);
-  color: #6d45bd;
-  font-size: 0.88rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
+  display: inline-flex !important;
+  padding: 0.32rem 0.75rem !important;
+  border-radius: 999px !important;
+  background: rgba(125, 94, 219, 0.10) !important;
+  color: var(--purple) !important;
+  font-size: 0.86rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.65rem !important;
 }
 
 .hero-card h1 {
   font-family: 'Baloo 2', 'Mitr', sans-serif !important;
   color: var(--text) !important;
-  font-size: clamp(2.55rem, 5.1vw, 4.25rem) !important;
-  line-height: 0.98 !important;
+  font-size: clamp(2.25rem, 4.4vw, 3.65rem) !important;
+  line-height: 1.02 !important;
   font-weight: 800 !important;
-  letter-spacing: -1px !important;
   margin: 0 !important;
-  text-shadow: 0 3px 0 rgba(255,255,255,0.72);
 }
 
 .hero-card p {
-  margin: 1rem 0 0 0 !important;
-  max-width: 680px;
+  margin: 0.85rem 0 0 0 !important;
   color: var(--muted) !important;
-  font-size: 1.02rem !important;
-  line-height: 1.8 !important;
+  font-size: 0.98rem !important;
+  line-height: 1.7 !important;
 }
 
-/* ---------- Chat Cards ---------- */
-
+/* Chat message */
 [data-testid="stChatMessage"] {
-  background: var(--card) !important;
+  background: rgba(255,255,255,0.78) !important;
   border: 1px solid var(--border) !important;
-  border-radius: 30px !important;
-  padding: 1.05rem 1.15rem !important;
+  border-radius: 28px !important;
+  padding: 1rem 1.15rem !important;
   margin: 1rem auto !important;
-  box-shadow: var(--shadow) !important;
-  backdrop-filter: blur(16px);
-  overflow: hidden;
-}
-
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
-  background: linear-gradient(135deg, rgba(233, 220, 255, 0.82), rgba(255,255,255,0.78)) !important;
-}
-
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
-  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,242,255,0.84)) !important;
-}
-
-[data-testid="chatAvatarIcon-user"],
-[data-testid="chatAvatarIcon-assistant"] {
-  border-radius: 18px !important;
-  box-shadow: 0 10px 24px rgba(86, 60, 140, 0.15) !important;
+  box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10) !important;
 }
 
 [data-testid="stMarkdownContainer"],
@@ -160,62 +111,41 @@ header[data-testid="stHeader"] {
 [data-testid="stMarkdownContainer"] li {
   color: var(--text) !important;
   font-family: 'Mitr', sans-serif !important;
-  font-size: 1.02rem !important;
-  line-height: 1.85 !important;
+  font-size: 1rem !important;
+  line-height: 1.8 !important;
 }
 
-[data-testid="stMarkdownContainer"] ol,
-[data-testid="stMarkdownContainer"] ul {
-  padding-left: 1.65rem !important;
-}
-
-[data-testid="stMarkdownContainer"] li {
-  margin-bottom: 0.4rem !important;
-  font-weight: 550 !important;
-}
-
-/* ---------- Chat Input: one clean layer ---------- */
-
+/* Chat input: ใช้ของ Streamlit แต่แต่งให้น้อยที่สุด */
 [data-testid="stBottom"],
-[data-testid="stBottomBlockContainer"],
-[data-testid="stBottom"] > div,
-[data-testid="stBottomBlockContainer"] > div {
-  background: linear-gradient(180deg, rgba(255,248,251,0), rgba(255,248,251,0.92)) !important;
+[data-testid="stBottomBlockContainer"] {
+  background: linear-gradient(180deg, rgba(255,248,251,0), rgba(248,240,255,0.92)) !important;
   border: none !important;
   box-shadow: none !important;
-}
-
-[data-testid="stChatInput"],
-[data-testid="stChatInput"] > div,
-[data-testid="stChatInput"] > div > div,
-[data-testid="stChatInput"] form,
-[data-testid="stChatInput"] form > div,
-[data-testid="stChatInput"] form > div > div {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
 }
 
 [data-testid="stChatInput"] {
-  max-width: 760px !important;
+  max-width: 720px !important;
   margin: 0 auto !important;
-  padding: 0.8rem 1rem 1.1rem !important;
+  padding: 0.9rem 1rem 1.1rem !important;
+  background: transparent !important;
 }
 
-[data-testid="stChatInput"] textarea,
-[data-testid="stChatInput"] textarea:focus,
-[data-testid="stChatInput"] textarea:active {
+[data-testid="stChatInput"] > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
+  overflow: hidden !important;
+}
+
+[data-testid="stChatInput"] textarea {
   background: #ffffff !important;
   color: var(--text) !important;
-  border: 1.5px solid rgba(135, 88, 216, 0.32) !important;
-  border-radius: 999px !important;
-  min-height: 56px !important;
-  padding: 1rem 4rem 1rem 1.35rem !important;
+  border: none !important;
+  box-shadow: none !important;
   font-family: 'Mitr', sans-serif !important;
   font-size: 1rem !important;
-  box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
-  outline: none !important;
+  padding-left: 1.25rem !important;
 }
 
 [data-testid="stChatInput"] textarea::placeholder {
@@ -225,103 +155,433 @@ header[data-testid="stHeader"] {
 [data-testid="stChatInput"] button {
   background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
   color: #ffffff !important;
-  border: none !important;
   border-radius: 999px !important;
-  width: 46px !important;
-  height: 46px !important;
-  box-shadow: 0 12px 26px rgba(108, 72, 200, 0.26) !important;
+  border: none !important;
+  width: 44px !important;
+  height: 44px !important;
+  box-shadow: 0 10px 22px rgba(108, 72, 200, 0.24) !important;
 }
 
-/* ---------- Dialog / Popup ---------- */
+/* Popup */
+div[role="dialog"] {
+  background: rgba(255,255,255,0.94) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 28px 80px rgba(86, 60, 140, 0.20) !important;
+}
 
-div[role="dialog"],
-div[data-testid="stDialog"] {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,242,255,0.96)) !important;
-  border: 1px solid rgba(135, 88, 216, 0.18) !important;
-  border-radius: 32px !important;
+.order-popup-shell,
+.order-summary-box {
+  background: rgba(255,255,255,0.78) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 14px 34px rgba(86, 60, 140, 0.08) !important;
+}
+
+div.stButton > button {
+  border-radius: 999px !important;
+  min-height: 48px !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
+  color: white !important;
+  border: none !important;
+}
+
+@media (max-width: 768px) {
+  .hero-card {
+    padding: 1.5rem !important;
+    align-items: flex-start !important;
+  }
+
+  .hero-card h1 {
+    font-size: 2.25rem !important;
+  }
+}
+
+
+
+/* ===== HERO NO EXTRA BLOCK FIX START ===== */
+
+/* เอากล่องขาว/เลเยอร์หัวเว็บออก ให้กลืนกับพื้นหลัง */
+.hero-card {
+  max-width: 920px !important;
+  margin: 2.6rem auto 2.8rem auto !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1.25rem !important;
+}
+
+/* ไอคอนให้เป็นก้อนเล็ก ๆ พอ ไม่เป็นบล็อคใหญ่ */
+.hero-icon {
+  width: 68px !important;
+  height: 68px !important;
+  border-radius: 24px !important;
+  background: rgba(255,255,255,0.45) !important;
+  box-shadow: 0 12px 30px rgba(86, 60, 140, 0.10) !important;
+}
+
+/* จัดตัวหนังสือให้ไม่ลอยมั่ว */
+.hero-content {
+  max-width: 720px !important;
+}
+
+.hero-kicker {
+  background: rgba(125, 94, 219, 0.10) !important;
+  color: #7d5edb !important;
+  margin-bottom: 0.65rem !important;
+}
+
+.hero-card h1 {
+  font-size: clamp(2.55rem, 5vw, 4.15rem) !important;
+  line-height: 1.02 !important;
+  margin: 0 !important;
+  color: #4a2e2a !important;
+  text-shadow: 0 3px 0 rgba(255,255,255,0.70) !important;
+}
+
+.hero-card p {
+  margin-top: 0.9rem !important;
+  color: rgba(74, 46, 42, 0.58) !important;
+  font-size: 1rem !important;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .hero-card {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 0.9rem !important;
+    margin-top: 1.4rem !important;
+  }
+
+  .hero-icon {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .hero-card h1 {
+    font-size: 2.45rem !important;
+  }
+}
+
+/* ===== HERO NO EXTRA BLOCK FIX END ===== */
+
+/* ===== HERO INLINE CLOUD FIX START ===== */
+
+.hero-card {
+  max-width: 980px !important;
+  margin: 2.4rem auto 2.8rem auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.hero-content {
+  width: 100% !important;
+  max-width: 980px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.hero-kicker {
+  margin: 0 0 1rem 0 !important;
+  padding: 0.36rem 0.9rem !important;
+  border-radius: 999px !important;
+  background: rgba(125, 94, 219, 0.11) !important;
+  color: #7d5edb !important;
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+}
+
+.hero-card h1 {
+  width: 100% !important;
+  margin: 0 !important;
+  color: #4a2e2a !important;
+  font-family: 'Baloo 2', 'Mitr', sans-serif !important;
+  font-size: clamp(2.7rem, 5.5vw, 4.7rem) !important;
+  line-height: 1.05 !important;
+  font-weight: 800 !important;
+  letter-spacing: -1px !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  text-shadow: 0 3px 0 rgba(255,255,255,0.72) !important;
+}
+
+.hero-cloud {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 72px !important;
+  height: 72px !important;
+  margin-right: 0.75rem !important;
+  border-radius: 24px !important;
+  background: rgba(255,255,255,0.42) !important;
+  box-shadow: 0 12px 30px rgba(86, 60, 140, 0.11) !important;
+  vertical-align: middle !important;
+  font-size: 2.2rem !important;
+  transform: translateY(-0.08em);
+}
+
+.hero-icon {
+  display: none !important;
+}
+
+.hero-card p {
+  margin: 1rem auto 0 auto !important;
+  max-width: 760px !important;
+  color: rgba(74, 46, 42, 0.62) !important;
+  font-size: 1rem !important;
+  line-height: 1.75 !important;
+  text-align: center !important;
+}
+
+@media (max-width: 900px) {
+  .hero-card h1 {
+    white-space: normal !important;
+    max-width: 720px !important;
+  }
+
+  .hero-cloud {
+    width: 58px !important;
+    height: 58px !important;
+    font-size: 1.8rem !important;
+    margin-right: 0.55rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-card {
+    margin-top: 1.5rem !important;
+  }
+
+  .hero-card h1 {
+    font-size: 2.35rem !important;
+  }
+
+  .hero-cloud {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 18px !important;
+    font-size: 1.45rem !important;
+  }
+}
+
+/* ===== HERO INLINE CLOUD FIX END ===== */
+
+/* ===== HERO CLOUD CLEAN FIX START ===== */
+
+/* เอากล่องหลังเมฆออก ให้เหลือแค่เมฆลอยนุ่ม ๆ */
+.hero-cloud {
+  display: inline-block !important;
+  width: auto !important;
+  height: auto !important;
+  margin-right: 0.8rem !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  vertical-align: middle !important;
+  font-size: 3.6rem !important;
+  line-height: 1 !important;
+  transform: translateY(-0.08em) !important;
+  filter: drop-shadow(0 8px 12px rgba(125, 94, 219, 0.20));
+}
+
+/* กัน class เก่า hero-icon ไม่ให้โผล่ */
+.hero-icon {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .hero-cloud {
+    font-size: 2.9rem !important;
+    margin-right: 0.45rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-cloud {
+    font-size: 2.35rem !important;
+    margin-right: 0.35rem !important;
+  }
+}
+
+/* ===== HERO CLOUD CLEAN FIX END ===== */
+
+/* ===== BOTTOM AREA TRANSPARENT FIX START ===== */
+
+/* ให้แถบล่างโปร่งใสทั้งหมด ใช้สีพื้นหลังเดียวกับหน้าเว็บ */
+[data-testid="stBottom"],
+[data-testid="stBottomBlockContainer"],
+[data-testid="stBottom"] > div,
+[data-testid="stBottom"] > div > div,
+[data-testid="stBottomBlockContainer"] > div,
+[data-testid="stBottomBlockContainer"] > div > div,
+section[data-testid="stAppScrollToBottomContainer"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* ลบสี/เงาของกล่องลูกที่ทำให้เหมือนมีบล็อคแยก */
+[data-testid="stBottom"] *,
+[data-testid="stBottomBlockContainer"] * {
+  box-shadow: none !important;
+}
+
+/* ให้เฉพาะตัวช่องพิมพ์ยังเป็นกล่องขาว */
+[data-testid="stChatInput"] > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
+}
+
+/* ===== BOTTOM AREA TRANSPARENT FIX END ===== */
+
+/* ===== CHAT INPUT FOCUS VISIBLE FIX START ===== */
+
+/* ตอนยังไม่คลิก */
+[data-testid="stChatInput"] > div {
+  transition: all 0.18s ease !important;
+}
+
+/* ตอนคลิก/กำลังพิมพ์ ให้มีวงม่วงนุ่ม ๆ รอบกล่อง */
+[data-testid="stChatInput"] > div:focus-within,
+[data-testid="stChatInput"] form:focus-within,
+[data-testid="stChatInput"] form > div:focus-within,
+[data-testid="stChatInput"] form > div > div:focus-within {
+  border-color: rgba(125, 94, 219, 0.72) !important;
+  box-shadow:
+    0 0 0 6px rgba(125, 94, 219, 0.14),
+    0 18px 42px rgba(86, 60, 140, 0.18) !important;
+  background: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* ตัว textarea ตอน focus */
+[data-testid="stChatInput"] textarea:focus {
+  outline: none !important;
+  caret-color: #7d5edb !important;
+}
+
+/* placeholder ให้ชัดขึ้นนิด */
+[data-testid="stChatInput"] textarea::placeholder {
+  color: rgba(74, 46, 42, 0.45) !important;
+}
+
+/* ===== CHAT INPUT FOCUS VISIBLE FIX END ===== */
+
+/* ===== FINAL POPUP RESTORE START ===== */
+
+/* กล่อง dialog หลัก */
+div[role="dialog"] {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(125, 94, 219, 0.18) !important;
+  border-radius: 30px !important;
   box-shadow: 0 28px 80px rgba(86, 60, 140, 0.22) !important;
-  color: var(--text) !important;
+  color: #4a2e2a !important;
+  padding: 1.4rem 1.45rem !important;
 }
 
-div[role="dialog"] *,
-div[data-testid="stDialog"] * {
+/* หัว popup ด้านบน */
+div[role="dialog"] h1,
+div[role="dialog"] h2,
+div[role="dialog"] h3,
+div[role="dialog"] p,
+div[role="dialog"] label {
+  color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
 }
 
-div[role="dialog"] button[aria-label="Close"],
-div[data-testid="stDialog"] button[aria-label="Close"] {
-  background: rgba(255,255,255,0.74) !important;
-  color: #6c48c8 !important;
-  border: 1px solid rgba(135, 88, 216, 0.20) !important;
+/* ปุ่มปิด */
+div[role="dialog"] button[aria-label="Close"] {
+  background: rgba(255, 255, 255, 0.78) !important;
+  color: #7d5edb !important;
+  border: 1px solid rgba(125, 94, 219, 0.22) !important;
   border-radius: 14px !important;
   box-shadow: none !important;
 }
 
-/* popup header */
+/* กล่องหัวใน popup */
 .order-popup-shell {
-  max-width: 560px;
-  margin: 0 auto 1.1rem auto;
-  padding: 1.35rem 1.35rem 1.2rem;
-  border-radius: 28px;
+  max-width: 560px !important;
+  margin: 0 auto 1.1rem auto !important;
+  padding: 1.25rem 1.3rem !important;
+  border-radius: 24px !important;
   background:
-    radial-gradient(circle at top right, rgba(203, 238, 229, 0.35), transparent 42%),
-    linear-gradient(180deg, #ffffff 0%, #f7f0ff 100%) !important;
-  border: 1px solid rgba(135, 88, 216, 0.15);
-  box-shadow: 0 16px 40px rgba(86, 60, 140, 0.10);
+    radial-gradient(circle at top right, rgba(255, 230, 246, 0.55), transparent 45%),
+    linear-gradient(180deg, #ffffff 0%, #f8f2ff 100%) !important;
+  border: 1px solid rgba(125, 94, 219, 0.16) !important;
+  box-shadow: 0 14px 34px rgba(86, 60, 140, 0.10) !important;
 }
 
 .order-popup-kicker {
-  font-size: 0.86rem;
-  font-weight: 700;
-  color: rgba(74, 46, 42, 0.48);
-  margin-bottom: 0.25rem;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: rgba(74, 46, 42, 0.48) !important;
+  margin-bottom: 0.25rem !important;
 }
 
 .order-popup-title {
-  font-size: 1.55rem;
-  line-height: 1.25;
-  font-weight: 800;
-  color: var(--text);
+  font-size: 1.45rem !important;
+  line-height: 1.25 !important;
+  font-weight: 800 !important;
+  color: #4a2e2a !important;
 }
 
 .order-popup-subtitle {
-  margin-top: 0.4rem;
-  font-size: 0.96rem;
-  line-height: 1.65;
-  color: rgba(74, 46, 42, 0.62);
+  margin-top: 0.4rem !important;
+  font-size: 0.95rem !important;
+  line-height: 1.65 !important;
+  color: rgba(74, 46, 42, 0.62) !important;
 }
 
-/* selectbox */
-div[role="dialog"] label,
-div[data-testid="stDialog"] label {
-  color: rgba(74, 46, 42, 0.76) !important;
-  font-weight: 750 !important;
+/* label */
+div[role="dialog"] [data-testid="stSelectbox"] label,
+div[role="dialog"] [data-testid="stNumberInput"] label {
+  color: rgba(74, 46, 42, 0.78) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
 }
 
-[data-baseweb="select"] > div {
+/* selectbox ตอนปิด */
+div[role="dialog"] [data-baseweb="select"] > div {
   background: #ffffff !important;
-  color: var(--text) !important;
-  border: 1.5px solid rgba(135, 88, 216, 0.24) !important;
-  border-radius: 20px !important;
-  min-height: 50px !important;
+  color: #4a2e2a !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.24) !important;
+  border-radius: 18px !important;
+  min-height: 48px !important;
   box-shadow: none !important;
 }
 
-[data-baseweb="select"] span,
-[data-baseweb="select"] div {
-  color: var(--text) !important;
+div[role="dialog"] [data-baseweb="select"] span,
+div[role="dialog"] [data-baseweb="select"] div {
+  color: #4a2e2a !important;
 }
 
-/* dropdown */
+/* dropdown list */
 div[data-baseweb="popover"],
-div[data-baseweb="popover"] > div,
 div[data-baseweb="menu"],
 ul[role="listbox"],
 div[role="listbox"] {
   background: #fffafd !important;
-  color: var(--text) !important;
-  border: 1px solid rgba(135, 88, 216, 0.18) !important;
+  color: #4a2e2a !important;
+  border: 1px solid rgba(125, 94, 219, 0.20) !important;
   border-radius: 18px !important;
   box-shadow: 0 18px 42px rgba(86, 60, 140, 0.18) !important;
   overflow: hidden !important;
@@ -330,11 +590,11 @@ div[role="listbox"] {
 li[role="option"],
 div[role="option"] {
   background: #fffafd !important;
-  color: var(--text) !important;
+  color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
   font-size: 0.96rem !important;
   font-weight: 600 !important;
-  padding: 0.78rem 1rem !important;
+  padding: 0.8rem 1rem !important;
 }
 
 li[role="option"]:hover,
@@ -342,18 +602,19 @@ div[role="option"]:hover,
 li[aria-selected="true"],
 div[aria-selected="true"] {
   background: #eee7ff !important;
-  color: var(--text) !important;
+  color: #4a2e2a !important;
 }
 
-/* number input */
+/* number input wrapper */
 div[role="dialog"] [data-testid="stNumberInput"] > div {
   background: #ffffff !important;
-  border: 1.5px solid rgba(135, 88, 216, 0.24) !important;
-  border-radius: 999px !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.24) !important;
+  border-radius: 18px !important;
   overflow: hidden !important;
-  box-shadow: 0 10px 24px rgba(86, 60, 140, 0.08) !important;
+  box-shadow: none !important;
 }
 
+/* ล้างสีดำของ number input */
 div[role="dialog"] [data-testid="stNumberInput"] div,
 div[role="dialog"] [data-testid="stNumberInput"] div[data-baseweb="input"] {
   background: transparent !important;
@@ -361,144 +622,88 @@ div[role="dialog"] [data-testid="stNumberInput"] div[data-baseweb="input"] {
   box-shadow: none !important;
 }
 
+/* ช่องเลข */
 div[role="dialog"] [data-testid="stNumberInput"] input {
   background: #ffffff !important;
-  color: var(--text) !important;
+  color: #4a2e2a !important;
   border: none !important;
   box-shadow: none !important;
   min-height: 48px !important;
   padding-left: 1rem !important;
+  font-family: 'Mitr', sans-serif !important;
   font-weight: 650 !important;
 }
 
-/* ใช้สีเดียวกันทั้ง - และ + */
+/* ปุ่ม - + ให้เข้าธีมเดียวกัน */
 div[role="dialog"] [data-testid="stNumberInput"] button,
 div[role="dialog"] [data-testid="stNumberInput"] button:disabled,
-div[role="dialog"] [data-testid="stNumberInput"] button[disabled],
-div[role="dialog"] [data-testid="stNumberInput"] [role="button"] {
+div[role="dialog"] [data-testid="stNumberInput"] button[disabled] {
   background: #e8ddff !important;
-  background-color: #e8ddff !important;
   color: #6c48c8 !important;
   opacity: 1 !important;
   border: none !important;
-  border-left: 1px solid rgba(135, 88, 216, 0.16) !important;
+  border-left: 1px solid rgba(125, 94, 219, 0.16) !important;
   box-shadow: none !important;
   min-width: 44px !important;
   min-height: 48px !important;
   font-weight: 900 !important;
 }
 
-div[role="dialog"] [data-testid="stNumberInput"] button:last-of-type {
-  border-radius: 0 999px 999px 0 !important;
-}
-
-/* summary */
+/* กล่องสรุป */
 .order-summary-box {
-  max-width: 560px;
-  margin: 1rem auto 1rem auto;
-  padding: 1.05rem 1.1rem;
-  border-radius: 24px;
-  background: linear-gradient(180deg, #ffffff 0%, #f7f0ff 100%) !important;
-  border: 1px solid rgba(135, 88, 216, 0.14);
-  box-shadow: 0 14px 32px rgba(86, 60, 140, 0.08);
+  max-width: 560px !important;
+  margin: 1rem auto 1rem auto !important;
+  padding: 1.05rem 1.15rem !important;
+  border-radius: 22px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f2ff 100%) !important;
+  border: 1px solid rgba(125, 94, 219, 0.14) !important;
+  box-shadow: 0 12px 28px rgba(86, 60, 140, 0.08) !important;
 }
 
 .order-summary-title {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 0.85rem;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  color: #4a2e2a !important;
+  margin-bottom: 0.8rem !important;
 }
 
 .order-summary-row,
 .order-summary-total {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.45rem 0;
-  color: var(--text);
-  font-size: 0.96rem;
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  padding: 0.42rem 0 !important;
+  color: #4a2e2a !important;
+  font-size: 0.96rem !important;
 }
 
 .order-summary-row span,
 .order-summary-total span {
-  color: rgba(74, 46, 42, 0.55);
+  color: rgba(74, 46, 42, 0.55) !important;
 }
 
 .order-summary-row strong,
 .order-summary-total strong {
-  color: var(--text);
-  font-weight: 750;
-  text-align: right;
+  color: #4a2e2a !important;
+  font-weight: 750 !important;
+  text-align: right !important;
 }
 
 .order-summary-total {
-  margin-top: 0.35rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(135, 88, 216, 0.24);
-  font-size: 1.02rem;
+  margin-top: 0.35rem !important;
+  padding-top: 0.75rem !important;
+  border-top: 1px dashed rgba(125, 94, 219, 0.24) !important;
 }
 
-/* buttons */
-div.stButton > button {
-  font-family: 'Mitr', sans-serif !important;
+/* ปุ่ม popup */
+div[role="dialog"] .stButton > button {
+  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
+  color: #ffffff !important;
+  border: none !important;
   border-radius: 999px !important;
   min-height: 48px !important;
   font-weight: 750 !important;
-  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
-  color: white !important;
-  border: none !important;
-  box-shadow: 0 14px 30px rgba(108, 72, 200, 0.22) !important;
+  box-shadow: 0 14px 30px rgba(108, 72, 200, 0.20) !important;
 }
 
-div.stButton > button:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.04);
-}
-
-/* scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f7f0ff;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(135, 88, 216, 0.48);
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(135, 88, 216, 0.68);
-}
-
-@media (max-width: 768px) {
-  .block-container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    padding-top: 1.4rem !important;
-  }
-
-  .hero-card {
-    padding: 1.6rem;
-    border-radius: 26px;
-    align-items: flex-start;
-  }
-
-  .hero-icon {
-    width: 56px;
-    height: 56px;
-    font-size: 1.8rem;
-  }
-
-  .hero-card h1 {
-    font-size: 2.35rem !important;
-  }
-
-  [data-testid="stChatMessage"] {
-    border-radius: 24px !important;
-    padding: 0.95rem !important;
-  }
-}
+/* ===== FINAL POPUP RESTORE END ===== */
