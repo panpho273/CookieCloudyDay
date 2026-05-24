@@ -1069,3 +1069,104 @@ div[role="listbox"]::-webkit-scrollbar-thumb:hover {
 }
 
 /* ===== SELECTBOX DROPDOWN FINAL FIX END ===== */
+
+/* ===== FIX DROPDOWN ACTIVE BLACK ROW START ===== */
+
+/* กล่อง dropdown หลัก */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
+div[data-baseweb="menu"],
+ul[role="listbox"],
+div[role="listbox"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  border: 1px solid rgba(125, 94, 219, 0.20) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
+  font-family: 'Mitr', sans-serif !important;
+}
+
+/* รายการทุกตัวใน dropdown */
+li[role="option"],
+div[role="option"],
+ul[role="listbox"] li,
+div[data-baseweb="menu"] div {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 650 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ตัวที่ถูก hover / focus / selected ห้ามเป็นดำ */
+li[role="option"]:hover,
+div[role="option"]:hover,
+li[role="option"]:focus,
+div[role="option"]:focus,
+li[role="option"]:active,
+div[role="option"]:active,
+li[aria-selected="true"],
+div[aria-selected="true"],
+li[data-highlighted="true"],
+div[data-highlighted="true"],
+div[data-baseweb="menu"] div:hover,
+div[data-baseweb="menu"] div:focus,
+div[data-baseweb="menu"] div:active {
+  background: #eee7ff !important;
+  background-color: #eee7ff !important;
+  color: #4a2e2a !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+}
+
+/* กันข้อความข้างในถูกทับเป็นสีขาว */
+li[role="option"] *,
+div[role="option"] *,
+div[data-baseweb="menu"] div * {
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+}
+
+/* ลบ focus ring สีดำของ browser/baseweb */
+div[data-baseweb="popover"] *:focus,
+div[data-baseweb="menu"] *:focus,
+ul[role="listbox"] *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* scrollbar ให้ไม่ดำ */
+div[data-baseweb="popover"]::-webkit-scrollbar,
+div[data-baseweb="popover"] *::-webkit-scrollbar,
+div[data-baseweb="menu"]::-webkit-scrollbar,
+div[data-baseweb="menu"] *::-webkit-scrollbar,
+ul[role="listbox"]::-webkit-scrollbar,
+ul[role="listbox"] *::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-track,
+div[data-baseweb="popover"] *::-webkit-scrollbar-track,
+div[data-baseweb="menu"]::-webkit-scrollbar-track,
+div[data-baseweb="menu"] *::-webkit-scrollbar-track,
+ul[role="listbox"]::-webkit-scrollbar-track,
+ul[role="listbox"] *::-webkit-scrollbar-track {
+  background: #f7f0ff !important;
+  border-radius: 999px !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
+div[data-baseweb="popover"] *::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"] *::-webkit-scrollbar-thumb,
+ul[role="listbox"]::-webkit-scrollbar-thumb,
+ul[role="listbox"] *::-webkit-scrollbar-thumb {
+  background: #b79cff !important;
+  border-radius: 999px !important;
+}
+
+/* ===== FIX DROPDOWN ACTIVE BLACK ROW END ===== */
