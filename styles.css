@@ -1,21 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap');
 
 /* ================================
-   CookieCloudyDay Lavender Milk Theme
+   CookieCloudyDay - Clean Lavender UI
+   ไม่มีกรอบ input ซ้อนหลายชั้น
 ================================ */
 
 :root {
-  --milk: #fffaf7;
-  --lavender: #efe8ff;
-  --lavender-2: #e2d4ff;
-  --lavender-3: #c7b5ff;
-  --choco: #4a2e2a;
-  --cocoa: #6d4a43;
-  --berry: #8f6ed5;
-  --berry-dark: #6b4fc4;
-  --cream-card: rgba(255, 252, 248, 0.88);
-  --border: rgba(126, 96, 190, 0.18);
-  --shadow: 0 20px 50px rgba(82, 58, 130, 0.13);
+  --bg1: #fffaf7;
+  --bg2: #f4edff;
+  --bg3: #fff6fb;
+  --text: #4a2e2a;
+  --muted: rgba(74, 46, 42, 0.48);
+  --purple: #8d72e1;
+  --purple2: #c9b8ff;
+  --card: rgba(255, 255, 255, 0.78);
+  --border: rgba(141, 114, 225, 0.18);
+  --shadow: 0 18px 45px rgba(91, 70, 145, 0.13);
 }
 
 html,
@@ -26,18 +26,11 @@ body,
 main,
 section.main {
   background:
-    radial-gradient(circle at 15% 8%, rgba(199, 181, 255, 0.45), transparent 25%),
-    radial-gradient(circle at 88% 12%, rgba(255, 235, 246, 0.75), transparent 28%),
-    radial-gradient(circle at 18% 86%, rgba(221, 242, 255, 0.55), transparent 24%),
-    linear-gradient(180deg, #fffaf7 0%, #f7f0ff 48%, #fff8fb 100%) !important;
-  color: var(--choco) !important;
+    radial-gradient(circle at 15% 8%, rgba(201, 184, 255, 0.45), transparent 26%),
+    radial-gradient(circle at 88% 12%, rgba(255, 232, 246, 0.76), transparent 30%),
+    linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 52%, var(--bg3) 100%) !important;
+  color: var(--text) !important;
   font-family: 'Mitr', sans-serif !important;
-}
-
-/* ล้างกล่อง/พื้นดำ Streamlit */
-[data-testid="stVerticalBlock"],
-[data-testid="stVerticalBlockBorderWrapper"] {
-  background: transparent !important;
 }
 
 #MainMenu,
@@ -49,17 +42,24 @@ header[data-testid="stHeader"] {
   background: transparent !important;
 }
 
+/* ห้ามมีกล่องใหญ่จาก Streamlit */
+[data-testid="stVerticalBlock"],
+[data-testid="stVerticalBlockBorderWrapper"],
+[data-testid="stElementContainer"] {
+  background: transparent !important;
+}
+
 /* layout */
 .block-container {
   max-width: 940px !important;
-  padding-top: 3.1rem !important;
-  padding-bottom: 10rem !important;
+  padding-top: 3rem !important;
+  padding-bottom: 7rem !important;
 }
 
 /* title */
 h1 {
   font-family: 'Baloo 2', 'Mitr', sans-serif !important;
-  color: var(--choco) !important;
+  color: var(--text) !important;
   font-size: clamp(2.8rem, 5.7vw, 4.9rem) !important;
   line-height: 1.02 !important;
   font-weight: 800 !important;
@@ -70,74 +70,47 @@ h1 {
     0 14px 35px rgba(126, 96, 190, 0.12);
 }
 
-/* caption */
 [data-testid="stCaptionContainer"] {
-  color: rgba(74, 46, 42, 0.50) !important;
+  color: var(--muted) !important;
   font-size: 1rem !important;
   margin-bottom: 2rem !important;
 }
 
 /* chat card */
 [data-testid="stChatMessage"] {
-  background: var(--cream-card) !important;
+  background: var(--card) !important;
   border: 1px solid var(--border) !important;
-  border-radius: 30px !important;
-  padding: 1.1rem 1.2rem !important;
-  margin: 1.15rem 0 !important;
+  border-radius: 28px !important;
+  padding: 1.05rem 1.15rem !important;
+  margin: 1.1rem 0 !important;
   box-shadow: var(--shadow) !important;
   backdrop-filter: blur(14px);
   overflow: hidden;
 }
 
-/* user bubble */
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
-  background:
-    linear-gradient(135deg, rgba(226, 212, 255, 0.95), rgba(255, 250, 247, 0.94)) !important;
-  border-color: rgba(143, 110, 213, 0.24) !important;
+  background: linear-gradient(135deg, rgba(226, 212, 255, 0.88), rgba(255, 255, 255, 0.78)) !important;
 }
 
-/* assistant bubble */
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 239, 255, 0.92)) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,242,255,0.88)) !important;
 }
 
-/* little cookie sparkle */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"])::after {
-  content: "✦";
-  position: absolute;
-  right: 18px;
-  top: 14px;
-  color: rgba(143, 110, 213, 0.28);
-  font-size: 1.35rem;
-}
-
-/* avatar */
 [data-testid="chatAvatarIcon-user"],
 [data-testid="chatAvatarIcon-assistant"] {
-  border-radius: 19px !important;
-  box-shadow: 0 9px 20px rgba(82, 58, 130, 0.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 18px rgba(91, 70, 145, 0.16) !important;
 }
 
-/* text */
 [data-testid="stMarkdownContainer"],
 [data-testid="stMarkdownContainer"] p,
 [data-testid="stMarkdownContainer"] li {
-  color: var(--choco) !important;
+  color: var(--text) !important;
   font-family: 'Mitr', sans-serif !important;
   font-size: 1.02rem !important;
   line-height: 1.85 !important;
 }
 
-/* assistant inner card */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) [data-testid="stMarkdownContainer"] {
-  background: rgba(255, 255, 255, 0.58);
-  border: 1px solid rgba(143, 110, 213, 0.12);
-  border-radius: 22px;
-  padding: 1rem 1.15rem;
-}
-
-/* list */
 [data-testid="stMarkdownContainer"] ol,
 [data-testid="stMarkdownContainer"] ul {
   padding-left: 1.6rem !important;
@@ -148,83 +121,91 @@ h1 {
   font-weight: 550 !important;
 }
 
-/* bottom bar */
+/* ================================
+   CHAT INPUT: ชั้นเดียวเท่านั้น
+================================ */
+
+/* ลบพื้นหลังกล่องล่างทุกชั้น */
 [data-testid="stBottom"],
-[data-testid="stBottom"] > div,
-[data-testid="stBottom"] > div > div,
 [data-testid="stBottomBlockContainer"],
-[data-testid="stBottomBlockContainer"] > div,
-[data-testid="stBottomBlockContainer"] > div > div {
-  background:
-    linear-gradient(180deg, rgba(255, 250, 247, 0.92), rgba(240, 232, 255, 1)) !important;
-  background-color: #f7f0ff !important;
-  border-top: 1px solid rgba(143, 110, 213, 0.14) !important;
-  box-shadow: 0 -18px 45px rgba(82, 58, 130, 0.07) !important;
-}
-
-[data-testid="stBottom"] section,
-[data-testid="stBottom"] div,
-[data-testid="stBottomBlockContainer"] section,
-[data-testid="stBottomBlockContainer"] div {
+[data-testid="stBottom"] *,
+[data-testid="stBottomBlockContainer"] * {
   background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
-/* input */
-[data-testid="stChatInput"] {
-  max-width: 860px !important;
-  margin: 0 auto !important;
-  padding: 1rem 1rem 1.25rem 1rem !important;
+/* ตัวแถบล่างเป็นแค่ fade โปร่ง ๆ */
+[data-testid="stBottom"],
+[data-testid="stBottomBlockContainer"] {
+  background: linear-gradient(180deg, rgba(250,246,255,0), rgba(250,246,255,0.88)) !important;
+  border: none !important;
+}
+
+/* ล้าง parent ทุกตัวที่ครอบ textarea */
+[data-testid="stChatInput"],
+[data-testid="stChatInput"] > div,
+[data-testid="stChatInput"] > div > div,
+[data-testid="stChatInput"] > div > div > div,
+[data-testid="stChatInput"] form,
+[data-testid="stChatInput"] form > div,
+[data-testid="stChatInput"] form > div > div {
   background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
-[data-testid="stChatInput"] > div {
-  background: rgba(255, 255, 255, 0.82) !important;
-  border: 2px solid rgba(143, 110, 213, 0.26) !important;
-  border-radius: 30px !important;
-  box-shadow: 0 16px 38px rgba(82, 58, 130, 0.13) !important;
-  padding: 0.55rem !important;
+/* วาง input ลอยกลางจอ */
+[data-testid="stChatInput"] {
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  padding: 0.6rem 1rem 1rem 1rem !important;
 }
 
+/* ตัว textarea เป็น bubble เดียว */
 [data-testid="stChatInput"] textarea {
   font-family: 'Mitr', sans-serif !important;
-  background: #ffffff !important;
-  color: var(--choco) !important;
-  border: 1.5px solid rgba(143, 110, 213, 0.24) !important;
-  border-radius: 24px !important;
-  min-height: 58px !important;
-  padding: 1rem 3.25rem 1rem 1.15rem !important;
+  background: rgba(255,255,255,0.92) !important;
+  color: var(--text) !important;
+  border: 1.5px solid rgba(141, 114, 225, 0.35) !important;
+  border-radius: 999px !important;
+  min-height: 56px !important;
+  padding: 1rem 4rem 1rem 1.35rem !important;
   font-size: 1rem !important;
-  box-shadow: inset 0 2px 8px rgba(82, 58, 130, 0.04) !important;
+  box-shadow:
+    0 14px 34px rgba(126, 96, 190, 0.13),
+    inset 0 1px 4px rgba(82, 58, 130, 0.04) !important;
 }
 
 [data-testid="stChatInput"] textarea::placeholder {
-  color: rgba(74, 46, 42, 0.42) !important;
+  color: rgba(74, 46, 42, 0.38) !important;
 }
 
 [data-testid="stChatInput"] textarea:focus {
-  border-color: var(--berry) !important;
+  border-color: rgba(141, 114, 225, 0.72) !important;
   box-shadow:
-    0 0 0 4px rgba(143, 110, 213, 0.13),
-    inset 0 2px 8px rgba(82, 58, 130, 0.04) !important;
+    0 0 0 4px rgba(141, 114, 225, 0.12),
+    0 16px 36px rgba(126, 96, 190, 0.15) !important;
 }
 
-/* send button - purple milk */
+/* ปุ่มส่ง */
 [data-testid="stChatInput"] button {
   background: linear-gradient(135deg, #a58bff, #7d63d8) !important;
   color: white !important;
   border: none !important;
-  border-radius: 19px !important;
-  width: 44px !important;
-  height: 44px !important;
-  box-shadow: 0 10px 24px rgba(125, 99, 216, 0.28) !important;
+  border-radius: 999px !important;
+  width: 46px !important;
+  height: 46px !important;
+  box-shadow: 0 10px 22px rgba(125, 99, 216, 0.26) !important;
 }
 
 [data-testid="stChatInput"] button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(125, 99, 216, 0.36) !important;
+  box-shadow: 0 14px 28px rgba(125, 99, 216, 0.34) !important;
 }
 
-/* buttons */
+/* ปุ่มอื่น ๆ */
 div.stButton > button {
   font-family: 'Mitr', sans-serif !important;
   border-radius: 999px !important;
@@ -241,22 +222,20 @@ div.stButton > button:hover {
   filter: brightness(1.04);
 }
 
-/* alert/info */
 [data-testid="stAlert"] {
-  background: rgba(255, 255, 255, 0.82) !important;
-  color: var(--choco) !important;
-  border: 1px solid rgba(143, 110, 213, 0.16) !important;
+  background: rgba(255,255,255,0.82) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(141, 114, 225, 0.16) !important;
   border-radius: 22px !important;
   box-shadow: var(--shadow) !important;
 }
 
-/* select/input */
 [data-baseweb="select"] > div,
 [data-testid="stNumberInput"] input {
   font-family: 'Mitr', sans-serif !important;
   background: #ffffff !important;
-  color: var(--choco) !important;
-  border: 1px solid rgba(143, 110, 213, 0.25) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(141, 114, 225, 0.25) !important;
   border-radius: 16px !important;
 }
 
@@ -270,15 +249,14 @@ div.stButton > button:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(143, 110, 213, 0.45);
+  background: rgba(141, 114, 225, 0.45);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(143, 110, 213, 0.68);
+  background: rgba(141, 114, 225, 0.68);
 }
 
-/* mobile */
 @media (max-width: 768px) {
   .block-container {
     padding-left: 1rem !important;
