@@ -1,5 +1,6 @@
 import json
 import random
+import textwrap
 from pathlib import Path
 
 import streamlit as st
@@ -102,7 +103,7 @@ def render_lucky_cookie_tarot():
     if not st.session_state.get("show_lucky_tarot"):
         return
 
-    # ถ้าเคยค้างเป็นไพ่ default ให้ล้างแล้วสุ่มใหม่จากไฟล์จริง
+    # ถ้าเคยค้างเป็นไพ่ default ให้สุ่มใหม่จากไฟล์ 78 ใบ
     old_card = st.session_state.get("lucky_tarot_card")
     if old_card and old_card.get("name") == "The Choco Chip":
         st.session_state.pop("lucky_tarot_card", None)
@@ -114,143 +115,130 @@ def render_lucky_cookie_tarot():
     def lucky_tarot_dialog():
         card = st.session_state["lucky_tarot_card"]
 
-        st.markdown(
-            f"""
-            <style>
-            .tarot-wrap {{
-                width: 100%;
-                max-width: 430px;
-                margin: 0 auto;
-                padding: 4px 0 8px;
-                font-family: 'Mitr', sans-serif;
-                color: #4a2e2a;
-            }}
+        html = f"""
+<style>
+.tarot-wrap {{
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 4px 0 10px;
+    font-family: 'Mitr', sans-serif;
+    color: #4a2e2a;
+}}
 
-            .tarot-card {{
-                width: 210px;
-                min-height: 270px;
-                margin: 0 auto 22px auto;
-                padding: 22px 18px;
-                border-radius: 28px;
-                background: linear-gradient(180deg, #ffe8df 0%, #ffd8cd 100%);
-                border: 1px solid rgba(168, 112, 91, 0.22);
-                box-shadow:
-                    0 18px 42px rgba(91, 51, 42, 0.14),
-                    inset 0 1px 0 rgba(255,255,255,0.45);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-            }}
+.tarot-card {{
+    width: 210px;
+    min-height: 270px;
+    margin: 0 auto 22px auto;
+    padding: 22px 18px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, #ffe8df 0%, #ffd8cd 100%);
+    border: 1px solid rgba(168, 112, 91, 0.22);
+    box-shadow:
+        0 18px 42px rgba(91, 51, 42, 0.14),
+        inset 0 1px 0 rgba(255,255,255,0.45);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}}
 
-            .tarot-cookie {{
-                font-size: 46px;
-                margin-bottom: 24px;
-            }}
+.tarot-cookie {{
+    font-size: 46px;
+    margin-bottom: 24px;
+}}
 
-            .tarot-name {{
-                font-size: 24px;
-                font-weight: 700;
-                line-height: 1.25;
-                margin-bottom: 14px;
-                color: #4a2e2a;
-                word-break: break-word;
-            }}
+.tarot-name {{
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    color: #4a2e2a;
+    word-break: break-word;
+}}
 
-            .tarot-sub {{
-                font-size: 14px;
-                font-weight: 600;
-                color: rgba(74, 46, 42, 0.68);
-            }}
+.tarot-sub {{
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(74, 46, 42, 0.68);
+}}
 
-            .tarot-section-title {{
-                font-size: 19px;
-                font-weight: 700;
-                margin: 8px 0 12px;
-                color: #4a2e2a;
-            }}
+.tarot-section-title {{
+    font-size: 19px;
+    font-weight: 700;
+    margin: 8px 0 12px;
+    color: #4a2e2a;
+}}
 
-            .tarot-meaning {{
-                font-size: 15px;
-                line-height: 1.85;
-                margin-bottom: 16px;
-                color: #4a2e2a;
-                word-break: break-word;
-            }}
+.tarot-meaning {{
+    font-size: 15px;
+    line-height: 1.85;
+    margin-bottom: 16px;
+    color: #4a2e2a;
+}}
 
-            .tarot-keyword {{
-                padding: 14px 16px;
-                border-radius: 14px;
-                background: #dceeff;
-                font-size: 14px;
-                line-height: 1.75;
-                font-weight: 500;
-                margin-bottom: 14px;
-                color: #4a2e2a;
-            }}
+.tarot-keyword {{
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #dceeff;
+    font-size: 14px;
+    line-height: 1.75;
+    font-weight: 500;
+    margin-bottom: 14px;
+    color: #4a2e2a;
+}}
 
-            .tarot-promo {{
-                padding: 14px 16px;
-                border-radius: 14px;
-                background: #dcf8e8;
-                font-size: 14px;
-                line-height: 1.75;
-                font-weight: 500;
-                margin-bottom: 18px;
-                color: #4a2e2a;
-            }}
+.tarot-promo {{
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #dcf8e8;
+    font-size: 14px;
+    line-height: 1.75;
+    font-weight: 500;
+    margin-bottom: 18px;
+    color: #4a2e2a;
+}}
 
-            div[data-testid="stDialog"] div.stButton > button,
-            div[role="dialog"] div.stButton > button {{
-                min-height: 54px !important;
-                border-radius: 999px !important;
-                border: none !important;
-                background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 55%, #7547d8 100%) !important;
-                color: #4a2e2a !important;
-                font-family: 'Mitr', sans-serif !important;
-                font-size: 16px !important;
-                font-weight: 700 !important;
-                box-shadow:
-                    0 14px 28px rgba(124, 58, 237, 0.24),
-                    0 0 18px rgba(167, 139, 250, 0.22),
-                    inset 0 1px 0 rgba(255,255,255,0.28) !important;
-                transition: all 0.18s ease !important;
-            }}
+div[role="dialog"] div.stButton > button {{
+    min-height: 54px !important;
+    border-radius: 999px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 55%, #7547d8 100%) !important;
+    color: #4a2e2a !important;
+    font-family: 'Mitr', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    box-shadow:
+        0 14px 28px rgba(124, 58, 237, 0.24),
+        0 0 18px rgba(167, 139, 250, 0.22),
+        inset 0 1px 0 rgba(255,255,255,0.28) !important;
+}}
+</style>
 
-            div[data-testid="stDialog"] div.stButton > button:hover,
-            div[role="dialog"] div.stButton > button:hover {{
-                transform: translateY(-1px) !important;
-                box-shadow:
-                    0 18px 34px rgba(124, 58, 237, 0.30),
-                    0 0 22px rgba(167, 139, 250, 0.32),
-                    inset 0 1px 0 rgba(255,255,255,0.32) !important;
-            }}
-            </style>
+<div class="tarot-wrap">
+    <div class="tarot-card">
+        <div class="tarot-cookie">🍪</div>
+        <div class="tarot-name">{card.get("name", "Lucky Cookie")}</div>
+        <div class="tarot-sub">Cookie Fortune Card</div>
+    </div>
 
-            <div class="tarot-wrap">
-                <div class="tarot-card">
-                    <div class="tarot-cookie">🍪</div>
-                    <div class="tarot-name">{card.get("name", "Lucky Cookie")}</div>
-                    <div class="tarot-sub">Cookie Fortune Card</div>
-                </div>
+    <div class="tarot-section-title">คำทำนายของคุณ</div>
 
-                <div class="tarot-section-title">คำทำนายของคุณ</div>
-                <div class="tarot-meaning">
-                    {card.get("meaning", "")}
-                </div>
+    <div class="tarot-meaning">
+        {card.get("meaning", "")}
+    </div>
 
-                <div class="tarot-keyword">
-                    ความหมายหลักของไพ่: {card.get("keyword", "")}
-                </div>
+    <div class="tarot-keyword">
+        ความหมายหลักของไพ่: {card.get("keyword", "")}
+    </div>
 
-                <div class="tarot-promo">
-                    โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป รับฟรีคุกกี้ช็อกโกแลตชิพ 1 ชิ้น ตามไพ่ที่สุ่มได้
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    <div class="tarot-promo">
+        โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป รับฟรีคุกกี้ช็อกโกแลตชิพ 1 ชิ้น ตามไพ่ที่สุ่มได้
+    </div>
+</div>
+"""
+        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
 
         col1, col2 = st.columns(2)
 
@@ -267,4 +255,5 @@ def render_lucky_cookie_tarot():
                 st.rerun()
 
     lucky_tarot_dialog()
+
 
