@@ -1136,3 +1136,134 @@ div[data-baseweb="menu"] div * {
 }
 
 /* ===== FIX DROPDOWN ACTIVE BLACK ROW END ===== */
+
+/* ===== HARD FIX SELECTBOX BLACK SCROLLBAR ===== */
+
+/* บังคับ dropdown ใช้ light color-scheme ไม่ให้ browser ทำ scrollbar ดำ */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] *,
+ul[role="listbox"],
+ul[role="listbox"] *,
+div[role="listbox"],
+div[role="listbox"] * {
+  color-scheme: light !important;
+}
+
+/* กล่อง dropdown */
+div[data-baseweb="popover"],
+div[data-baseweb="menu"],
+ul[role="listbox"],
+div[role="listbox"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  border: 1px solid rgba(125, 94, 219, 0.20) !important;
+  border-radius: 18px !important;
+}
+
+/* รายการเมนู */
+li[role="option"],
+div[role="option"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 650 !important;
+}
+
+li[role="option"]:hover,
+div[role="option"]:hover,
+li[aria-selected="true"],
+div[aria-selected="true"] {
+  background: #eee7ff !important;
+  background-color: #eee7ff !important;
+  color: #4a2e2a !important;
+}
+
+/* scrollbar ทุกชั้น */
+div[data-baseweb="popover"]::-webkit-scrollbar,
+div[data-baseweb="popover"] *::-webkit-scrollbar,
+div[data-baseweb="menu"]::-webkit-scrollbar,
+div[data-baseweb="menu"] *::-webkit-scrollbar,
+ul[role="listbox"]::-webkit-scrollbar,
+ul[role="listbox"] *::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"] *::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+  background: #f7f0ff !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-track,
+div[data-baseweb="popover"] *::-webkit-scrollbar-track,
+div[data-baseweb="menu"]::-webkit-scrollbar-track,
+div[data-baseweb="menu"] *::-webkit-scrollbar-track,
+ul[role="listbox"]::-webkit-scrollbar-track,
+ul[role="listbox"] *::-webkit-scrollbar-track,
+div[role="listbox"]::-webkit-scrollbar-track,
+div[role="listbox"] *::-webkit-scrollbar-track {
+  background: #f7f0ff !important;
+  border-radius: 999px !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-track-piece,
+div[data-baseweb="popover"] *::-webkit-scrollbar-track-piece,
+div[data-baseweb="menu"]::-webkit-scrollbar-track-piece,
+div[data-baseweb="menu"] *::-webkit-scrollbar-track-piece,
+ul[role="listbox"]::-webkit-scrollbar-track-piece,
+ul[role="listbox"] *::-webkit-scrollbar-track-piece {
+  background: #f7f0ff !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
+div[data-baseweb="popover"] *::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"] *::-webkit-scrollbar-thumb,
+ul[role="listbox"]::-webkit-scrollbar-thumb,
+ul[role="listbox"] *::-webkit-scrollbar-thumb,
+div[role="listbox"]::-webkit-scrollbar-thumb,
+div[role="listbox"] *::-webkit-scrollbar-thumb {
+  background: #b79cff !important;
+  border-radius: 999px !important;
+  border: 2px solid #f7f0ff !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-button,
+div[data-baseweb="popover"] *::-webkit-scrollbar-button,
+div[data-baseweb="menu"]::-webkit-scrollbar-button,
+div[data-baseweb="menu"] *::-webkit-scrollbar-button,
+ul[role="listbox"]::-webkit-scrollbar-button,
+ul[role="listbox"] *::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: #f7f0ff !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-corner,
+div[data-baseweb="popover"] *::-webkit-scrollbar-corner,
+div[data-baseweb="menu"]::-webkit-scrollbar-corner,
+div[data-baseweb="menu"] *::-webkit-scrollbar-corner,
+ul[role="listbox"]::-webkit-scrollbar-corner,
+ul[role="listbox"] *::-webkit-scrollbar-corner {
+  background: #f7f0ff !important;
+}
+
+/* Firefox */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] *,
+ul[role="listbox"],
+ul[role="listbox"] *,
+div[role="listbox"],
+div[role="listbox"] * {
+  scrollbar-width: thin !important;
+  scrollbar-color: #b79cff #f7f0ff !important;
+}
+
+/* ===== END HARD FIX SELECTBOX BLACK SCROLLBAR ===== */
+
