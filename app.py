@@ -213,6 +213,24 @@ Knowledge Base:
 def fallback_answer(user_question: str) -> str:
     q = (user_question or "").lower().strip()
 
+    if q in [
+        "เมนู",
+        "ดูเมนู",
+        "ขอเมนู",
+        "มีเมนูอะไร",
+        "มีอะไรขาย",
+        "ขายอะไร",
+        "แนะนำเมนู",
+        "เมนูแนะนำ",
+        "เมนูขายดี",
+        "เมนูฮิต",
+        "เมนูยอดฮิต",
+        "เมนูยอดนิยม",
+    ]:
+        return reply_hot_menu_safe()
+
+    q = (user_question or "").lower().strip()
+
     if "เปิด" in q or "กี่โมง" in q or "เวลา" in q:
         return "ร้าน CookieCloudyDay เปิดทุกวัน เวลา 10:00–20:00 น. ค่ะ"
 
@@ -682,8 +700,58 @@ def build_new_menu_reply(limit=5):
     return "\n".join(lines)
 
 
+
+def reply_hot_menu_safe():
+    """
+    ใช้ตอบคำว่า เมนู / แนะนำเมนู
+    ต้องตอบแค่เมนูฮิต ไม่โชว์เมนูทั้งหมด 78 รายการ
+    """
+    if "build_hot_menu_reply" in globals():
+        return build_hot_menu_reply()
+    if "get_hot_menu_reply" in globals():
+        return get_hot_menu_reply()
+
+    return (
+        "ได้เลยค่า 🍪\n\n"
+        "ตอนนี้ Demi แนะนำเมนูฮิตของร้านให้ก่อนนะคะ "
+        "ถ้าอยากดูครบทุกเมนู ค่อยพิมพ์ว่า “เมนูทั้งหมด” ได้เลยค่ะ"
+    )
+
+
 def direct_customer_answer(message: str):
     q = (message or "").lower().strip()
+
+    hot_menu_exact_keywords = [
+        "เมนู",
+        "ดูเมนู",
+        "ขอเมนู",
+        "มีเมนูอะไร",
+        "มีอะไรขาย",
+        "ขายอะไร",
+        "แนะนำเมนู",
+        "เมนูแนะนำ",
+        "เมนูขายดี",
+        "เมนูฮิต",
+        "เมนูยอดฮิต",
+        "เมนูยอดนิยม",
+    ]
+
+    all_menu_keywords = [
+        "เมนูทั้งหมด",
+        "ดูเมนูทั้งหมด",
+        "ขอดูเมนูทั้งหมด",
+        "เปิดเมนูทั้งหมด",
+        "ทั้งหมดของร้าน",
+    ]
+
+    # คำว่า "เมนู" เฉย ๆ ห้ามโชว์ 78 เมนู ให้โชว์เมนูฮิตแทน
+    if q in hot_menu_exact_keywords:
+        return reply_hot_menu_safe()
+
+    # ถ้าลูกค้าตั้งใจดูทั้งหมดจริง ๆ ให้ปล่อยไป flow popup/เมนูทั้งหมดเดิม
+    if q in all_menu_keywords:
+        return None
+
 
     new_menu_keywords = [
         "เมนูใหม่",
