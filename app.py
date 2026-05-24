@@ -1017,27 +1017,34 @@ if prompt:
                 save_result = save_order(menu_name, quantity, price)
                 saved_total = int(save_result["total"])
 
-                # Lucky Cookie Tarot promo: ครบ 3 ชิ้น และยอดรวม 150 บาทขึ้นไป
+                # Lucky Cookie Tarot promo: ยอดรวม 150 บาทขึ้นไป
                 try:
                     _promo_quantity = int(quantity)
                 except Exception:
                     _promo_quantity = 0
+
                 try:
                     _promo_total = int(saved_total)
                 except Exception:
                     _promo_total = 0
-                if _promo_quantity >= 3 and _promo_total >= 150:
-                    st.session_state['lucky_cookie_promo'] = {
-                        'quantity': _promo_quantity,
-                        'total': _promo_total,
+
+                if _promo_total >= 150:
+                    st.session_state["lucky_cookie_promo"] = {
+                        "menu": menu_name,
+                        "quantity": _promo_quantity,
+                        "total": _promo_total,
                     }
-                    st.session_state['show_lucky_tarot'] = False
-                    st.session_state.pop('lucky_tarot_card', None)
+                    st.session_state["show_lucky_tarot"] = True
+                    st.session_state.pop("lucky_tarot_card", None)
                 else:
-                    st.session_state.pop('lucky_cookie_promo', None)
-                    st.session_state['show_lucky_tarot'] = False
+                    st.session_state.pop("lucky_cookie_promo", None)
+                    st.session_state["show_lucky_tarot"] = False
+                    st.session_state.pop("lucky_tarot_card", None)
 
                 answer = build_order_success_reply(menu_name, quantity, saved_total)
+
+                if _promo_total >= 150:
+                    answer += "\n\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ เดี๋ยว Demi เปิดไพ่ให้เลยนะคะ"
 
         except Exception:
             answer = "ขออภัยค่ะ ตอนนี้ Demi รับออเดอร์ไม่สำเร็จ ลองพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ"
