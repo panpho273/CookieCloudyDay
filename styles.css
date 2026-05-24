@@ -199,43 +199,7 @@ div.stButton > button {
   }
 }
 
-/* ===== FIX ONLY BLACK BOTTOM AREA START ===== */
 
-/* ลบพื้นหลังดำตรงแถบล่างของ Streamlit */
-[data-testid="stBottom"],
-[data-testid="stBottomBlockContainer"],
-[data-testid="stBottom"] > div,
-[data-testid="stBottom"] > div > div,
-[data-testid="stBottomBlockContainer"] > div,
-[data-testid="stBottomBlockContainer"] > div > div {
-  background:
-    linear-gradient(180deg, rgba(255,248,251,0), rgba(246,238,255,0.96)) !important;
-  background-color: #f6eeff !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* ลบสีดำที่ container ลูกด้านล่างแอบใส่ */
-[data-testid="stBottom"] section,
-[data-testid="stBottom"] section > div,
-[data-testid="stBottomBlockContainer"] section,
-[data-testid="stBottomBlockContainer"] section > div {
-  background: transparent !important;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* ถ้า Streamlit ใส่ block สีเข้มไว้หลัง input ให้กลบเป็นสีเดียวกับพื้นหลัง */
-[data-testid="stBottom"] [data-testid="stVerticalBlock"],
-[data-testid="stBottomBlockContainer"] [data-testid="stVerticalBlock"],
-[data-testid="stBottom"] [data-testid="stElementContainer"],
-[data-testid="stBottomBlockContainer"] [data-testid="stElementContainer"] {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-/* ===== FIX ONLY BLACK BOTTOM AREA END ===== */
 
 /* ===== HERO NO EXTRA BLOCK FIX START ===== */
 
@@ -457,32 +421,34 @@ div.stButton > button {
 
 /* ===== HERO CLOUD CLEAN FIX END ===== */
 
-/* ===== Fix bottom area background to match page ===== */
-[data-testid="stBottom"] {
-  background: transparent !important;
-}
+/* ===== BOTTOM AREA TRANSPARENT FIX START ===== */
 
-[data-testid="stBottomBlockContainer"] {
-  background: transparent !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
+/* ให้แถบล่างโปร่งใสทั้งหมด ใช้สีพื้นหลังเดียวกับหน้าเว็บ */
+[data-testid="stBottom"],
+[data-testid="stBottomBlockContainer"],
+[data-testid="stBottom"] > div,
+[data-testid="stBottom"] > div > div,
 [data-testid="stBottomBlockContainer"] > div,
-.st-emotion-cache-6shykm.eqt0gmo7 {
-  background: linear-gradient(135deg, #efe7fb 0%, #f7edf8 45%, #eef4fb 100%) !important;
-  box-shadow: none !important;
-  border: none !important;
-  padding: 16px 16px 28px !important;
-  margin: 0 !important;
-}
-
-[data-testid="stBottomBlockContainer"] * {
-  box-sizing: border-box;
-}
-
+[data-testid="stBottomBlockContainer"] > div > div,
 section[data-testid="stAppScrollToBottomContainer"] {
   background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
+/* ลบสี/เงาของกล่องลูกที่ทำให้เหมือนมีบล็อคแยก */
+[data-testid="stBottom"] *,
+[data-testid="stBottomBlockContainer"] * {
+  box-shadow: none !important;
+}
+
+/* ให้เฉพาะตัวช่องพิมพ์ยังเป็นกล่องขาว */
+[data-testid="stChatInput"] > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
+}
+
+/* ===== BOTTOM AREA TRANSPARENT FIX END ===== */
