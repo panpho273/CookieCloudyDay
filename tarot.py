@@ -239,13 +239,13 @@ def render_lucky_cookie_tarot():
         col1, col2 = st.columns(2)
 
         with col1:
-            if st.button("🔄 สุ่มไพ่ใหม่", use_container_width=True):
+            if st.button("สุ่มไพ่ใหม่", use_container_width=True):
                 st.session_state["lucky_tarot_card"] = draw_random_card()
                 st.session_state.pop("_lucky_tarot_dialog_opened", None)
                 st.rerun()
 
         with col2:
-            if st.button("✅ จบออเดอร์และเริ่มแชทใหม่", use_container_width=True):
+            if st.button("จบออเดอร์และเริ่มแชทใหม่", use_container_width=True):
                 st.session_state["show_lucky_tarot"] = False
                 st.session_state.pop("lucky_tarot_card", None)
                 st.session_state.pop("lucky_cookie_promo", None)
