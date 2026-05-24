@@ -1082,3 +1082,56 @@ div[data-baseweb="menu"]::-webkit-scrollbar-thumb {
 }
 
 /* ===== CLEAN DROPDOWN SINGLE SOURCE END ===== */
+
+/* ===== FIX DROPDOWN SCROLLBAR GUTTER PURPLE ===== */
+
+/* ให้กล่อง dropdown มีพื้นหลังม่วงอ่อนตรงราง scrollbar */
+div[data-baseweb="menu"],
+ul[role="listbox"],
+div[role="listbox"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  scrollbar-color: #b79cff #f1e8ff !important;
+  scrollbar-width: thin !important;
+}
+
+/* Chrome / Edge */
+div[data-baseweb="menu"]::-webkit-scrollbar,
+ul[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar {
+  width: 10px !important;
+  background: #f1e8ff !important;
+}
+
+div[data-baseweb="menu"]::-webkit-scrollbar-track,
+ul[role="listbox"]::-webkit-scrollbar-track,
+div[role="listbox"]::-webkit-scrollbar-track {
+  background: #f1e8ff !important;
+  border-radius: 999px !important;
+}
+
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
+ul[role="listbox"]::-webkit-scrollbar-thumb,
+div[role="listbox"]::-webkit-scrollbar-thumb {
+  background: #b79cff !important;
+  border-radius: 999px !important;
+  border: 2px solid #f1e8ff !important;
+}
+
+div[data-baseweb="menu"]::-webkit-scrollbar-corner,
+ul[role="listbox"]::-webkit-scrollbar-corner,
+div[role="listbox"]::-webkit-scrollbar-corner {
+  background: #f1e8ff !important;
+}
+
+/* กันชั้นในของ BaseWeb ที่เป็นดำตรงขอบ scrollbar */
+div[data-baseweb="menu"] > div,
+div[data-baseweb="menu"] > div > div,
+ul[role="listbox"] > div,
+div[role="listbox"] > div {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+}
+
+/* ===== END FIX DROPDOWN SCROLLBAR GUTTER PURPLE ===== */
+
