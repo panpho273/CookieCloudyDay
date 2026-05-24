@@ -90,13 +90,10 @@ def render_lucky_cookie_tarot():
     if "lucky_tarot_card" not in st.session_state:
         st.session_state["lucky_tarot_card"] = draw_random_card()
 
-    card = st.session_state["lucky_tarot_card"]
+    @st.dialog("🔮 Lucky Cookie Tarot")
+    def lucky_tarot_dialog():
+        card = st.session_state["lucky_tarot_card"]
 
-    promo = st.session_state.get("lucky_cookie_promo", {})
-    quantity = promo.get("quantity", 0)
-    total = promo.get("total", 0)
-
-    with st.dialog("🔮 Lucky Cookie Tarot"):
         st.markdown(
             f"""
             <div class="tarot-wrap">
@@ -136,3 +133,5 @@ def render_lucky_cookie_tarot():
                 st.session_state.pop("lucky_tarot_card", None)
                 st.session_state.pop("lucky_cookie_promo", None)
                 st.rerun()
+
+    lucky_tarot_dialog()
