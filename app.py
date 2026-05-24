@@ -1076,9 +1076,10 @@ if prompt:
     with st.chat_message("assistant"):
         st.write(answer)
 
-    # แสดง Lucky Tarot dialog ถ้าลูกค้าเข้าเงื่อนไขโปร
-    if st.session_state.get("show_lucky_tarot"):
-        render_lucky_cookie_tarot()
+# แสดง Lucky Tarot dialog ถ้าลูกค้าเข้าเงื่อนไขโปร
+# ต้องอยู่นอก if prompt เพราะ popup จะ st.rerun() แล้วไม่มี prompt ใหม่
+if st.session_state.get("show_lucky_tarot"):
+    render_lucky_cookie_tarot()
 
 
 DEMI_CUSTOMER_RULES = """
