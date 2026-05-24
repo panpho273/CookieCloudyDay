@@ -276,3 +276,291 @@ h1 {
   }
 }
 
+
+/* =========================================
+   CookieCloudyDay - Cookie Shop Theme v2
+   โทนร้านคุกกี้ / เบเกอรี่ / คาเฟ่น่ารัก
+========================================= */
+
+:root {
+  --bg-main: #fff8f1;
+  --bg-soft: #fff3e6;
+  --bg-card: rgba(255, 250, 245, 0.92);
+  --bg-user: linear-gradient(135deg, #ffb38a, #ff8f70);
+  --bg-bot: linear-gradient(180deg, #fffaf5, #fff1e4);
+  --text-main: #4b2e2a;
+  --text-soft: #7b5a52;
+  --accent: #d97745;
+  --accent-2: #ffb347;
+  --accent-3: #8b5e3c;
+  --border-soft: rgba(139, 94, 60, 0.12);
+  --shadow-soft: 0 10px 30px rgba(160, 110, 70, 0.10);
+  --shadow-card: 0 14px 32px rgba(120, 84, 50, 0.12);
+}
+
+/* พื้นหลังรวม */
+.stApp {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 196, 136, 0.35), transparent 18%),
+    radial-gradient(circle at 85% 12%, rgba(255, 224, 193, 0.48), transparent 20%),
+    radial-gradient(circle at 20% 85%, rgba(255, 210, 170, 0.25), transparent 18%),
+    linear-gradient(180deg, #fff9f4 0%, #fff4ea 38%, #fffaf5 100%) !important;
+  color: var(--text-main) !important;
+}
+
+/* layout */
+.block-container {
+  max-width: 940px !important;
+  padding-top: 2rem !important;
+  padding-bottom: 7rem !important;
+}
+
+/* title */
+h1 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem) !important;
+  line-height: 1.04 !important;
+  font-weight: 900 !important;
+  letter-spacing: -1.4px !important;
+  color: #4a2d24 !important;
+  margin-bottom: 0.35rem !important;
+  text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+}
+
+/* caption */
+[data-testid="stCaptionContainer"] {
+  color: #8b6a60 !important;
+  font-size: 0.98rem !important;
+  margin-bottom: 1.1rem !important;
+}
+
+/* ซ่อน header streamlit ถ้าอยากโล่งขึ้นนิดนึง */
+/*
+header[data-testid="stHeader"] {
+  background: transparent !important;
+}
+*/
+
+/* กล่องข้อความแชทหลัก */
+[data-testid="stChatMessage"] {
+  border-radius: 28px !important;
+  padding: 1.1rem 1.2rem !important;
+  margin: 1rem 0 !important;
+  border: 1px solid var(--border-soft) !important;
+  box-shadow: var(--shadow-card) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ข้อความ user */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+  background: rgba(255,255,255,0.62) !important;
+  border: 1px solid rgba(255, 140, 110, 0.28) !important;
+  box-shadow: 0 10px 24px rgba(255, 138, 102, 0.10) !important;
+}
+
+/* bubble user ด้านใน */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) [data-testid="stMarkdownContainer"] {
+  background: var(--bg-user);
+  color: white !important;
+  border-radius: 18px !important;
+  padding: 0.95rem 1rem !important;
+  box-shadow: 0 10px 22px rgba(255, 145, 102, 0.18);
+}
+
+/* ข้อความ assistant */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
+  background: var(--bg-bot) !important;
+  border: 1px solid rgba(212, 160, 120, 0.22) !important;
+}
+
+/* ลาย cookie มุมกล่อง assistant */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"])::after {
+  content: "🍪";
+  position: absolute;
+  right: 14px;
+  top: 10px;
+  font-size: 1.2rem;
+  opacity: 0.16;
+}
+
+/* avatar */
+[data-testid="chatAvatarIcon-assistant"],
+[data-testid="chatAvatarIcon-user"] {
+  border-radius: 18px !important;
+  box-shadow: 0 6px 16px rgba(80, 55, 35, 0.15) !important;
+}
+
+/* เนื้อหาข้อความ */
+[data-testid="stChatMessage"] p,
+[data-testid="stChatMessage"] li,
+[data-testid="stChatMessage"] div {
+  color: var(--text-main) !important;
+  line-height: 1.85 !important;
+  font-size: 1rem !important;
+}
+
+/* user text ให้ขาว */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) p,
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) div {
+  color: #fffefc !important;
+}
+
+/* รายการเมนู / Top 5 */
+[data-testid="stChatMessage"] ol,
+[data-testid="stChatMessage"] ul {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.9rem !important;
+  padding-left: 1.6rem !important;
+}
+
+[data-testid="stChatMessage"] li {
+  margin-bottom: 0.45rem !important;
+  font-weight: 600;
+}
+
+/* markdown block ภายใน assistant ให้ดูเป็น card */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) [data-testid="stMarkdownContainer"] {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(215, 170, 130, 0.16);
+  border-radius: 20px;
+  padding: 1rem 1rem 0.9rem 1rem;
+}
+
+/* input bar ด้านล่าง */
+[data-testid="stChatInput"] {
+  background: rgba(255, 248, 241, 0.85) !important;
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(210, 170, 130, 0.22);
+  padding: 0.9rem 0 1rem 0 !important;
+}
+
+/* กล่อง input ครอบนอก */
+[data-testid="stChatInput"] > div {
+  background: linear-gradient(135deg, #fff9f4, #fff1e4) !important;
+  border: 2px solid rgba(217, 119, 69, 0.26) !important;
+  border-radius: 26px !important;
+  padding: 0.65rem 0.75rem !important;
+  box-shadow: 0 12px 28px rgba(170, 110, 70, 0.14) !important;
+}
+
+/* textarea */
+[data-testid="stChatInput"] textarea {
+  background: white !important;
+  border: 2px solid rgba(230, 185, 150, 0.7) !important;
+  border-radius: 22px !important;
+  color: var(--text-main) !important;
+  min-height: 54px !important;
+  padding: 0.95rem 3.2rem 0.95rem 1rem !important;
+  font-size: 1rem !important;
+  box-shadow: inset 0 2px 6px rgba(190, 150, 115, 0.06);
+}
+
+[data-testid="stChatInput"] textarea::placeholder {
+  color: #b08979 !important;
+}
+
+[data-testid="stChatInput"] textarea:focus {
+  border-color: #d97745 !important;
+  box-shadow:
+    0 0 0 4px rgba(217, 119, 69, 0.12),
+    inset 0 2px 6px rgba(190, 150, 115, 0.06) !important;
+}
+
+/* ปุ่มส่ง */
+[data-testid="stChatInput"] button {
+  background: linear-gradient(135deg, #ffb347, #ff8c5a) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 18px !important;
+  width: 42px !important;
+  height: 42px !important;
+  box-shadow: 0 8px 18px rgba(255, 140, 90, 0.28) !important;
+}
+
+[data-testid="stChatInput"] button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(255, 140, 90, 0.34) !important;
+}
+
+/* ปุ่มทั่วไป */
+.stButton > button {
+  border-radius: 999px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #ffbe5c, #ff955d) !important;
+  color: #fffdf9 !important;
+  font-weight: 800 !important;
+  padding: 0.7rem 1.25rem !important;
+  box-shadow: 0 10px 24px rgba(255, 149, 93, 0.22) !important;
+  transition: all 0.18s ease;
+}
+
+.stButton > button:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 14px 28px rgba(255, 149, 93, 0.30) !important;
+}
+
+/* info, success, warning */
+[data-testid="stAlert"] {
+  border-radius: 20px !important;
+  border: 1px solid rgba(210, 165, 125, 0.22) !important;
+  background: rgba(255, 251, 247, 0.88) !important;
+  color: var(--text-main) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+/* popup menu / input */
+[data-baseweb="select"] > div,
+[data-testid="stNumberInput"] input {
+  background: white !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(220, 180, 145, 0.8) !important;
+  color: var(--text-main) !important;
+}
+
+/* sidebar ถ้ามี */
+section[data-testid="stSidebar"] {
+  background: linear-gradient(180deg, #fff8f0, #fff3e5) !important;
+}
+
+/* เส้น scroll */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #fff3e8;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(217, 119, 69, 0.40);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(217, 119, 69, 0.65);
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .block-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  h1 {
+    font-size: 2.35rem !important;
+    line-height: 1.08 !important;
+  }
+
+  [data-testid="stChatMessage"] {
+    padding: 0.9rem !important;
+    border-radius: 22px !important;
+  }
+
+  [data-testid="stChatInput"] > div {
+    border-radius: 20px !important;
+    padding: 0.55rem !important;
+  }
+
+  [data-testid="stChatInput"] textarea {
+    font-size: 0.97rem !important;
+  }
+}
+
