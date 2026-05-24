@@ -456,3 +456,33 @@ div.stButton > button {
 }
 
 /* ===== HERO CLOUD CLEAN FIX END ===== */
+
+/* ===== Fix bottom area background to match page ===== */
+[data-testid="stBottom"] {
+  background: transparent !important;
+}
+
+[data-testid="stBottomBlockContainer"] {
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+[data-testid="stBottomBlockContainer"] > div,
+.st-emotion-cache-6shykm.eqt0gmo7 {
+  background: linear-gradient(135deg, #efe7fb 0%, #f7edf8 45%, #eef4fb 100%) !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 16px 16px 28px !important;
+  margin: 0 !important;
+}
+
+[data-testid="stBottomBlockContainer"] * {
+  box-sizing: border-box;
+}
+
+section[data-testid="stAppScrollToBottomContainer"] {
+  background: transparent !important;
+}
+
