@@ -75,7 +75,15 @@ def get_top_selling_menus_from_sheet(limit=5):
 
 
 def build_hot_menu_reply(limit=5):
-    top_menus = get_top_selling_menus_from_sheet(limit)
+    try:
+        top_menus = get_top_selling_menus_from_sheet(limit)
+    except Exception as e:
+        print("build_hot_menu_reply error:", repr(e))
+        return (
+            "ได้เลยค่ะ รับคุกกี้อะไรดีคะ 🍪\n\n"
+            "ตอนนี้ Demi ยังดึงเมนูขายดีจากยอดขายจริงไม่ได้ชั่วคราวค่ะ\n"
+            "ลูกค้าสามารถพิมพ์ว่า “เมนูทั้งหมด” เพื่อเลือกเมนูได้เลยนะคะ"
+        )
 
     if not top_menus:
         return (
