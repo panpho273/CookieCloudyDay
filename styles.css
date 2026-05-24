@@ -1131,3 +1131,58 @@ html body div[role="listbox"] {
 
 /* ===== END HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
 
+
+/* ===== FORCE DROPDOWN FONT AND TEXT COLOR FINAL ===== */
+
+/* บังคับฟอนต์และสีทุกตัวใน dropdown */
+html body div[data-baseweb="popover"],
+html body div[data-baseweb="popover"] *,
+html body div[data-baseweb="menu"],
+html body div[data-baseweb="menu"] *,
+html body ul[role="listbox"],
+html body ul[role="listbox"] *,
+html body div[role="listbox"],
+html body div[role="listbox"] *,
+html body li[role="option"],
+html body li[role="option"] *,
+html body div[role="option"],
+html body div[role="option"] * {
+  font-family: 'Mitr', sans-serif !important;
+  color: #4a2e2a !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+
+/* ข้อความเมนูแต่ละบรรทัด ให้ขนาดเท่ากับ selectbox */
+html body li[role="option"],
+html body div[role="option"],
+html body ul[role="listbox"] li {
+  font-size: 0.96rem !important;
+  line-height: 1.55 !important;
+  padding: 0.82rem 1rem !important;
+}
+
+/* ตอน hover / selected สีข้อความยังเหมือนเดิม */
+html body li[role="option"]:hover,
+html body div[role="option"]:hover,
+html body li[aria-selected="true"],
+html body div[aria-selected="true"],
+html body [data-highlighted="true"] {
+  background: #eee7ff !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* ข้อความใน selectbox ตอนปิด ให้ฟอนต์เดียวกันด้วย */
+html body div[data-baseweb="select"],
+html body div[data-baseweb="select"] *,
+html body [data-testid="stSelectbox"],
+html body [data-testid="stSelectbox"] * {
+  font-family: 'Mitr', sans-serif !important;
+  color: #4a2e2a !important;
+}
+
+/* ===== END FORCE DROPDOWN FONT AND TEXT COLOR FINAL ===== */
+
