@@ -965,7 +965,10 @@ if "show_menu_order_popup" not in st.session_state:
 if "show_lucky_tarot" not in st.session_state:
     st.session_state["show_lucky_tarot"] = False
 
-if st.session_state.get("show_menu_order_popup"):
+# กัน st.dialog ซ้อนกัน: ถ้าโปรไพ่กำลังจะขึ้น ต้องปิด popup เมนูก่อน
+if st.session_state.get("show_lucky_tarot"):
+    st.session_state["show_menu_order_popup"] = False
+elif st.session_state.get("show_menu_order_popup"):
     render_menu_order_popup()
 
 prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")

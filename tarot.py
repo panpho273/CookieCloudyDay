@@ -3,6 +3,7 @@ import random
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 TAROT_FILE = Path("tarot_cards.json")
@@ -94,8 +95,101 @@ def render_lucky_cookie_tarot():
     def lucky_tarot_dialog():
         card = st.session_state["lucky_tarot_card"]
 
-        st.markdown(
+        components.html(
             f"""
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
+
+                body {{
+                    margin: 0;
+                    font-family: 'Mitr', sans-serif;
+                    color: #4a2e2a;
+                    background: transparent;
+                }}
+
+                .tarot-wrap {{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 16px;
+                    padding: 4px 0 10px;
+                }}
+
+                .tarot-card {{
+                    width: 190px;
+                    min-height: 250px;
+                    border-radius: 26px;
+                    background: linear-gradient(180deg, #ffe8df 0%, #ffd7cb 100%);
+                    border: 1px solid rgba(168, 112, 91, 0.22);
+                    box-shadow: 0 18px 45px rgba(92, 52, 43, 0.14);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    padding: 18px;
+                }}
+
+                .tarot-cookie {{
+                    font-size: 46px;
+                    margin-bottom: 22px;
+                }}
+
+                .tarot-name {{
+                    font-size: 24px;
+                    font-weight: 700;
+                    line-height: 1.25;
+                    margin-bottom: 16px;
+                }}
+
+                .tarot-sub {{
+                    font-size: 14px;
+                    font-weight: 600;
+                    opacity: 0.72;
+                }}
+
+                .tarot-section-title {{
+                    width: 100%;
+                    max-width: 430px;
+                    font-size: 18px;
+                    font-weight: 700;
+                    text-align: left;
+                    margin-top: 2px;
+                }}
+
+                .tarot-meaning {{
+                    width: 100%;
+                    max-width: 430px;
+                    font-size: 15px;
+                    line-height: 1.8;
+                    text-align: left;
+                }}
+
+                .tarot-keyword {{
+                    width: 100%;
+                    max-width: 430px;
+                    padding: 14px 16px;
+                    border-radius: 12px;
+                    background: #d9ecff;
+                    font-size: 14px;
+                    line-height: 1.7;
+                    font-weight: 500;
+                    box-sizing: border-box;
+                }}
+
+                .tarot-promo {{
+                    width: 100%;
+                    max-width: 430px;
+                    padding: 14px 16px;
+                    border-radius: 12px;
+                    background: #dcf8e8;
+                    font-size: 14px;
+                    line-height: 1.7;
+                    font-weight: 500;
+                    box-sizing: border-box;
+                }}
+            </style>
+
             <div class="tarot-wrap">
                 <div class="tarot-card">
                     <div class="tarot-cookie">🍪</div>
@@ -117,7 +211,8 @@ def render_lucky_cookie_tarot():
                 </div>
             </div>
             """,
-            unsafe_allow_html=True,
+            height=570,
+            scrolling=False,
         )
 
         col1, col2 = st.columns(2)
