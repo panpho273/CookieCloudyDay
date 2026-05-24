@@ -1,155 +1,138 @@
 import json
 import random
 from pathlib import Path
+
 import streamlit as st
 
-TAROT_FILE = Path(__file__).parent / "tarot_cards.json"
 
-FALLBACK_TAROT_CARDS = [
-    {
-        "name": "The Choco Chip",
-        "emoji": "🍪",
-        "cookie": "คุกกี้ช็อกโกแลตชิพ",
-        "cookie_price": 45,
-        "keyword": "ความสดใส การเริ่มต้นเล็ก ๆ",
-        "meaning": "วันนี้เหมาะกับการเริ่มต้นอะไรเล็ก ๆ ที่ทำให้ใจฟู ความพยายามเล็กน้อยจะพาไปสู่เรื่องดี ๆ",
-    }
-]
+TAROT_FILE = Path("tarot_cards.json")
 
-@st.cache_data(ttl=300)
+
 def load_tarot_cards():
-    if TAROT_FILE.exists():
-        try:
-            with open(TAROT_FILE, "r", encoding="utf-8") as f:
-                cards = json.load(f)
-            if isinstance(cards, list) and cards:
-                return cards
-        except Exception:
-            pass
+    if not TAROT_FILE.exists():
+        return []
 
-    return FALLBACK_TAROT_CARDS
+    with open(TAROT_FILE, "r", encoding="utf-8") as f:
+        cards = json.load(f)
 
-def draw_tarot_card():
-    previous_card_name = st.session_state.get("lucky_tarot_card", {}).get("name") if isinstance(st.session_state.get("lucky_tarot_card"), dict) else None
-    return random.choice(load_tarot_cards())
+    if isinstance(cards, dict):
+        # รองรับกรณีไฟล์เป็น {"cards": [...]}
+        cards = cards.get("cards", [])
 
-def reset_order_chat():
-    keys_to_remove = [
-        "lucky_cookie_promo",
-        "show_lucky_tarot",
-        "lucky_tarot_card",
-        "last_order_total",
-        "last_order_quantity",
-        "last_order_menu",
-    ]
+    if not isinstance(cards, list):
+        return []
 
-    for key in keys_to_remove:
-        st.session_state.pop(key, None)
+    result = []
+    for card in cards:
+        if not isinstance(card, dict):
+            continue
 
-    st.session_state.messages = []
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": (
-            "สวัสดีค่ะ Demi พร้อมรับออเดอร์ใหม่แล้วค่ะ 🍪\n\n"
-            "ลูกค้าพิมพ์ว่า “สั่งของ” หรือพิมพ์ชื่อเมนูพร้อมจำนวนได้เลยนะคะ"
+        name = (
+            card.get("name")
+            or card.get("title")
+            or card.get("card")
+            or card.get("thai_name")
+            or "Lucky Cookie"
         )
-    })
 
-@st.dialog("🔮 Lucky Cookie Tarot")
-def lucky_cookie_tarot_dialog():
+        meaning = (
+            card.get("meaning")
+            or card.get("message")
+            or card.get("description")
+            or card.get("fortune")
+            or "วันนี้เหมาะกับการเริ่มต้นสิ่งเล็ก ๆ ด้วยใจดี ๆ"
+        )
+
+        keyword = (
+            card.get("keyword")
+            or card.get("keywords")
+            or card.get("theme")
+            or "ความสดใส การเริ่มต้นเล็ก ๆ"
+        )
+
+        result.append({
+            "name": str(name),
+            "meaning": str(meaning),
+            "keyword": str(keyword),
+        })
+
+    return result
+
+
+def draw_random_card():
+    cards = load_tarot_cards()
+
+    if not cards:
+        return {
+            "name": "The Choco Chip",
+            "meaning": "วันนี้เหมาะกับการเริ่มต้นอะไรเล็ก ๆ ที่ทำให้ใจฟู ความพยายามเล็กน้อยจะพาไปสู่เรื่องดี ๆ",
+            "keyword": "ความสดใส การเริ่มต้นเล็ก ๆ",
+        }
+
+    last_name = st.session_state.get("last_lucky_tarot_name")
+
+    # กันสุ่มได้ใบเดิมติดกัน ถ้ามีมากกว่า 1 ใบ
+    if len(cards) > 1 and last_name:
+        choices = [card for card in cards if card.get("name") != last_name]
+        if choices:
+            cards = choices
+
+    card = random.SystemRandom().choice(cards)
+    st.session_state["last_lucky_tarot_name"] = card.get("name")
+
+    return card
+
+
+def render_lucky_cookie_tarot():
+    if not st.session_state.get("show_lucky_tarot"):
+        return
+
     if "lucky_tarot_card" not in st.session_state:
-        st.session_state["lucky_tarot_card"] = draw_tarot_card()
+        st.session_state["lucky_tarot_card"] = draw_random_card()
 
     card = st.session_state["lucky_tarot_card"]
 
-    st.markdown(
-        f"""
-        <style>
-        .tarot-card {{
-            width: 190px;
-            height: 280px;
-            margin: 0 auto 18px;
-            border-radius: 26px;
-            background: linear-gradient(145deg, #fff7ef, #f1c7bd);
-            border: 1px solid rgba(139, 83, 52, .18);
-            box-shadow: 0 24px 60px rgba(80, 45, 30, .25);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            animation: flipTarot .8s ease both;
-        }}
-        .tarot-emoji {{
-            font-size: 62px;
-            margin-bottom: 16px;
-        }}
-        .tarot-name {{
-            font-size: 25px;
-            font-weight: 900;
-            color: #3b241b;
-            text-align: center;
-        }}
-        .tarot-label {{
-            margin-top: 8px;
-            color: #8a5a40;
-            font-weight: 700;
-        }}
-        @keyframes flipTarot {{
-            0% {{ transform: rotateY(90deg) scale(.88); opacity: 0; }}
-            55% {{ transform: rotateY(-12deg) scale(1.03); opacity: 1; }}
-            100% {{ transform: rotateY(0deg) scale(1); opacity: 1; }}
-        }}
-        </style>
+    promo = st.session_state.get("lucky_cookie_promo", {})
+    quantity = promo.get("quantity", 0)
+    total = promo.get("total", 0)
 
-        <div class="tarot-card">
-            <div class="tarot-emoji">{card.get("emoji", "🔮")}</div>
-            <div class="tarot-name">{card.get("name", "Lucky Cookie Tarot")}</div>
-            <div class="tarot-label">Cookie Fortune Card</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    with st.dialog("🔮 Lucky Cookie Tarot"):
+        st.markdown(
+            f"""
+            <div class="tarot-wrap">
+                <div class="tarot-card">
+                    <div class="tarot-cookie">🍪</div>
+                    <div class="tarot-name">{card.get("name", "Lucky Cookie")}</div>
+                    <div class="tarot-sub">Cookie Fortune Card</div>
+                </div>
 
-    st.markdown("### คำทำนายของคุณ")
-    st.write(card.get("meaning", "วันนี้เหมาะกับการให้รางวัลตัวเองด้วยคุกกี้น่ารัก ๆ"))
+                <div class="tarot-section-title">คำทำนายของคุณ</div>
+                <div class="tarot-meaning">
+                    {card.get("meaning", "")}
+                </div>
 
-    st.info(f"ความหมายหลักของไพ่: {card.get('keyword', '-')}")
-    st.success(
-        f"🎁 โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป "
-        f"รับฟรี {card.get('cookie', 'คุกกี้พิเศษของร้าน')} 1 ชิ้น ตามไพ่ที่สุ่มได้"
-    )
+                <div class="tarot-keyword">
+                    ความหมายหลักของไพ่: {card.get("keyword", "")}
+                </div>
 
-    col1, col2 = st.columns(2)
+                <div class="tarot-promo">
+                    🎁 โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป รับฟรีคุกกี้ช็อกโกแลตชิพ 1 ชิ้น ตามไพ่ที่สุ่มได้
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    with col1:
-        if st.button("🔄 สุ่มไพ่ใหม่", key="btn_redraw_lucky_cookie_tarot", use_container_width=True):
-            st.session_state["lucky_tarot_card"] = draw_tarot_card()
-            st.rerun()
+        col1, col2 = st.columns(2)
 
-    with col2:
-        if st.button("✅ จบออเดอร์และเริ่มแชทใหม่", key="btn_finish_order_new_chat", use_container_width=True):
-            reset_order_chat()
-            st.rerun()
+        with col1:
+            if st.button("🔄 สุ่มไพ่ใหม่", use_container_width=True):
+                st.session_state["lucky_tarot_card"] = draw_random_card()
+                st.rerun()
 
-def render_lucky_cookie_tarot():
-    promo = st.session_state.get("lucky_cookie_promo")
-
-    if not promo:
-        return
-
-    st.markdown("---")
-    st.success(
-        f"🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ "
-        f"ครบ {promo.get('quantity')} ชิ้น ยอดรวม {promo.get('total')} บาท"
-    )
-
-    if st.button("🔮 รับไพ่คุกกี้และคำทำนาย", key="btn_draw_lucky_cookie_tarot", use_container_width=True):
-        st.session_state["show_lucky_tarot"] = True
-        st.session_state["lucky_tarot_card"] = draw_tarot_card()
-
-    if st.button("✅ จบออเดอร์ / เริ่มแชทใหม่", use_container_width=True):
-        reset_order_chat()
-        st.rerun()
-
-    if st.session_state.get("show_lucky_tarot"):
-        lucky_cookie_tarot_dialog()
+        with col2:
+            if st.button("✅ จบออเดอร์และเริ่มแชทใหม่", use_container_width=True):
+                st.session_state["show_lucky_tarot"] = False
+                st.session_state.pop("lucky_tarot_card", None)
+                st.session_state.pop("lucky_cookie_promo", None)
+                st.rerun()

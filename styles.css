@@ -893,3 +893,78 @@ div[role="dialog"] [data-testid="stSelectbox"] svg {
 }
 
 /* ===== POPUP SELECT TEXT CENTER FIX END ===== */
+
+/* ===== TAROT POPUP STYLE START ===== */
+.tarot-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  color: #4a2e2a;
+  font-family: 'Mitr', sans-serif;
+}
+
+.tarot-card {
+  width: 190px;
+  min-height: 260px;
+  margin: 0 auto 1.6rem auto;
+  padding: 1.5rem 1.1rem;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #ffe8dc 0%, #f7d7cb 100%);
+  border: 1px solid rgba(125, 94, 219, 0.18);
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tarot-cookie {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.tarot-name {
+  text-align: center;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.tarot-sub {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: rgba(74, 46, 42, 0.62);
+  font-weight: 700;
+}
+
+.tarot-section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.tarot-meaning {
+  line-height: 1.85;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tarot-keyword {
+  padding: 1rem;
+  border-radius: 14px;
+  background: #dceeff;
+  color: #4a2e2a;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.tarot-promo {
+  padding: 1rem;
+  border-radius: 14px;
+  background: #d8f5df;
+  color: #315c3c;
+  font-weight: 700;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+/* ===== TAROT POPUP STYLE END ===== */
+
