@@ -321,6 +321,7 @@ def get_sheet_client():
 
 
 def append_order_to_sheet(menu_name: str, quantity: int, price: int):
+    import base64
     import json
     import os
     import re
@@ -334,19 +335,52 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
 
     base_dir = Path(__file__).resolve().parent
 
+    def read_secret(name: str) -> str:
+        try:
+            return str(st.secrets.get(name, "")).strip()
+        except Exception:
+            return ""
+
+    def decode_b64(value: str) -> str:
+        value = (value or "").strip()
+
+        if not value:
+            return ""
+
+        # ถ้าเป็น URL จริงอยู่แล้ว ใช้ได้เลย
+        if value.startswith("http://") or value.startswith("https://"):
+            return value
+
+        # ถ้าเป็น base64 ให้ decode
+        try:
+            padding = "=" * (-len(value) % 4)
+            decoded = base64.b64decode(value + padding).decode("utf-8").strip()
+
+            if decoded.startswith("http://") or decoded.startswith("https://"):
+                return decoded
+        except Exception:
+            pass
+
+        return value
+
     web_app_url = ""
 
-    # 1) อ่านจาก Streamlit secrets ก่อน
-    try:
-        web_app_url = str(st.secrets.get("SHEET_WEB_APP_URL", "")).strip()
-    except Exception:
-        web_app_url = ""
+    # 1) รองรับ secret แบบ base64 โดยตรง
+    web_app_url = decode_b64(read_secret("SHEET_WEB_APP_URL_B64"))
 
-    # 2) อ่านจาก environment
+    # 2) รองรับกรณีใส่ base64 ไว้ในชื่อเดิม SHEET_WEB_APP_URL
     if not web_app_url:
-        web_app_url = os.getenv("SHEET_WEB_APP_URL", "").strip()
+        web_app_url = decode_b64(read_secret("SHEET_WEB_APP_URL"))
 
-    # 3) อ่านจาก script.js ใน repo
+    # 3) รองรับ env แบบ base64
+    if not web_app_url:
+        web_app_url = decode_b64(os.getenv("SHEET_WEB_APP_URL_B64", ""))
+
+    # 4) รองรับ env แบบเดิม
+    if not web_app_url:
+        web_app_url = decode_b64(os.getenv("SHEET_WEB_APP_URL", ""))
+
+    # 5) fallback อ่านจาก script.js
     if not web_app_url:
         possible_script_paths = [
             base_dir / "script.js",
@@ -362,15 +396,15 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
                 match = re.search(r'const\s+SHEET_WEB_APP_URL\s*=\s*"([^"]+)"', script_text)
 
                 if match:
-                    web_app_url = match.group(1).strip()
+                    web_app_url = decode_b64(match.group(1).strip())
                     break
             except Exception:
                 pass
 
-    if not web_app_url:
+    if not web_app_url or not web_app_url.startswith("https://"):
         raise RuntimeError(
-            "ไม่พบ SHEET_WEB_APP_URL สำหรับบันทึกออเดอร์ "
-            "ให้เพิ่มใน Streamlit Secrets หรือเช็กว่า script.js ถูก push ขึ้น Git แล้ว"
+            "ไม่พบ SHEET_WEB_APP_URL ที่ใช้งานได้ "
+            "ให้ใส่ SHEET_WEB_APP_URL_B64 เป็นค่า base64 ของ Apps Script Web App URL"
         )
 
     payload = {
