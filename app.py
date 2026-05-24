@@ -753,23 +753,37 @@ def render_menu_order_popup():
 
     with col1:
         if st.button("บันทึกออเดอร์", type="primary", use_container_width=True):
-            menu_name = selected_item["name"]
+            menu_name = str(selected_item["name"])
             price = int(selected_item["price"])
             qty = int(quantity)
             total = price * qty
 
+            # บันทึกลง Google Sheets ด้วยค่าจาก popup โดยตรง
             try:
                 saved_total = append_order_to_sheet(menu_name, qty, price)
                 if saved_total:
                     total = int(saved_total)
             except TypeError:
+                # เผื่อฟังก์ชันเก่ารับแค่ 2 args
                 append_order_to_sheet(menu_name, qty)
+                total = price * qty
 
+            # ส่ง Telegram real-time ถ้าตั้ง token/chat id แล้ว
             send_realtime_order_to_telegram(menu_name, qty, price, total)
 
             promo_text = ""
             if total >= 150:
-                promo_text = "\n\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ สามารถกดรับไพ่และคำทำนายได้เลย"
+                st.session_state["lucky_cookie_promo"] = {
+                    "quantity": qty,
+                    "total": total,
+                    "menu": menu_name,
+                }
+                st.session_state["show_lucky_tarot"] = True
+                st.session_state.pop("lucky_tarot_card", None)
+                promo_text = "\n\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ กดรับไพ่และคำทำนายได้เลย"
+            else:
+                st.session_state.pop("lucky_cookie_promo", None)
+                st.session_state["show_lucky_tarot"] = False
 
             answer = (
                 f"รับออเดอร์เรียบร้อยค่ะ 🍪\n\n"
@@ -807,7 +821,14 @@ for msg in st.session_state.messages:
 if st.session_state.get("show_menu_order_popup"):
     render_menu_order_popup()
 
+if st.session_state.get("show_lucky_tarot") or st.session_state.get("show_tarot"):
+    try:
+        render_lucky_cookie_tarot()
+    except Exception as e:
+        st.warning(f"เปิด Lucky Cookie Tarot ไม่สำเร็จ: {e}")
+
 prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")
+
 
 
 if prompt:
