@@ -119,7 +119,12 @@ def build_hot_menu_reply(limit=5):
 
 
 def get_hot_menu_number_map(limit=5):
-    top_menus = get_top_selling_menus_from_sheet(limit)
+    try:
+        top_menus = get_top_selling_menus_from_sheet(limit)
+    except Exception as e:
+        print("get_hot_menu_number_map error:", repr(e))
+        return {}
+
     return {
         str(index): item["menu"]
         for index, item in enumerate(top_menus, start=1)
