@@ -502,3 +502,119 @@ div.stButton > button:hover {
     padding: 0.95rem !important;
   }
 }
+
+/* ===== FINAL HERO AND CHAT INPUT FIX START ===== */
+
+/* ลดหัวเว็บไม่ให้ลอย/ใหญ่เกิน */
+.hero-card {
+  max-width: 860px !important;
+  margin: 1.6rem auto 2.2rem auto !important;
+  padding: 2rem 2.2rem !important;
+  border-radius: 32px !important;
+  align-items: center !important;
+}
+
+.hero-card h1 {
+  font-size: clamp(2.3rem, 4.6vw, 3.75rem) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.8px !important;
+}
+
+.hero-card p {
+  font-size: 0.98rem !important;
+  margin-top: 0.8rem !important;
+  color: rgba(74, 46, 42, 0.62) !important;
+}
+
+/* แถบล่างไม่ต้องมีกรอบ/เงาซ้อน */
+[data-testid="stBottom"],
+[data-testid="stBottomBlockContainer"],
+[data-testid="stBottom"] > div,
+[data-testid="stBottomBlockContainer"] > div {
+  background: linear-gradient(180deg, rgba(255,248,251,0), rgba(246,238,255,0.92)) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* กล่อง chat input ให้เป็นเลเยอร์เดียวแบบ pill card */
+[data-testid="stChatInput"] {
+  max-width: 720px !important;
+  margin: 0 auto !important;
+  padding: 0.75rem 1rem 1.1rem !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* wrapper ตัวจริง: ทำเป็นพื้นขาวเต็มก้อน เพื่อกลบมุมดำ */
+[data-testid="stChatInput"] > div,
+[data-testid="stChatInput"] form,
+[data-testid="stChatInput"] form > div,
+[data-testid="stChatInput"] form > div > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(135, 88, 216, 0.30) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 16px 36px rgba(86, 60, 140, 0.14) !important;
+  overflow: hidden !important;
+}
+
+/* ล้างชั้นในที่ทำมุมดำ */
+[data-testid="stChatInput"] > div > div,
+[data-testid="stChatInput"] textarea {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* textarea ไม่ต้องมี border เอง เพราะ wrapper มีแล้ว */
+[data-testid="stChatInput"] textarea,
+[data-testid="stChatInput"] textarea:focus,
+[data-testid="stChatInput"] textarea:active {
+  background: transparent !important;
+  color: #4a2e2a !important;
+  border: none !important;
+  border-radius: 0 !important;
+  min-height: 56px !important;
+  padding: 1rem 4rem 1rem 1.35rem !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 1rem !important;
+}
+
+[data-testid="stChatInput"] textarea::placeholder {
+  color: rgba(74, 46, 42, 0.42) !important;
+}
+
+/* ปุ่มส่งให้อยู่ในเลเยอร์เดียวกับ input */
+[data-testid="stChatInput"] button {
+  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+  min-height: 46px !important;
+  box-shadow: none !important;
+  margin-right: 0.35rem !important;
+}
+
+[data-testid="stChatInput"] button:hover {
+  filter: brightness(1.05);
+  transform: none !important;
+}
+
+/* ลบเส้น/พื้นหลังดำทุกชั้นใน chat input */
+[data-testid="stChatInput"] * {
+  border-color: transparent !important;
+}
+
+/* แต่คง border ของ wrapper ไว้ */
+[data-testid="stChatInput"] > div,
+[data-testid="stChatInput"] form,
+[data-testid="stChatInput"] form > div,
+[data-testid="stChatInput"] form > div > div {
+  border-color: rgba(135, 88, 216, 0.30) !important;
+}
+
+/* ===== FINAL HERO AND CHAT INPUT FIX END ===== */
