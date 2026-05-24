@@ -402,11 +402,11 @@ MENU_ITEMS = {
 HOT_MENU_REPLY = """ได้เลยค่ะ รับคุกกี้อะไรดีคะ 🍪
 
 วันนี้เมนูยอดฮิตของ CookieCloudyDay มี:
-1. คุกกี้ช็อกโกแลตชิพ — 45 บาท
-2. คุกกี้แมคคาเดเมียไวท์ช็อก — 65 บาท
-3. คุกกี้เนยสด — 55 บาท
-4. คุกกี้สตรอว์เบอร์รีชีสเค้ก — 59 บาท
-5. คุกกี้ช็อกโกแลตลาวา — 59 บาท
+1. คุกกี้ช็อกโกแลตชิพ ราคา 45 บาท
+2. คุกกี้แมคคาเดเมียไวท์ช็อก ราคา 65 บาท
+3. คุกกี้เนยสด ราคา 55 บาท
+4. คุกกี้สตรอว์เบอร์รีชีสเค้ก ราคา 59 บาท
+5. คุกกี้ช็อกโกแลตลาวา ราคา 59 บาท
 
 ลูกค้าพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น
 “เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"""
@@ -550,7 +550,7 @@ def get_hot_menu_reply():
         menu = item["menu"]
         price = item["price"] or MENU_PRICE_MAP.get(menu, 0)
         if price:
-            lines.append(f"{index}. {menu} — {price} บาท")
+            lines.append(f"{index}. {menu} ราคา {price} บาท")
         else:
             lines.append(f"{index}. {menu}")
 
@@ -643,7 +643,7 @@ def build_new_menu_reply(limit=5):
         price = int(item.get("price", 0) or 0)
 
         if price:
-            lines.append(f"{index}. {name} — {price} บาท")
+            lines.append(f"{index}. {name} ราคา {price} บาท")
         else:
             lines.append(f"{index}. {name}")
 

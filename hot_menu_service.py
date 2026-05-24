@@ -104,7 +104,7 @@ def build_hot_menu_reply(limit=5):
         price = int(item.get("price") or 0)
 
         if price:
-            lines.append(f"{index}. {menu} — {price} บาท")
+            lines.append(f"{index}. {menu} ราคา {price} บาท")
         else:
             lines.append(f"{index}. {menu}")
 
