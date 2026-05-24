@@ -1131,111 +1131,46 @@ html body div[role="listbox"] {
 
 /* ===== END HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
 
+/* ===== SELECTBOX FONT CLEAN FINAL START ===== */
 
-/* ===== FORCE DROPDOWN FONT AND TEXT COLOR FINAL ===== */
-
-/* บังคับฟอนต์และสีทุกตัวใน dropdown */
-html body div[data-baseweb="popover"],
-html body div[data-baseweb="popover"] *,
-html body div[data-baseweb="menu"],
-html body div[data-baseweb="menu"] *,
-html body ul[role="listbox"],
-html body ul[role="listbox"] *,
-html body div[role="listbox"],
-html body div[role="listbox"] *,
-html body li[role="option"],
-html body li[role="option"] *,
-html body div[role="option"],
-html body div[role="option"] * {
-  font-family: 'Mitr', sans-serif !important;
-  color: #4a2e2a !important;
-  font-weight: 650 !important;
-  letter-spacing: 0 !important;
-  text-shadow: none !important;
-}
-
-/* ข้อความเมนูแต่ละบรรทัด ให้ขนาดเท่ากับ selectbox */
-html body li[role="option"],
-html body div[role="option"],
-html body ul[role="listbox"] li {
-  font-size: 0.96rem !important;
-  line-height: 1.55 !important;
-  padding: 0.82rem 1rem !important;
-}
-
-/* ตอน hover / selected สีข้อความยังเหมือนเดิม */
-html body li[role="option"]:hover,
-html body div[role="option"]:hover,
-html body li[aria-selected="true"],
-html body div[aria-selected="true"],
-html body [data-highlighted="true"] {
-  background: #eee7ff !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  font-weight: 700 !important;
-}
-
-/* ข้อความใน selectbox ตอนปิด ให้ฟอนต์เดียวกันด้วย */
-html body div[data-baseweb="select"],
-html body div[data-baseweb="select"] *,
+/* selectbox ตอนปิด */
+html body [data-baseweb="select"],
+html body [data-baseweb="select"] *,
 html body [data-testid="stSelectbox"],
 html body [data-testid="stSelectbox"] * {
   font-family: 'Mitr', sans-serif !important;
   color: #4a2e2a !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
 }
 
-/* ===== END FORCE DROPDOWN FONT AND TEXT COLOR FINAL ===== */
-
-
-/* ===== ABSOLUTE FORCE SELECTBOX FONT FINAL ===== */
-
-/* บังคับ font ให้ portal/dropdown ของ BaseWeb ทั้งหมด */
+/* dropdown ตอนเปิด */
 html body [data-baseweb="popover"],
 html body [data-baseweb="popover"] *,
 html body [data-baseweb="menu"],
 html body [data-baseweb="menu"] *,
-html body [data-baseweb="select"],
-html body [data-baseweb="select"] *,
 html body [role="listbox"],
 html body [role="listbox"] *,
 html body [role="option"],
-html body [role="option"] *,
-html body [data-testid="stSelectbox"],
-html body [data-testid="stSelectbox"] * {
-  font-family: 'Mitr', 'Baloo 2', sans-serif !important;
+html body [role="option"] * {
+  font-family: 'Mitr', sans-serif !important;
   color: #4a2e2a !important;
-  text-shadow: none !important;
+  font-weight: 400 !important;
   letter-spacing: 0 !important;
+  text-shadow: none !important;
 }
 
-/* ตัวหนังสือรายการเมนูใน dropdown */
+/* รายการเมนูแต่ละแถว */
 html body [role="option"],
-html body [role="option"] div,
-html body [role="option"] span,
-html body [role="option"] p,
-html body [role="listbox"] li,
-html body [role="listbox"] li div,
-html body [role="listbox"] li span,
-html body [role="listbox"] li p {
+html body [role="listbox"] li {
   font-family: 'Mitr', sans-serif !important;
   font-size: 15.5px !important;
-  font-weight: 600 !important;
-  line-height: 1.55 !important;
-  color: #4a2e2a !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
 }
 
-/* ตัวหนังสือใน selectbox ตอนยังไม่เปิด */
-html body [data-baseweb="select"] div,
-html body [data-baseweb="select"] span,
-html body [data-baseweb="select"] p {
-  font-family: 'Mitr', sans-serif !important;
-  font-size: 15.5px !important;
-  font-weight: 500 !important;
-  line-height: 1.45 !important;
-  color: #4a2e2a !important;
-}
-
-/* hover/selected ให้ font ไม่เด้งกลับ */
+/* hover / selected ให้สีเหมือนเดิม แต่ฟอนต์ไม่เด้ง */
 html body [role="option"]:hover,
 html body [role="option"]:hover *,
 html body [aria-selected="true"],
@@ -1243,10 +1178,9 @@ html body [aria-selected="true"] *,
 html body [data-highlighted="true"],
 html body [data-highlighted="true"] * {
   font-family: 'Mitr', sans-serif !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   color: #4a2e2a !important;
   background-color: #eee7ff !important;
 }
 
-/* ===== END ABSOLUTE FORCE SELECTBOX FONT FINAL ===== */
-
+/* ===== SELECTBOX FONT CLEAN FINAL END ===== */

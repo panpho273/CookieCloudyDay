@@ -23,6 +23,32 @@ import customer_language as cl
 
 load_dotenv(".env")
 
+# FORCE_MITR_FONT_FOR_PORTAL
+
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
+
+    html, body, div, span, p, label, input, textarea, button,
+    [data-baseweb="popover"],
+    [data-baseweb="popover"] *,
+    [data-baseweb="menu"],
+    [data-baseweb="menu"] *,
+    [data-baseweb="select"],
+    [data-baseweb="select"] *,
+    [role="listbox"],
+    [role="listbox"] *,
+    [role="option"],
+    [role="option"] * {
+        font-family: 'Mitr', sans-serif !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 # =========================
 # Gemini Client Init
 # =========================
