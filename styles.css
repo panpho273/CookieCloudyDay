@@ -776,3 +776,75 @@ div[role="dialog"] .order-popup-shell {
 }
 
 /* ===== POPUP CENTER ALIGN FIX END ===== */
+
+/* ===== STOP POPUP TEXT SELECT AND BUTTON ACTIVE FIX START ===== */
+
+/* กันการลากเลือกข้อความทั้ง popup */
+div[role="dialog"],
+div[role="dialog"] *,
+div[data-testid="stDialog"],
+div[data-testid="stDialog"] * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* ยกเว้นช่องกรอก ให้ยังคลิก/พิมพ์ได้ */
+div[role="dialog"] input,
+div[role="dialog"] textarea,
+div[role="dialog"] [contenteditable="true"] {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+/* กันข้อความ summary โดยเฉพาะ ไม่ให้โดนเลือกเป็นแถบน้ำเงิน */
+.order-summary-box,
+.order-summary-box *,
+.order-popup-shell,
+.order-popup-shell * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* ปุ่ม - + ทุกสถานะ ให้สีเดียวกัน */
+div[role="dialog"] [data-testid="stNumberInput"] button,
+div[role="dialog"] [data-testid="stNumberInput"] button:hover,
+div[role="dialog"] [data-testid="stNumberInput"] button:focus,
+div[role="dialog"] [data-testid="stNumberInput"] button:focus-visible,
+div[role="dialog"] [data-testid="stNumberInput"] button:active,
+div[role="dialog"] [data-testid="stNumberInput"] button:disabled,
+div[role="dialog"] [data-testid="stNumberInput"] button[disabled] {
+  background: #e6dcff !important;
+  background-color: #e6dcff !important;
+  color: #6c48c8 !important;
+  opacity: 1 !important;
+  border: none !important;
+  border-left: 1px solid rgba(125, 94, 219, 0.14) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  min-width: 44px !important;
+  min-height: 48px !important;
+  font-weight: 900 !important;
+}
+
+/* ลบสี focus/active ของ browser ที่อาจติดมากับปุ่ม */
+div[role="dialog"] [data-testid="stNumberInput"] button * {
+  color: #6c48c8 !important;
+  fill: #6c48c8 !important;
+  stroke: #6c48c8 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* ถ้ามี selection เกิดขึ้นจริง ให้ทำเป็นโปร่งใส */
+div[role="dialog"] ::selection {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+div[role="dialog"] ::-moz-selection {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* ===== STOP POPUP TEXT SELECT AND BUTTON ACTIVE FIX END ===== */
