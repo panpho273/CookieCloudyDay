@@ -968,156 +968,12 @@ div[role="dialog"] [data-testid="stSelectbox"] svg {
 }
 /* ===== TAROT POPUP STYLE END ===== */
 
-/* ===== RESTORE PURPLE SELECTBOX DROPDOWN START ===== */
+/* ===== SELECTBOX DROPDOWN ONLY CLEAN START ===== */
 
-/* กล่อง dropdown หลัก */
-div[data-baseweb="popover"],
-div[data-baseweb="popover"] > div,
-div[data-baseweb="popover"] > div > div,
-div[data-baseweb="menu"],
-div[data-baseweb="menu"] > div,
-ul[role="listbox"],
-div[role="listbox"] {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  border: 1px solid rgba(125, 94, 219, 0.20) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
-  color-scheme: light !important;
-}
-
-/* ให้ listbox เป็นตัว scroll แต่ซ่อน scrollbar ดำ */
-ul[role="listbox"],
-div[role="listbox"],
-div[data-baseweb="menu"] {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  max-height: 320px !important;
-  padding: 0 !important;
-
-  /* ซ่อน scrollbar จริงที่เป็นดำ */
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
-/* Chrome / Edge / Safari: ซ่อน scrollbar ดำ */
-ul[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar,
-div[data-baseweb="menu"]::-webkit-scrollbar,
-ul[role="listbox"] *::-webkit-scrollbar,
-div[role="listbox"] *::-webkit-scrollbar,
-div[data-baseweb="menu"] *::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-/* ทำรางม่วงปลอมด้านขวาแทน scrollbar ดำ */
-ul[role="listbox"],
-div[role="listbox"] {
-  box-shadow:
-    inset -7px 0 0 #f1e8ff,
-    0 18px 42px rgba(86, 60, 140, 0.16) !important;
-}
-
-/* รายการเมนู */
-li[role="option"],
-div[role="option"],
-ul[role="listbox"] li,
-div[data-baseweb="menu"] [role="option"] {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  font-size: 0.96rem !important;
-  font-weight: 650 !important;
-  line-height: 1.45 !important;
-  padding: 0.82rem 1rem !important;
-  margin: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* ข้อความข้างใน */
-li[role="option"] *,
-div[role="option"] *,
-ul[role="listbox"] li *,
-div[data-baseweb="menu"] [role="option"] * {
-  background: transparent !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  font-weight: 650 !important;
-}
-
-/* hover / selected */
-li[role="option"]:hover,
-div[role="option"]:hover,
-li[role="option"]:focus,
-div[role="option"]:focus,
-li[aria-selected="true"],
-div[aria-selected="true"] {
-  background: #eee7ff !important;
-  background-color: #eee7ff !important;
-  color: #4a2e2a !important;
-  border: none !important;
-  border-radius: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* กัน focus/selection สีดำ */
-div[data-baseweb="popover"] *,
-div[data-baseweb="menu"] *,
-ul[role="listbox"] *,
-div[role="listbox"] * {
-  outline: none !important;
-  text-shadow: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-div[data-baseweb="popover"] ::selection,
-div[data-baseweb="menu"] ::selection,
-ul[role="listbox"] ::selection,
-div[role="listbox"] ::selection {
-  background: transparent !important;
-  color: inherit !important;
-}
-
-/* ===== RESTORE PURPLE SELECTBOX DROPDOWN END ===== */
-
-/* ===== HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
-
-/* ซ่อน scrollbar ดำใน dropdown แต่ยังเลื่อนได้ */
+/* dropdown portal + container */
 html body div[data-baseweb="popover"],
-html body div[data-baseweb="popover"] *,
-html body div[data-baseweb="menu"],
-html body div[data-baseweb="menu"] *,
-html body ul[role="listbox"],
-html body ul[role="listbox"] *,
-html body div[role="listbox"],
-html body div[role="listbox"] * {
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
-html body div[data-baseweb="popover"]::-webkit-scrollbar,
-html body div[data-baseweb="popover"] *::-webkit-scrollbar,
-html body div[data-baseweb="menu"]::-webkit-scrollbar,
-html body div[data-baseweb="menu"] *::-webkit-scrollbar,
-html body ul[role="listbox"]::-webkit-scrollbar,
-html body ul[role="listbox"] *::-webkit-scrollbar,
-html body div[role="listbox"]::-webkit-scrollbar,
-html body div[role="listbox"] *::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-/* กันพื้นที่ดำด้านขวาที่เหลือจาก scrollbar */
+html body div[data-baseweb="popover"] > div,
+html body div[data-baseweb="popover"] > div > div,
 html body div[data-baseweb="menu"],
 html body div[data-baseweb="menu"] > div,
 html body div[data-baseweb="menu"] > div > div,
@@ -1125,150 +981,97 @@ html body ul[role="listbox"],
 html body div[role="listbox"] {
   background: #fffafd !important;
   background-color: #fffafd !important;
-  padding-right: 0 !important;
-  border-right: 1px solid rgba(125, 94, 219, 0.20) !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  color-scheme: light !important;
+  border-color: rgba(125, 94, 219, 0.18) !important;
 }
 
-/* ===== END HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
+/* dropdown box */
+html body ul[role="listbox"],
+html body div[role="listbox"],
+html body div[data-baseweb="menu"] {
+  border: 1px solid rgba(125, 94, 219, 0.20) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: 320px !important;
+  padding: 0 !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
 
-/* ===== SELECTBOX FONT CLEAN FINAL START ===== */
+/* hide native scrollbar */
+html body ul[role="listbox"]::-webkit-scrollbar,
+html body div[role="listbox"]::-webkit-scrollbar,
+html body div[data-baseweb="menu"]::-webkit-scrollbar,
+html body ul[role="listbox"] *::-webkit-scrollbar,
+html body div[role="listbox"] *::-webkit-scrollbar,
+html body div[data-baseweb="menu"] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
 
-/* selectbox ตอนปิด */
-html body [data-baseweb="select"],
-html body [data-baseweb="select"] *,
+/* options */
+html body li[role="option"],
+html body div[role="option"],
+html body ul[role="listbox"] li,
+html body div[data-baseweb="menu"] [role="option"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 15.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.6 !important;
+  padding: 0.82rem 1rem !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* option inner text */
+html body li[role="option"] *,
+html body div[role="option"] *,
+html body ul[role="listbox"] li *,
+html body div[data-baseweb="menu"] [role="option"] * {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 500 !important;
+  text-shadow: none !important;
+}
+
+/* hover / selected */
+html body li[role="option"]:hover,
+html body div[role="option"]:hover,
+html body li[role="option"]:focus,
+html body div[role="option"]:focus,
+html body li[aria-selected="true"],
+html body div[aria-selected="true"],
+html body [data-highlighted="true"] {
+  background: #eee7ff !important;
+  background-color: #eee7ff !important;
+  color: #4a2e2a !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* selectbox closed state */
+html body div[data-baseweb="select"],
+html body div[data-baseweb="select"] *,
 html body [data-testid="stSelectbox"],
 html body [data-testid="stSelectbox"] * {
   font-family: 'Mitr', sans-serif !important;
   color: #4a2e2a !important;
-  font-weight: 400 !important;
-  letter-spacing: 0 !important;
-  text-shadow: none !important;
 }
 
-/* dropdown ตอนเปิด */
-html body [data-baseweb="popover"],
-html body [data-baseweb="popover"] *,
-html body [data-baseweb="menu"],
-html body [data-baseweb="menu"] *,
-html body [role="listbox"],
-html body [role="listbox"] *,
-html body [role="option"],
-html body [role="option"] * {
-  font-family: 'Mitr', sans-serif !important;
-  color: #4a2e2a !important;
-  font-weight: 400 !important;
-  letter-spacing: 0 !important;
-  text-shadow: none !important;
-}
-
-/* รายการเมนูแต่ละแถว */
-html body [role="option"],
-html body [role="listbox"] li {
-  font-family: 'Mitr', sans-serif !important;
-  font-size: 15.5px !important;
-  font-weight: 400 !important;
-  line-height: 1.65 !important;
-}
-
-/* hover / selected ให้สีเหมือนเดิม แต่ฟอนต์ไม่เด้ง */
-html body [role="option"]:hover,
-html body [role="option"]:hover *,
-html body [aria-selected="true"],
-html body [aria-selected="true"] *,
-html body [data-highlighted="true"],
-html body [data-highlighted="true"] * {
-  font-family: 'Mitr', sans-serif !important;
-  font-weight: 500 !important;
-  color: #4a2e2a !important;
-  background-color: #eee7ff !important;
-}
-
-/* ===== SELECTBOX FONT CLEAN FINAL END ===== */
-
-/* ===== RESTORE ORDER POPUP DIALOG UI ONLY ===== */
-
-/* กล่อง popup */
-div[role="dialog"] {
-  max-width: 560px !important;
-  margin: auto !important;
-  background: rgba(255,255,255,0.96) !important;
-  border: 1px solid rgba(125, 94, 219, 0.18) !important;
-  border-radius: 30px !important;
-  box-shadow: 0 28px 80px rgba(86, 60, 140, 0.22) !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-}
-
-/* เนื้อหาใน dialog */
-div[role="dialog"] * {
-  font-family: 'Mitr', sans-serif !important;
-  color: #4a2e2a !important;
-}
-
-/* selectbox ตอนปิด */
-div[role="dialog"] [data-testid="stSelectbox"] {
-  width: 100% !important;
-  max-width: 460px !important;
-  margin: 0 auto !important;
-}
-
-div[role="dialog"] [data-baseweb="select"] > div {
-  background: #ffffff !important;
-  border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
-  border-radius: 18px !important;
-  min-height: 50px !important;
-  color: #4a2e2a !important;
-  box-shadow: none !important;
-}
-
-/* number input */
-div[role="dialog"] [data-testid="stNumberInput"] {
-  width: 100% !important;
-  max-width: 460px !important;
-  margin: 0 auto !important;
-}
-
-div[role="dialog"] [data-testid="stNumberInput"] > div {
-  background: #ffffff !important;
-  border: 1.5px solid rgba(125, 94, 219, 0.22) !important;
-  border-radius: 18px !important;
-  overflow: hidden !important;
-  box-shadow: none !important;
-}
-
-div[role="dialog"] [data-testid="stNumberInput"] input {
-  background: #ffffff !important;
-  color: #4a2e2a !important;
-  border: none !important;
-  min-height: 48px !important;
-  font-weight: 600 !important;
-}
-
-div[role="dialog"] [data-testid="stNumberInput"] button {
-  background: #e6dcff !important;
-  color: #6c48c8 !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* summary และปุ่ม */
-div[role="dialog"] .order-popup-shell,
-div[role="dialog"] .order-summary-box {
-  width: 100% !important;
-  max-width: 460px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  background: linear-gradient(180deg, #ffffff 0%, #f8f2ff 100%) !important;
-  border: 1px solid rgba(125, 94, 219, 0.16) !important;
-  border-radius: 24px !important;
-}
-
-div[role="dialog"] [data-testid="stHorizontalBlock"] {
-  width: 100% !important;
-  max-width: 460px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* ===== END RESTORE ORDER POPUP DIALOG UI ONLY ===== */
-
+/* ===== SELECTBOX DROPDOWN ONLY CLEAN END ===== */
