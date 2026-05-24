@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -20,20 +21,62 @@ SCOPES = [
 
 def get_sheet_id():
     sheet_id = os.getenv("GOOGLE_SHEETS_ID", "").strip()
+
     if not sheet_id:
-        raise RuntimeError("ไม่พบ GOOGLE_SHEETS_ID ในไฟล์ .env")
+        try:
+            import streamlit as st
+            sheet_id = str(st.secrets.get("GOOGLE_SHEETS_ID", "")).strip()
+        except Exception:
+            sheet_id = ""
+
+    if not sheet_id:
+        raise RuntimeError("ไม่พบ GOOGLE_SHEETS_ID ใน .env หรือ Streamlit Secrets")
+
     return sheet_id
 
 
-def get_worksheet():
-    if not os.path.exists(SERVICE_ACCOUNT_FILE):
-        raise FileNotFoundError("ไม่พบไฟล์ service-account.json")
+def get_credentials():
+    """
+    ใช้ service-account.json ตอนรัน local
+    ใช้ Streamlit Secrets ตอนรันบน Streamlit Cloud
+    """
 
-    creds = Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE,
-        scopes=SCOPES,
+    # 1) Local / Codespaces
+    if os.path.exists(SERVICE_ACCOUNT_FILE):
+        return Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE,
+            scopes=SCOPES,
+        )
+
+    # 2) Streamlit Cloud Secrets แบบ [gcp_service_account]
+    try:
+        import streamlit as st
+
+        if "gcp_service_account" in st.secrets:
+            service_account_info = dict(st.secrets["gcp_service_account"])
+            return Credentials.from_service_account_info(
+                service_account_info,
+                scopes=SCOPES,
+            )
+    except Exception:
+        pass
+
+    # 3) สำรอง: อ่านจาก env เป็น JSON string
+    service_account_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
+    if service_account_json:
+        service_account_info = json.loads(service_account_json)
+        return Credentials.from_service_account_info(
+            service_account_info,
+            scopes=SCOPES,
+        )
+
+    raise FileNotFoundError(
+        "ไม่พบ service-account.json และไม่พบ gcp_service_account ใน Streamlit Secrets"
     )
 
+
+def get_worksheet():
+    creds = get_credentials()
     client = gspread.authorize(creds)
     spreadsheet = client.open_by_key(get_sheet_id())
     return spreadsheet.sheet1
@@ -41,18 +84,16 @@ def get_worksheet():
 
 def log_sale(menu_name: str, quantity: int, price: int):
     today = datetime.now(THAI_TZ).strftime("%Y-%m-%d")
-    total = quantity * price
+    total = int(quantity) * int(price)
 
     worksheet = get_worksheet()
 
-    # ให้ตรงหัวตารางเดิม:
-    # วันที่ | เมนู | จำนวน | ราคา | ยอดรวม
     worksheet.append_row(
         [
             today,
             menu_name,
-            quantity,
-            price,
+            int(quantity),
+            int(price),
             total,
         ],
         value_input_option="USER_ENTERED",
@@ -67,8 +108,6 @@ def log_sale(menu_name: str, quantity: int, price: int):
 
 
 def main():
-    # แบบที่ 1: รับจาก command line
-    # python sales_logger.py "คุกกี้ช็อกโกแลตชิพ" 3 45
     if len(sys.argv) == 4:
         menu_name = sys.argv[1]
         quantity = int(sys.argv[2])
@@ -76,7 +115,6 @@ def main():
         log_sale(menu_name, quantity, price)
         return
 
-    # แบบที่ 2: ถ้าไม่ส่ง argument ค่อยถามทีละช่อง
     menu_name = input("ชื่อเมนู: ").strip()
     quantity = int(input("จำนวน: ").strip())
     price = int(input("ราคา: ").strip())
