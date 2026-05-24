@@ -707,3 +707,52 @@ div[role="dialog"] .stButton > button {
 }
 
 /* ===== FINAL POPUP RESTORE END ===== */
+
+/* ===== CLIP SELECTBOX BLACK SCROLLBAR START ===== */
+
+/* ตัดขอบ dropdown ไม่ให้เห็น scrollbar ดำด้านขวา */
+html body div[data-baseweb="popover"],
+html body div[data-baseweb="popover"] > div,
+html body div[data-baseweb="popover"] > div > div {
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  background: #fffafd !important;
+}
+
+/* ดัน scrollbar จริงออกไปนอกกรอบ */
+html body ul[role="listbox"],
+html body div[role="listbox"],
+html body div[data-baseweb="menu"] {
+  width: calc(100% + 18px) !important;
+  max-width: calc(100% + 18px) !important;
+  padding-right: 18px !important;
+  margin-right: -18px !important;
+
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  border-radius: 18px !important;
+}
+
+/* สีรายการเมนู */
+html body [role="option"],
+html body [role="option"] * {
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+}
+
+/* แถวที่เลือก */
+html body [role="option"]:hover,
+html body [role="option"]:focus,
+html body [aria-selected="true"],
+html body [data-highlighted="true"] {
+  background-color: #eee7ff !important;
+  color: #4a2e2a !important;
+}
+
+/* ===== CLIP SELECTBOX BLACK SCROLLBAR END ===== */
