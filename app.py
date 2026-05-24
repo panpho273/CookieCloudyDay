@@ -15,6 +15,7 @@ from google.oauth2.service_account import Credentials
 
 from rag_engine import RAGEngine
 from tarot import render_lucky_cookie_tarot
+from order_service import save_order
 
 load_dotenv(".env")
 
@@ -832,18 +833,9 @@ def render_menu_order_popup():
             qty = int(quantity)
             total = price * qty
 
-            # บันทึกลง Google Sheets ด้วยค่าจาก popup โดยตรง
-            try:
-                saved_total = append_order_to_sheet(menu_name, qty, price)
-                if saved_total:
-                    total = int(saved_total)
-            except TypeError:
-                # เผื่อฟังก์ชันเก่ารับแค่ 2 args
-                append_order_to_sheet(menu_name, qty)
-                total = price * qty
-
-            # ส่ง Telegram real-time ถ้าตั้ง token/chat id แล้ว
-            send_realtime_order_to_telegram(menu_name, qty, price, total)
+            # บันทึกลง Google Sheet และส่ง Telegram ผ่าน order_service.py
+            save_result = save_order(menu_name, qty, price)
+            total = int(save_result["total"])
 
             promo_text = ""
             if total >= 150:

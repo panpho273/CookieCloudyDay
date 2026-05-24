@@ -4,9 +4,9 @@ from zoneinfo import ZoneInfo
 
 import requests
 from dotenv import load_dotenv
-from sheets_client import get_sheet
+from sales_logger import get_worksheet
 
-load_dotenv()
+load_dotenv(".env")
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -32,18 +32,29 @@ def get_period_text(hour):
 
 
 def get_today_sales():
-    sheet = get_sheet()
+    """
+    อ่านข้อมูลยอดขายจาก Google Sheet
+    ใช้ get_worksheet() จาก sales_logger.py เพื่อให้มั่นใจว่าอ่านชีทเดียวกับที่บันทึกยอดขาย
+    """
+    sheet = get_worksheet()
     rows = sheet.get_all_records()
 
     now = get_now_thai_time()
     today = now.strftime("%Y-%m-%d")
 
-    today_rows = [row for row in rows if str(row["วันที่"]) == today]
+    today_rows = []
+
+    for row in rows:
+        row_date = str(row.get("วันที่", "")).strip()
+
+        if row_date == today:
+            today_rows.append(row)
 
     return now, today, today_rows
 
 
 def send_telegram_message(message):
+    """ส่งข้อความเข้า Telegram"""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         raise RuntimeError("ไม่พบ TELEGRAM_BOT_TOKEN หรือ TELEGRAM_CHAT_ID ในไฟล์ .env")
 
@@ -59,7 +70,9 @@ def send_telegram_message(message):
 
 
 def create_report():
+    """สร้างข้อความสรุปยอดขาย"""
     now, today, sales = get_today_sales()
+
     period_text = get_period_text(now.hour)
     current_time = now.strftime("%H:%M")
 
@@ -70,16 +83,33 @@ def create_report():
 
 วันนี้ยังไม่มียอดขายนะ 🍪"""
 
-    total_sales = sum(float(row["ยอดรวม"]) for row in sales)
-    total_items = sum(int(row["จำนวน"]) for row in sales)
-
+    total_sales = 0
+    total_items = 0
     menu_summary = {}
-    for row in sales:
-        menu = row["เมนู"]
-        quantity = int(row["จำนวน"])
-        menu_summary[menu] = menu_summary.get(menu, 0) + quantity
 
-    best_menu = max(menu_summary, key=menu_summary.get)
+    for row in sales:
+        menu = str(row.get("เมนู", "")).strip()
+
+        try:
+            quantity = int(row.get("จำนวน", 0))
+        except ValueError:
+            quantity = 0
+
+        try:
+            total = float(row.get("ยอดรวม", 0))
+        except ValueError:
+            total = 0
+
+        total_items += quantity
+        total_sales += total
+
+        if menu:
+            menu_summary[menu] = menu_summary.get(menu, 0) + quantity
+
+    if menu_summary:
+        best_menu = max(menu_summary, key=menu_summary.get)
+    else:
+        best_menu = "-"
 
     message = f"""☀️ {period_text} CookieCloudyDay
 วันที่ {today}
@@ -96,6 +126,9 @@ def create_report():
 
 if __name__ == "__main__":
     report = create_report()
+
     print(report)
+
     send_telegram_message(report)
-    print("ส่งรายงานเข้า Telegram สำเร็จ")
+
+    print("✅ ส่งรายงานเข้า Telegram สำเร็จ")
