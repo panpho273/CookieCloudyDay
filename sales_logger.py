@@ -52,14 +52,19 @@ def get_credentials():
     try:
         import streamlit as st
 
+        print("DEBUG Streamlit secret keys:", list(st.secrets.keys()))
+
         if "gcp_service_account" in st.secrets:
+            print("DEBUG found gcp_service_account")
             service_account_info = dict(st.secrets["gcp_service_account"])
             return Credentials.from_service_account_info(
                 service_account_info,
                 scopes=SCOPES,
             )
-    except Exception:
-        pass
+        else:
+            print("DEBUG gcp_service_account not found")
+    except Exception as e:
+        print("DEBUG Streamlit secrets error:", repr(e))
 
     # 3) สำรอง: อ่านจาก env เป็น JSON string
     service_account_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
