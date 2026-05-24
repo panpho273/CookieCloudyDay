@@ -83,3 +83,196 @@ div.stButton > button:hover {
         font-size: 27px;
     }
 }
+
+/* ================================
+   CookieCloudyDay Chat UI Polish
+   เพิ่มความน่ารักให้หน้าแชท Demi
+================================ */
+
+/* พื้นหลังหลัก */
+.stApp {
+  background:
+    radial-gradient(circle at top left, rgba(255, 183, 77, 0.12), transparent 32%),
+    radial-gradient(circle at top right, rgba(255, 132, 82, 0.10), transparent 28%),
+    linear-gradient(180deg, #0f1117 0%, #11131b 100%) !important;
+  color: #fff7ef;
+}
+
+/* จำกัดความกว้างให้อ่านง่ายขึ้น */
+.block-container {
+  max-width: 920px !important;
+  padding-top: 2.2rem !important;
+  padding-bottom: 7rem !important;
+}
+
+/* หัวข้อใหญ่ */
+h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem) !important;
+  line-height: 1.05 !important;
+  font-weight: 900 !important;
+  letter-spacing: -1px !important;
+  color: #fff7ef !important;
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
+  margin-bottom: 0.4rem !important;
+}
+
+/* caption ใต้หัวข้อ */
+[data-testid="stCaptionContainer"] {
+  color: rgba(255, 247, 239, 0.62) !important;
+  font-size: 0.98rem !important;
+}
+
+/* กล่องข้อความแชท */
+[data-testid="stChatMessage"] {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 22px !important;
+  padding: 1.05rem 1.15rem !important;
+  margin: 1rem 0 !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+}
+
+/* ข้อความของ assistant */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
+  background:
+    linear-gradient(135deg, rgba(255, 160, 63, 0.15), rgba(255, 122, 89, 0.08)),
+    rgba(255, 255, 255, 0.045) !important;
+}
+
+/* ข้อความของ user */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+  background:
+    linear-gradient(135deg, rgba(255, 80, 80, 0.18), rgba(255, 255, 255, 0.045)),
+    rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Avatar assistant/user */
+[data-testid="chatAvatarIcon-assistant"],
+[data-testid="chatAvatarIcon-user"] {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+}
+
+/* เนื้อหาแชท */
+[data-testid="stChatMessage"] p,
+[data-testid="stChatMessage"] li {
+  font-size: 1.02rem !important;
+  line-height: 1.85 !important;
+  color: #fffaf3 !important;
+}
+
+/* รายการ Top 5 ให้อ่านง่าย */
+[data-testid="stChatMessage"] ol,
+[data-testid="stChatMessage"] ul {
+  padding-left: 1.35rem !important;
+  margin-top: 0.6rem !important;
+  margin-bottom: 0.9rem !important;
+}
+
+/* กล่อง input ด้านล่าง */
+[data-testid="stChatInput"] {
+  background: rgba(15, 17, 23, 0.85) !important;
+  backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1rem !important;
+}
+
+/* ช่องพิมพ์ */
+[data-testid="stChatInput"] textarea {
+  background: rgba(255, 255, 255, 0.075) !important;
+  color: #fff7ef !important;
+  border: 1px solid rgba(255, 184, 102, 0.28) !important;
+  border-radius: 22px !important;
+  min-height: 56px !important;
+  padding: 1rem 3.3rem 1rem 1.15rem !important;
+  font-size: 1rem !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+[data-testid="stChatInput"] textarea:focus {
+  border-color: rgba(255, 171, 76, 0.85) !important;
+  box-shadow:
+    0 0 0 3px rgba(255, 171, 76, 0.14),
+    0 12px 30px rgba(0, 0, 0, 0.34) !important;
+}
+
+/* ปุ่มส่ง */
+[data-testid="stChatInput"] button {
+  background: linear-gradient(135deg, #ffb347, #ff7f50) !important;
+  color: #26150b !important;
+  border-radius: 16px !important;
+  border: none !important;
+  box-shadow: 0 8px 18px rgba(255, 127, 80, 0.28);
+}
+
+/* ปุ่มทั่วไป เช่น popup */
+.stButton > button {
+  border-radius: 999px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #ffb347, #ff7f50) !important;
+  color: #281408 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 10px 22px rgba(255, 127, 80, 0.22);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.stButton > button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(255, 127, 80, 0.32);
+}
+
+/* กล่อง info/success */
+[data-testid="stAlert"] {
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.075) !important;
+  color: #fff7ef !important;
+}
+
+/* selectbox / number input ใน popup */
+[data-baseweb="select"] > div,
+[data-testid="stNumberInput"] input {
+  background: rgba(255, 255, 255, 0.075) !important;
+  border-radius: 16px !important;
+  border-color: rgba(255, 184, 102, 0.22) !important;
+  color: #fff7ef !important;
+}
+
+/* scrollbar ให้นุ่มขึ้น */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #11131b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 179, 71, 0.45);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 179, 71, 0.7);
+}
+
+/* mobile */
+@media (max-width: 640px) {
+  .block-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  h1 {
+    font-size: 2.15rem !important;
+  }
+
+  [data-testid="stChatMessage"] {
+    border-radius: 18px !important;
+    padding: 0.95rem !important;
+  }
+
+  [data-testid="stChatMessage"] p {
+    font-size: 0.96rem !important;
+  }
+}
+
