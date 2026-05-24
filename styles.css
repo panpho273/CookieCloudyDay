@@ -968,19 +968,12 @@ div[role="dialog"] [data-testid="stSelectbox"] svg {
 }
 /* ===== TAROT POPUP STYLE END ===== */
 
-/* ===== CLEAN DROPDOWN SINGLE SOURCE START ===== */
+/* ===== RESTORE PURPLE SELECTBOX DROPDOWN START ===== */
 
-/* BaseWeb dropdown container */
+/* กล่อง dropdown หลัก */
 div[data-baseweb="popover"],
 div[data-baseweb="popover"] > div,
-div[data-baseweb="popover"] > div > div {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  color-scheme: light !important;
-}
-
-/* Real dropdown box */
+div[data-baseweb="popover"] > div > div,
 div[data-baseweb="menu"],
 div[data-baseweb="menu"] > div,
 ul[role="listbox"],
@@ -993,15 +986,47 @@ div[role="listbox"] {
   border-radius: 18px !important;
   box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
   color-scheme: light !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
 }
 
-/* Option rows */
-div[data-baseweb="menu"] [role="option"],
-ul[role="listbox"] [role="option"],
+/* ให้ listbox เป็นตัว scroll แต่ซ่อน scrollbar ดำ */
+ul[role="listbox"],
+div[role="listbox"],
+div[data-baseweb="menu"] {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: 320px !important;
+  padding: 0 !important;
+
+  /* ซ่อน scrollbar จริงที่เป็นดำ */
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* Chrome / Edge / Safari: ซ่อน scrollbar ดำ */
+ul[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar,
+div[data-baseweb="menu"]::-webkit-scrollbar,
+ul[role="listbox"] *::-webkit-scrollbar,
+div[role="listbox"] *::-webkit-scrollbar,
+div[data-baseweb="menu"] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ทำรางม่วงปลอมด้านขวาแทน scrollbar ดำ */
+ul[role="listbox"],
+div[role="listbox"] {
+  box-shadow:
+    inset -7px 0 0 #f1e8ff,
+    0 18px 42px rgba(86, 60, 140, 0.16) !important;
+}
+
+/* รายการเมนู */
 li[role="option"],
-div[role="option"] {
+div[role="option"],
+ul[role="listbox"] li,
+div[data-baseweb="menu"] [role="option"] {
   background: #fffafd !important;
   background-color: #fffafd !important;
   color: #4a2e2a !important;
@@ -1015,32 +1040,24 @@ div[role="option"] {
   border-radius: 0 !important;
   outline: none !important;
   box-shadow: none !important;
-  text-shadow: none !important;
 }
 
-/* Text inside options */
-div[data-baseweb="menu"] [role="option"] *,
-ul[role="listbox"] [role="option"] *,
+/* ข้อความข้างใน */
 li[role="option"] *,
-div[role="option"] * {
+div[role="option"] *,
+ul[role="listbox"] li *,
+div[data-baseweb="menu"] [role="option"] * {
   background: transparent !important;
   color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
   font-weight: 650 !important;
-  text-shadow: none !important;
 }
 
-/* Hover / selected / active row */
-div[data-baseweb="menu"] [role="option"]:hover,
-ul[role="listbox"] [role="option"]:hover,
+/* hover / selected */
 li[role="option"]:hover,
 div[role="option"]:hover,
-div[data-baseweb="menu"] [role="option"]:focus,
-ul[role="listbox"] [role="option"]:focus,
 li[role="option"]:focus,
 div[role="option"]:focus,
-div[data-baseweb="menu"] [aria-selected="true"],
-ul[role="listbox"] [aria-selected="true"],
 li[aria-selected="true"],
 div[aria-selected="true"] {
   background: #eee7ff !important;
@@ -1052,86 +1069,22 @@ div[aria-selected="true"] {
   box-shadow: none !important;
 }
 
-/* Scrollbar */
-ul[role="listbox"],
-div[role="listbox"],
-div[data-baseweb="menu"] {
-  scrollbar-width: thin !important;
-  scrollbar-color: #b79cff #f7f0ff !important;
+/* กัน focus/selection สีดำ */
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"] *,
+ul[role="listbox"] *,
+div[role="listbox"] * {
+  outline: none !important;
+  text-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
-ul[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar,
-div[data-baseweb="menu"]::-webkit-scrollbar {
-  width: 8px !important;
+div[data-baseweb="popover"] ::selection,
+div[data-baseweb="menu"] ::selection,
+ul[role="listbox"] ::selection,
+div[role="listbox"] ::selection {
+  background: transparent !important;
+  color: inherit !important;
 }
 
-ul[role="listbox"]::-webkit-scrollbar-track,
-div[role="listbox"]::-webkit-scrollbar-track,
-div[data-baseweb="menu"]::-webkit-scrollbar-track {
-  background: #f7f0ff !important;
-  border-radius: 999px !important;
-}
-
-ul[role="listbox"]::-webkit-scrollbar-thumb,
-div[role="listbox"]::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb {
-  background: #b79cff !important;
-  border-radius: 999px !important;
-  border: 2px solid #f7f0ff !important;
-}
-
-/* ===== CLEAN DROPDOWN SINGLE SOURCE END ===== */
-
-/* ===== FIX DROPDOWN SCROLLBAR GUTTER PURPLE ===== */
-
-/* ให้กล่อง dropdown มีพื้นหลังม่วงอ่อนตรงราง scrollbar */
-div[data-baseweb="menu"],
-ul[role="listbox"],
-div[role="listbox"] {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-  scrollbar-color: #b79cff #f1e8ff !important;
-  scrollbar-width: thin !important;
-}
-
-/* Chrome / Edge */
-div[data-baseweb="menu"]::-webkit-scrollbar,
-ul[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar {
-  width: 10px !important;
-  background: #f1e8ff !important;
-}
-
-div[data-baseweb="menu"]::-webkit-scrollbar-track,
-ul[role="listbox"]::-webkit-scrollbar-track,
-div[role="listbox"]::-webkit-scrollbar-track {
-  background: #f1e8ff !important;
-  border-radius: 999px !important;
-}
-
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
-ul[role="listbox"]::-webkit-scrollbar-thumb,
-div[role="listbox"]::-webkit-scrollbar-thumb {
-  background: #b79cff !important;
-  border-radius: 999px !important;
-  border: 2px solid #f1e8ff !important;
-}
-
-div[data-baseweb="menu"]::-webkit-scrollbar-corner,
-ul[role="listbox"]::-webkit-scrollbar-corner,
-div[role="listbox"]::-webkit-scrollbar-corner {
-  background: #f1e8ff !important;
-}
-
-/* กันชั้นในของ BaseWeb ที่เป็นดำตรงขอบ scrollbar */
-div[data-baseweb="menu"] > div,
-div[data-baseweb="menu"] > div > div,
-ul[role="listbox"] > div,
-div[role="listbox"] > div {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-}
-
-/* ===== END FIX DROPDOWN SCROLLBAR GUTTER PURPLE ===== */
-
+/* ===== RESTORE PURPLE SELECTBOX DROPDOWN END ===== */
