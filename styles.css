@@ -848,3 +848,48 @@ div[role="dialog"] ::-moz-selection {
 }
 
 /* ===== STOP POPUP TEXT SELECT AND BUTTON ACTIVE FIX END ===== */
+
+/* ===== POPUP SELECT TEXT CENTER FIX START ===== */
+
+/* กล่อง select ใน popup ให้จัดข้อความกลางแนวตั้ง */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+  min-height: 50px !important;
+  height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 18px !important;
+}
+
+/* ข้อความใน select ให้ไม่ลอย */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] span,
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] div {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1.2 !important;
+}
+
+/* ตัวข้อความเมนูที่เลือก */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] div[aria-haspopup="listbox"] {
+  height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ลด padding แปลก ๆ ที่ทำให้ข้อความลอย */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] > div > div {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* ลูกศร dropdown ให้อยู่กลางเหมือนกัน */
+div[role="dialog"] [data-testid="stSelectbox"] svg {
+  align-self: center !important;
+  color: rgba(125, 94, 219, 0.65) !important;
+}
+
+/* ===== POPUP SELECT TEXT CENTER FIX END ===== */
