@@ -31,37 +31,6 @@ st.set_page_config(
     layout="centered",
 )
 
-# FORCE_MITR_FONT_FOR_APP
-st.markdown(
-    """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
-
-    html, body, div, span, p, label, input, textarea, button,
-    [data-testid="stMarkdownContainer"],
-    [data-testid="stChatMessage"],
-    [data-testid="stChatMessageContent"],
-    [data-testid="stChatInput"],
-    [data-testid="stSelectbox"],
-    [data-testid="stSelectbox"] *,
-    [data-baseweb="select"],
-    [data-baseweb="select"] *,
-    [data-baseweb="popover"],
-    [data-baseweb="popover"] *,
-    [data-baseweb="menu"],
-    [data-baseweb="menu"] *,
-    [role="listbox"],
-    [role="listbox"] *,
-    [role="option"],
-    [role="option"] * {
-        font-family: 'Mitr', sans-serif !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
 
 # =========================
 # Load CSS
@@ -595,19 +564,8 @@ def normalize_menu_number_order(message: str) -> str:
 
 rag = load_rag()
 
-st.markdown(
-    """
-    <section class="hero-card">
-        <div class="hero-content">
-            <div class="hero-kicker">CookieCloudyDay Assistant</div>
-            <h1><span class="hero-cloud">☁️</span>Demi ผู้ช่วย AI ของร้านคุกกี้</h1>
-            <p>ถามเมนู เวลาเปิดร้าน ราคา หรือให้ Demi ช่วยแนะนำคุกกี้ที่เหมาะกับคุณได้เลยค่ะ</p>
-        </div>
-    </section>
-    """,
-    unsafe_allow_html=True,
-)
-
+st.title("☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay")
+st.caption("ถามเรื่องเมนู เวลาเปิด ราคา หรือข้อมูลร้านได้เลย")
 
 
 def direct_customer_answer(message: str):
@@ -769,8 +727,7 @@ def render_menu_order_popup():
         unsafe_allow_html=True,
     )
 
-    # แสดงแค่ชื่อเมนูใน dropdown เพราะราคาสรุปอยู่ในกล่องออเดอร์แล้ว
-    menu_names = [str(item["name"]) for item in menus]
+    menu_names = [f"{item['name']} — {item['price']} บาท" for item in menus]
 
     selected_label = st.selectbox(
         "เมนูที่อยากสั่ง",
