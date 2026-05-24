@@ -1,6 +1,5 @@
 import json
 import random
-import textwrap
 from pathlib import Path
 
 import streamlit as st
@@ -115,17 +114,10 @@ def render_lucky_cookie_tarot():
     def lucky_tarot_dialog():
         card = st.session_state["lucky_tarot_card"]
 
-        html = f"""
+        # CSS + เฉพาะการ์ดใช้ HTML
+        st.markdown(
+            f"""
 <style>
-.tarot-wrap {{
-    width: 100%;
-    max-width: 430px;
-    margin: 0 auto;
-    padding: 4px 0 10px;
-    font-family: 'Mitr', sans-serif;
-    color: #4a2e2a;
-}}
-
 .tarot-card {{
     width: 210px;
     min-height: 270px;
@@ -136,6 +128,7 @@ def render_lucky_cookie_tarot():
     border: 1px solid rgba(168, 112, 91, 0.22);
     box-shadow:
         0 18px 42px rgba(91, 51, 42, 0.14),
+        0 0 30px rgba(255, 206, 190, 0.32),
         inset 0 1px 0 rgba(255,255,255,0.45);
     display: flex;
     flex-direction: column;
@@ -164,42 +157,6 @@ def render_lucky_cookie_tarot():
     color: rgba(74, 46, 42, 0.68);
 }}
 
-.tarot-section-title {{
-    font-size: 19px;
-    font-weight: 700;
-    margin: 8px 0 12px;
-    color: #4a2e2a;
-}}
-
-.tarot-meaning {{
-    font-size: 15px;
-    line-height: 1.85;
-    margin-bottom: 16px;
-    color: #4a2e2a;
-}}
-
-.tarot-keyword {{
-    padding: 14px 16px;
-    border-radius: 14px;
-    background: #dceeff;
-    font-size: 14px;
-    line-height: 1.75;
-    font-weight: 500;
-    margin-bottom: 14px;
-    color: #4a2e2a;
-}}
-
-.tarot-promo {{
-    padding: 14px 16px;
-    border-radius: 14px;
-    background: #dcf8e8;
-    font-size: 14px;
-    line-height: 1.75;
-    font-weight: 500;
-    margin-bottom: 18px;
-    color: #4a2e2a;
-}}
-
 div[role="dialog"] div.stButton > button {{
     min-height: 54px !important;
     border-radius: 999px !important;
@@ -214,31 +171,35 @@ div[role="dialog"] div.stButton > button {{
         0 0 18px rgba(167, 139, 250, 0.22),
         inset 0 1px 0 rgba(255,255,255,0.28) !important;
 }}
+
+div[role="dialog"] div.stButton > button:hover {{
+    transform: translateY(-1px) !important;
+    box-shadow:
+        0 18px 34px rgba(124, 58, 237, 0.30),
+        0 0 22px rgba(167, 139, 250, 0.32),
+        inset 0 1px 0 rgba(255,255,255,0.32) !important;
+}}
 </style>
 
-<div class="tarot-wrap">
-    <div class="tarot-card">
-        <div class="tarot-cookie">🍪</div>
-        <div class="tarot-name">{card.get("name", "Lucky Cookie")}</div>
-        <div class="tarot-sub">Cookie Fortune Card</div>
-    </div>
-
-    <div class="tarot-section-title">คำทำนายของคุณ</div>
-
-    <div class="tarot-meaning">
-        {card.get("meaning", "")}
-    </div>
-
-    <div class="tarot-keyword">
-        ความหมายหลักของไพ่: {card.get("keyword", "")}
-    </div>
-
-    <div class="tarot-promo">
-        โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป รับฟรีคุกกี้ช็อกโกแลตชิพ 1 ชิ้น ตามไพ่ที่สุ่มได้
-    </div>
+<div class="tarot-card">
+    <div class="tarot-cookie">🍪</div>
+    <div class="tarot-name">{card.get("name", "Lucky Cookie")}</div>
+    <div class="tarot-sub">Cookie Fortune Card</div>
 </div>
-"""
-        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+""",
+            unsafe_allow_html=True,
+        )
+
+        # ตรงนี้ใช้ Streamlit ปกติ ไม่ใช้ HTML แล้ว จะไม่ขึ้น <div> ดิบอีก
+        st.markdown("### คำทำนายของคุณ")
+        st.markdown(card.get("meaning", ""))
+
+        st.info(f"ความหมายหลักของไพ่: {card.get('keyword', '')}")
+
+        st.success(
+            "โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป "
+            "รับฟรีคุกกี้ช็อกโกแลตชิพ 1 ชิ้น ตามไพ่ที่สุ่มได้"
+        )
 
         col1, col2 = st.columns(2)
 
@@ -255,5 +216,6 @@ div[role="dialog"] div.stButton > button {{
                 st.rerun()
 
     lucky_tarot_dialog()
+
 
 
