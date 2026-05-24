@@ -1,540 +1,246 @@
-.block-container {
-    max-width: 920px;
-    padding-top: 3rem;
-    padding-bottom: 7rem;
-    margin: 0 auto;
+/* ================================
+   CookieCloudyDay Clean Cookie Theme
+   แก้หน้าแชทให้เป็นโทนร้านคุกกี้
+================================ */
+
+:root {
+  --cream: #fff7ed;
+  --cream-2: #fff0df;
+  --cookie: #d89a5b;
+  --cookie-dark: #5a3528;
+  --caramel: #ff9f5a;
+  --brown: #3f261f;
+  --soft-brown: #8a6658;
+  --white-card: rgba(255, 252, 247, 0.92);
+  --border: rgba(142, 91, 55, 0.16);
+  --shadow: 0 18px 45px rgba(91, 56, 35, 0.12);
+}
+
+/* ล้างพื้นหลังดำทั้งหมด */
+html,
+body,
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stVerticalBlock"],
+[data-testid="stMain"],
+main {
+  background:
+    radial-gradient(circle at 15% 8%, rgba(255, 197, 126, 0.32), transparent 24%),
+    radial-gradient(circle at 85% 12%, rgba(255, 226, 190, 0.55), transparent 28%),
+    linear-gradient(180deg, #fff7ed 0%, #fff2e6 45%, #fffaf4 100%) !important;
+  color: var(--brown) !important;
+}
+
+/* ซ่อนของ Streamlit ที่รก */
+#MainMenu,
+footer {
+  visibility: hidden;
 }
 
 header[data-testid="stHeader"] {
-    background: transparent;
+  background: transparent !important;
 }
 
-#MainMenu, footer {
-    visibility: hidden;
-}
-
-[data-testid="stChatMessage"] {
-    border-radius: 18px;
-    padding: 8px 12px;
-    margin-bottom: 18px;
-}
-
-[data-testid="stChatMessageContent"],
-[data-testid="stChatMessageContent"] p,
-[data-testid="stChatMessageContent"] li {
-    font-size: 16px !important;
-    line-height: 1.75 !important;
-}
-
-[data-testid="stChatInput"] {
-    max-width: 820px;
-    margin: 0 auto;
-}
-
-/* ปุ่ม */
-div.stButton > button {
-    border-radius: 999px;
-    padding: 0.65rem 1.35rem;
-    font-weight: 800;
-    border: none;
-    background: linear-gradient(135deg, #ffb547, #ff7a45);
-    color: #111827;
-}
-
-div.stButton > button:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.05);
-}
-
-/* กล่อง section */
-.order-section {
-    padding: 26px 28px;
-    border-radius: 26px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: radial-gradient(circle at top left, rgba(255, 190, 96, 0.18), transparent 34%),
-                linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
-    box-shadow: 0 18px 50px rgba(0,0,0,0.22);
-    margin-bottom: 24px;
-}
-
-.order-title {
-    font-size: 34px;
-    font-weight: 850;
-    color: #ffffff;
-    margin: 0 0 8px 0;
-    letter-spacing: -0.4px;
-}
-
-.order-subtitle {
-    color: #a7adba;
-    font-size: 15px;
-    line-height: 1.7;
-    margin: 0;
-}
-
-@media (max-width: 768px) {
-    .block-container {
-        padding-top: 2rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-
-    .order-title {
-        font-size: 27px;
-    }
-}
-
-/* ================================
-   CookieCloudyDay Chat UI Polish
-   เพิ่มความน่ารักให้หน้าแชท Demi
-================================ */
-
-/* พื้นหลังหลัก */
-.stApp {
-  background:
-    radial-gradient(circle at top left, rgba(255, 183, 77, 0.12), transparent 32%),
-    radial-gradient(circle at top right, rgba(255, 132, 82, 0.10), transparent 28%),
-    linear-gradient(180deg, #0f1117 0%, #11131b 100%) !important;
-  color: #fff7ef;
-}
-
-/* จำกัดความกว้างให้อ่านง่ายขึ้น */
+/* container หลัก */
 .block-container {
   max-width: 920px !important;
-  padding-top: 2.2rem !important;
-  padding-bottom: 7rem !important;
+  padding-top: 3.2rem !important;
+  padding-bottom: 9rem !important;
 }
 
-/* หัวข้อใหญ่ */
+/* หัวข้อ */
 h1 {
-  font-size: clamp(2.2rem, 5vw, 4rem) !important;
+  color: var(--cookie-dark) !important;
+  font-size: clamp(2.7rem, 5.5vw, 4.7rem) !important;
   line-height: 1.05 !important;
-  font-weight: 900 !important;
-  letter-spacing: -1px !important;
-  color: #fff7ef !important;
-  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
-  margin-bottom: 0.4rem !important;
-}
-
-/* caption ใต้หัวข้อ */
-[data-testid="stCaptionContainer"] {
-  color: rgba(255, 247, 239, 0.62) !important;
-  font-size: 0.98rem !important;
-}
-
-/* กล่องข้อความแชท */
-[data-testid="stChatMessage"] {
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 22px !important;
-  padding: 1.05rem 1.15rem !important;
-  margin: 1rem 0 !important;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
-}
-
-/* ข้อความของ assistant */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
-  background:
-    linear-gradient(135deg, rgba(255, 160, 63, 0.15), rgba(255, 122, 89, 0.08)),
-    rgba(255, 255, 255, 0.045) !important;
-}
-
-/* ข้อความของ user */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
-  background:
-    linear-gradient(135deg, rgba(255, 80, 80, 0.18), rgba(255, 255, 255, 0.045)),
-    rgba(255, 255, 255, 0.04) !important;
-}
-
-/* Avatar assistant/user */
-[data-testid="chatAvatarIcon-assistant"],
-[data-testid="chatAvatarIcon-user"] {
-  border-radius: 16px !important;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
-}
-
-/* เนื้อหาแชท */
-[data-testid="stChatMessage"] p,
-[data-testid="stChatMessage"] li {
-  font-size: 1.02rem !important;
-  line-height: 1.85 !important;
-  color: #fffaf3 !important;
-}
-
-/* รายการ Top 5 ให้อ่านง่าย */
-[data-testid="stChatMessage"] ol,
-[data-testid="stChatMessage"] ul {
-  padding-left: 1.35rem !important;
-  margin-top: 0.6rem !important;
-  margin-bottom: 0.9rem !important;
-}
-
-/* กล่อง input ด้านล่าง */
-[data-testid="stChatInput"] {
-  background: rgba(15, 17, 23, 0.85) !important;
-  backdrop-filter: blur(18px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 1rem !important;
-}
-
-/* ช่องพิมพ์ */
-[data-testid="stChatInput"] textarea {
-  background: rgba(255, 255, 255, 0.075) !important;
-  color: #fff7ef !important;
-  border: 1px solid rgba(255, 184, 102, 0.28) !important;
-  border-radius: 22px !important;
-  min-height: 56px !important;
-  padding: 1rem 3.3rem 1rem 1.15rem !important;
-  font-size: 1rem !important;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-}
-
-[data-testid="stChatInput"] textarea:focus {
-  border-color: rgba(255, 171, 76, 0.85) !important;
-  box-shadow:
-    0 0 0 3px rgba(255, 171, 76, 0.14),
-    0 12px 30px rgba(0, 0, 0, 0.34) !important;
-}
-
-/* ปุ่มส่ง */
-[data-testid="stChatInput"] button {
-  background: linear-gradient(135deg, #ffb347, #ff7f50) !important;
-  color: #26150b !important;
-  border-radius: 16px !important;
-  border: none !important;
-  box-shadow: 0 8px 18px rgba(255, 127, 80, 0.28);
-}
-
-/* ปุ่มทั่วไป เช่น popup */
-.stButton > button {
-  border-radius: 999px !important;
-  border: none !important;
-  background: linear-gradient(135deg, #ffb347, #ff7f50) !important;
-  color: #281408 !important;
-  font-weight: 800 !important;
-  box-shadow: 0 10px 22px rgba(255, 127, 80, 0.22);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
-}
-
-.stButton > button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 26px rgba(255, 127, 80, 0.32);
-}
-
-/* กล่อง info/success */
-[data-testid="stAlert"] {
-  border-radius: 18px !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  background: rgba(255, 255, 255, 0.075) !important;
-  color: #fff7ef !important;
-}
-
-/* selectbox / number input ใน popup */
-[data-baseweb="select"] > div,
-[data-testid="stNumberInput"] input {
-  background: rgba(255, 255, 255, 0.075) !important;
-  border-radius: 16px !important;
-  border-color: rgba(255, 184, 102, 0.22) !important;
-  color: #fff7ef !important;
-}
-
-/* scrollbar ให้นุ่มขึ้น */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #11131b;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 179, 71, 0.45);
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 179, 71, 0.7);
-}
-
-/* mobile */
-@media (max-width: 640px) {
-  .block-container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-
-  h1 {
-    font-size: 2.15rem !important;
-  }
-
-  [data-testid="stChatMessage"] {
-    border-radius: 18px !important;
-    padding: 0.95rem !important;
-  }
-
-  [data-testid="stChatMessage"] p {
-    font-size: 0.96rem !important;
-  }
-}
-
-
-/* =========================================
-   CookieCloudyDay - Cookie Shop Theme v2
-   โทนร้านคุกกี้ / เบเกอรี่ / คาเฟ่น่ารัก
-========================================= */
-
-:root {
-  --bg-main: #fff8f1;
-  --bg-soft: #fff3e6;
-  --bg-card: rgba(255, 250, 245, 0.92);
-  --bg-user: linear-gradient(135deg, #ffb38a, #ff8f70);
-  --bg-bot: linear-gradient(180deg, #fffaf5, #fff1e4);
-  --text-main: #4b2e2a;
-  --text-soft: #7b5a52;
-  --accent: #d97745;
-  --accent-2: #ffb347;
-  --accent-3: #8b5e3c;
-  --border-soft: rgba(139, 94, 60, 0.12);
-  --shadow-soft: 0 10px 30px rgba(160, 110, 70, 0.10);
-  --shadow-card: 0 14px 32px rgba(120, 84, 50, 0.12);
-}
-
-/* พื้นหลังรวม */
-.stApp {
-  background:
-    radial-gradient(circle at 10% 10%, rgba(255, 196, 136, 0.35), transparent 18%),
-    radial-gradient(circle at 85% 12%, rgba(255, 224, 193, 0.48), transparent 20%),
-    radial-gradient(circle at 20% 85%, rgba(255, 210, 170, 0.25), transparent 18%),
-    linear-gradient(180deg, #fff9f4 0%, #fff4ea 38%, #fffaf5 100%) !important;
-  color: var(--text-main) !important;
-}
-
-/* layout */
-.block-container {
-  max-width: 940px !important;
-  padding-top: 2rem !important;
-  padding-bottom: 7rem !important;
-}
-
-/* title */
-h1 {
-  font-size: clamp(2.4rem, 5vw, 4.2rem) !important;
-  line-height: 1.04 !important;
-  font-weight: 900 !important;
-  letter-spacing: -1.4px !important;
-  color: #4a2d24 !important;
-  margin-bottom: 0.35rem !important;
-  text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+  font-weight: 950 !important;
+  letter-spacing: -1.5px !important;
+  margin-bottom: 0.5rem !important;
+  text-shadow: 0 3px 0 rgba(255, 255, 255, 0.75);
 }
 
 /* caption */
 [data-testid="stCaptionContainer"] {
-  color: #8b6a60 !important;
-  font-size: 0.98rem !important;
-  margin-bottom: 1.1rem !important;
+  color: rgba(90, 53, 40, 0.58) !important;
+  font-size: 1rem !important;
+  margin-bottom: 2rem !important;
 }
 
-/* ซ่อน header streamlit ถ้าอยากโล่งขึ้นนิดนึง */
-/*
-header[data-testid="stHeader"] {
-  background: transparent !important;
-}
-*/
-
-/* กล่องข้อความแชทหลัก */
+/* กล่องแชท */
 [data-testid="stChatMessage"] {
+  background: var(--white-card) !important;
+  border: 1px solid var(--border) !important;
   border-radius: 28px !important;
   padding: 1.1rem 1.2rem !important;
-  margin: 1rem 0 !important;
-  border: 1px solid var(--border-soft) !important;
-  box-shadow: var(--shadow-card) !important;
-  position: relative;
+  margin: 1.15rem 0 !important;
+  box-shadow: var(--shadow) !important;
+  backdrop-filter: blur(12px);
   overflow: hidden;
 }
 
-/* ข้อความ user */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
-  background: rgba(255,255,255,0.62) !important;
-  border: 1px solid rgba(255, 140, 110, 0.28) !important;
-  box-shadow: 0 10px 24px rgba(255, 138, 102, 0.10) !important;
-}
-
-/* bubble user ด้านใน */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) [data-testid="stMarkdownContainer"] {
-  background: var(--bg-user);
-  color: white !important;
-  border-radius: 18px !important;
-  padding: 0.95rem 1rem !important;
-  box-shadow: 0 10px 22px rgba(255, 145, 102, 0.18);
-}
-
-/* ข้อความ assistant */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
-  background: var(--bg-bot) !important;
-  border: 1px solid rgba(212, 160, 120, 0.22) !important;
-}
-
-/* ลาย cookie มุมกล่อง assistant */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"])::after {
-  content: "🍪";
-  position: absolute;
-  right: 14px;
-  top: 10px;
-  font-size: 1.2rem;
-  opacity: 0.16;
-}
-
 /* avatar */
-[data-testid="chatAvatarIcon-assistant"],
-[data-testid="chatAvatarIcon-user"] {
+[data-testid="chatAvatarIcon-user"],
+[data-testid="chatAvatarIcon-assistant"] {
   border-radius: 18px !important;
-  box-shadow: 0 6px 16px rgba(80, 55, 35, 0.15) !important;
+  box-shadow: 0 8px 18px rgba(91, 56, 35, 0.18) !important;
 }
 
-/* เนื้อหาข้อความ */
-[data-testid="stChatMessage"] p,
-[data-testid="stChatMessage"] li,
-[data-testid="stChatMessage"] div {
-  color: var(--text-main) !important;
+/* user message */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+  background: linear-gradient(135deg, #ffe1c6, #fff8f0) !important;
+  border-color: rgba(255, 145, 94, 0.26) !important;
+}
+
+/* assistant message */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 245, 235, 0.94)) !important;
+}
+
+/* เนื้อความแชท */
+[data-testid="stMarkdownContainer"],
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li {
+  color: var(--brown) !important;
+  font-size: 1.02rem !important;
   line-height: 1.85 !important;
-  font-size: 1rem !important;
 }
 
-/* user text ให้ขาว */
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) p,
-[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) div {
-  color: #fffefc !important;
-}
-
-/* รายการเมนู / Top 5 */
-[data-testid="stChatMessage"] ol,
-[data-testid="stChatMessage"] ul {
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.9rem !important;
+/* รายการเลขเมนู */
+[data-testid="stMarkdownContainer"] ol {
   padding-left: 1.6rem !important;
+  margin-top: 0.7rem !important;
+  margin-bottom: 0.9rem !important;
 }
 
-[data-testid="stChatMessage"] li {
-  margin-bottom: 0.45rem !important;
-  font-weight: 600;
+[data-testid="stMarkdownContainer"] li {
+  margin-bottom: 0.38rem !important;
+  font-weight: 650 !important;
 }
 
-/* markdown block ภายใน assistant ให้ดูเป็น card */
+/* ทำให้ข้อความ Top menu อ่านง่าย */
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) [data-testid="stMarkdownContainer"] {
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(215, 170, 130, 0.16);
+  background: rgba(255, 248, 240, 0.72);
+  border: 1px solid rgba(216, 154, 91, 0.14);
   border-radius: 20px;
-  padding: 1rem 1rem 0.9rem 1rem;
+  padding: 1rem 1.1rem;
 }
 
-/* input bar ด้านล่าง */
+/* แถบ input ด้านล่าง ไม่ให้ดำ */
+[data-testid="stBottomBlockContainer"],
 [data-testid="stChatInput"] {
-  background: rgba(255, 248, 241, 0.85) !important;
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(210, 170, 130, 0.22);
-  padding: 0.9rem 0 1rem 0 !important;
+  background:
+    linear-gradient(180deg, rgba(255, 247, 237, 0.75), rgba(255, 239, 222, 0.98)) !important;
+  border-top: 1px solid rgba(216, 154, 91, 0.18) !important;
+  backdrop-filter: blur(16px);
 }
 
-/* กล่อง input ครอบนอก */
+/* กล่อง input ให้อยู่กลางและดูเหมือนเคาน์เตอร์ร้าน */
+[data-testid="stChatInput"] {
+  max-width: 860px !important;
+  margin: 0 auto !important;
+  padding: 1rem 1rem 1.3rem 1rem !important;
+  border-radius: 30px 30px 0 0 !important;
+}
+
+/* ตัวครอบ input */
 [data-testid="stChatInput"] > div {
-  background: linear-gradient(135deg, #fff9f4, #fff1e4) !important;
-  border: 2px solid rgba(217, 119, 69, 0.26) !important;
+  background: #fffaf5 !important;
+  border: 2px solid rgba(216, 154, 91, 0.32) !important;
   border-radius: 26px !important;
-  padding: 0.65rem 0.75rem !important;
-  box-shadow: 0 12px 28px rgba(170, 110, 70, 0.14) !important;
+  box-shadow: 0 15px 35px rgba(91, 56, 35, 0.14) !important;
+  padding: 0.55rem !important;
 }
 
-/* textarea */
+/* ช่องพิมพ์ */
 [data-testid="stChatInput"] textarea {
-  background: white !important;
-  border: 2px solid rgba(230, 185, 150, 0.7) !important;
+  background: #ffffff !important;
+  color: var(--brown) !important;
+  border: 1.5px solid rgba(216, 154, 91, 0.35) !important;
   border-radius: 22px !important;
-  color: var(--text-main) !important;
-  min-height: 54px !important;
-  padding: 0.95rem 3.2rem 0.95rem 1rem !important;
+  min-height: 56px !important;
+  padding: 1rem 3.2rem 1rem 1.1rem !important;
   font-size: 1rem !important;
-  box-shadow: inset 0 2px 6px rgba(190, 150, 115, 0.06);
+  box-shadow: inset 0 2px 8px rgba(142, 91, 55, 0.06) !important;
 }
 
 [data-testid="stChatInput"] textarea::placeholder {
-  color: #b08979 !important;
+  color: rgba(90, 53, 40, 0.45) !important;
 }
 
 [data-testid="stChatInput"] textarea:focus {
-  border-color: #d97745 !important;
+  border-color: var(--caramel) !important;
   box-shadow:
-    0 0 0 4px rgba(217, 119, 69, 0.12),
-    inset 0 2px 6px rgba(190, 150, 115, 0.06) !important;
+    0 0 0 4px rgba(255, 159, 90, 0.16),
+    inset 0 2px 8px rgba(142, 91, 55, 0.06) !important;
 }
 
 /* ปุ่มส่ง */
 [data-testid="stChatInput"] button {
-  background: linear-gradient(135deg, #ffb347, #ff8c5a) !important;
+  background: linear-gradient(135deg, #ffb45f, #ff8556) !important;
   color: white !important;
   border: none !important;
   border-radius: 18px !important;
-  width: 42px !important;
-  height: 42px !important;
-  box-shadow: 0 8px 18px rgba(255, 140, 90, 0.28) !important;
+  width: 44px !important;
+  height: 44px !important;
+  box-shadow: 0 10px 22px rgba(255, 133, 86, 0.28) !important;
 }
 
 [data-testid="stChatInput"] button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 20px rgba(255, 140, 90, 0.34) !important;
+  box-shadow: 0 14px 26px rgba(255, 133, 86, 0.36) !important;
 }
 
 /* ปุ่มทั่วไป */
-.stButton > button {
+div.stButton > button {
   border-radius: 999px !important;
+  padding: 0.75rem 1.35rem !important;
+  font-weight: 850 !important;
   border: none !important;
-  background: linear-gradient(135deg, #ffbe5c, #ff955d) !important;
-  color: #fffdf9 !important;
-  font-weight: 800 !important;
-  padding: 0.7rem 1.25rem !important;
-  box-shadow: 0 10px 24px rgba(255, 149, 93, 0.22) !important;
-  transition: all 0.18s ease;
+  background: linear-gradient(135deg, #ffbc68, #ff8b5f) !important;
+  color: white !important;
+  box-shadow: 0 12px 26px rgba(255, 139, 95, 0.24) !important;
 }
 
-.stButton > button:hover {
-  transform: translateY(-1px) scale(1.01);
-  box-shadow: 0 14px 28px rgba(255, 149, 93, 0.30) !important;
+div.stButton > button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
 }
 
-/* info, success, warning */
+/* Alert / info */
 [data-testid="stAlert"] {
+  background: #fffaf5 !important;
+  color: var(--brown) !important;
+  border: 1px solid rgba(216, 154, 91, 0.18) !important;
   border-radius: 20px !important;
-  border: 1px solid rgba(210, 165, 125, 0.22) !important;
-  background: rgba(255, 251, 247, 0.88) !important;
-  color: var(--text-main) !important;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow) !important;
 }
 
-/* popup menu / input */
+/* Selectbox / input */
 [data-baseweb="select"] > div,
 [data-testid="stNumberInput"] input {
-  background: white !important;
+  background: #fffaf5 !important;
+  color: var(--brown) !important;
+  border: 1px solid rgba(216, 154, 91, 0.35) !important;
   border-radius: 16px !important;
-  border: 1px solid rgba(220, 180, 145, 0.8) !important;
-  color: var(--text-main) !important;
 }
 
-/* sidebar ถ้ามี */
-section[data-testid="stSidebar"] {
-  background: linear-gradient(180deg, #fff8f0, #fff3e5) !important;
-}
-
-/* เส้น scroll */
+/* scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #fff3e8;
+  background: #fff1e4;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(217, 119, 69, 0.40);
+  background: rgba(216, 154, 91, 0.48);
   border-radius: 999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(217, 119, 69, 0.65);
+  background: rgba(216, 154, 91, 0.72);
 }
 
 /* mobile */
@@ -542,25 +248,20 @@ section[data-testid="stSidebar"] {
   .block-container {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+    padding-top: 2rem !important;
   }
 
   h1 {
-    font-size: 2.35rem !important;
-    line-height: 1.08 !important;
+    font-size: 2.4rem !important;
   }
 
   [data-testid="stChatMessage"] {
-    padding: 0.9rem !important;
     border-radius: 22px !important;
+    padding: 0.95rem !important;
   }
 
-  [data-testid="stChatInput"] > div {
-    border-radius: 20px !important;
-    padding: 0.55rem !important;
-  }
-
-  [data-testid="stChatInput"] textarea {
-    font-size: 0.97rem !important;
+  [data-testid="stChatInput"] {
+    padding-left: 0.7rem !important;
+    padding-right: 0.7rem !important;
   }
 }
-
