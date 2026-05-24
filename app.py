@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import random
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -21,6 +22,21 @@ from hot_menu_service import build_hot_menu_reply, get_hot_menu_number_map
 import customer_language as cl
 
 load_dotenv(".env")
+
+# =========================
+# Gemini Client Init
+# =========================
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
+
+client = None
+if GOOGLE_API_KEY:
+    try:
+        client = genai.Client(api_key=GOOGLE_API_KEY)
+    except Exception as e:
+        print("Gemini client init error:", repr(e))
+        client = None
+
 
 # =========================
 # Page Config
@@ -113,6 +129,17 @@ def parse_order_from_message(message: str):
     )
 def load_rag():
     return RAGEngine(KB_PATH)
+
+
+def get_genai_client():
+    """Initialize and return Google Gemini API client."""
+    try:
+        api_key = get_secret_value("GOOGLE_API_KEY")
+        if api_key:
+            return genai.Client(api_key=api_key)
+    except Exception:
+        pass
+    return None
 
 
 def clean_answer(text: str) -> str:
@@ -563,6 +590,7 @@ def normalize_menu_number_order(message: str) -> str:
     return text
 
 rag = load_rag()
+client = get_genai_client()
 
 st.markdown(
     """
@@ -579,8 +607,71 @@ st.markdown(
 
 
 
+
+def build_new_menu_reply(limit=5):
+    """
+    ตอบเมนูใหม่/เมนูน่าลอง โดยสุ่มจาก shop_menu.json
+    ไม่โชว์ยอดขายหลังร้านให้ลูกค้าเห็น
+    """
+    try:
+        menus = load_popup_menu_items()
+    except Exception:
+        menus = []
+
+    if not menus:
+        return (
+            "ได้เลยค่า 🍪\n\n"
+            "ตอนนี้ Demi ยังโหลดเมนูใหม่ให้ไม่ได้แป๊บนึงนะคะ "
+            "ลูกค้าพิมพ์ว่า “เมนูทั้งหมด” เพื่อดูเมนูที่มีในร้านได้เลยค่ะ"
+        )
+
+    # ถือว่าเมนูท้ายไฟล์คือกลุ่มที่เพิ่งเพิ่ม/เมนูใหม่กว่า
+    recent_pool = menus[-12:] if len(menus) > 12 else menus[:]
+
+    count = min(limit, len(recent_pool))
+    picked = random.SystemRandom().sample(recent_pool, count)
+
+    lines = [
+        "ได้เลยค่าา 🍪",
+        "",
+        "ถ้าถามหาเมนูใหม่ ๆ หรือเมนูน่าลอง ตอนนี้ Demi แนะนำประมาณนี้ค่ะ:",
+        "",
+    ]
+
+    for index, item in enumerate(picked, start=1):
+        name = item.get("name", "เมนูคุกกี้")
+        price = int(item.get("price", 0) or 0)
+
+        if price:
+            lines.append(f"{index}. {name} — {price} บาท")
+        else:
+            lines.append(f"{index}. {name}")
+
+    lines += [
+        "",
+        "ถ้าชอบแนวไหนบอก Demi ได้เลยน้า เช่น ชอบช็อกโกแลต ชอบกรอบ ๆ หรือชอบหวานน้อย",
+        "หรือพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น “เอาเมนู 1 จำนวน 2 ชิ้น”",
+    ]
+
+    return "\n".join(lines)
+
+
 def direct_customer_answer(message: str):
     q = (message or "").lower().strip()
+
+    new_menu_keywords = [
+        "เมนูใหม่",
+        "มีเมนูใหม่ไหม",
+        "เมนูที่เพิ่งเพิ่ม",
+        "เมนูมาใหม่",
+        "คุกกี้ใหม่",
+        "แนะนำเมนูใหม่",
+        "ตัวใหม่",
+        "เมนูน่าลอง",
+    ]
+
+    if any(keyword in q for keyword in new_menu_keywords):
+        return build_new_menu_reply(limit=5)
 
     if cl.is_order_start(q):
         return build_hot_menu_reply()
@@ -938,7 +1029,7 @@ if prompt:
         else:
             try:
                 response = client.models.generate_content(
-                    model=MODEL_NAME,
+                    model=MODEL,
                     contents=full_prompt,
                 )
                 answer = response.text.strip() if response.text else fallback_answer(prompt)
@@ -952,6 +1043,10 @@ if prompt:
     with st.chat_message("assistant"):
         st.write(answer)
 
+    # แสดง Lucky Tarot dialog ถ้าลูกค้าเข้าเงื่อนไขโปร
+    if st.session_state.get("show_lucky_tarot"):
+        render_lucky_cookie_tarot()
+
 
 DEMI_CUSTOMER_RULES = """
 กฎการตอบลูกค้าของ Demi:
@@ -961,6 +1056,3 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
-
-
-render_lucky_cookie_tarot()
