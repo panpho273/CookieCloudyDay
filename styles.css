@@ -1184,3 +1184,91 @@ html body [data-highlighted="true"] * {
 }
 
 /* ===== SELECTBOX FONT CLEAN FINAL END ===== */
+
+/* ===== RESTORE ORDER POPUP DIALOG UI ONLY ===== */
+
+/* กล่อง popup */
+div[role="dialog"] {
+  max-width: 560px !important;
+  margin: auto !important;
+  background: rgba(255,255,255,0.96) !important;
+  border: 1px solid rgba(125, 94, 219, 0.18) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 28px 80px rgba(86, 60, 140, 0.22) !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+}
+
+/* เนื้อหาใน dialog */
+div[role="dialog"] * {
+  font-family: 'Mitr', sans-serif !important;
+  color: #4a2e2a !important;
+}
+
+/* selectbox ตอนปิด */
+div[role="dialog"] [data-testid="stSelectbox"] {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin: 0 auto !important;
+}
+
+div[role="dialog"] [data-baseweb="select"] > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
+  border-radius: 18px !important;
+  min-height: 50px !important;
+  color: #4a2e2a !important;
+  box-shadow: none !important;
+}
+
+/* number input */
+div[role="dialog"] [data-testid="stNumberInput"] {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin: 0 auto !important;
+}
+
+div[role="dialog"] [data-testid="stNumberInput"] > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.22) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+
+div[role="dialog"] [data-testid="stNumberInput"] input {
+  background: #ffffff !important;
+  color: #4a2e2a !important;
+  border: none !important;
+  min-height: 48px !important;
+  font-weight: 600 !important;
+}
+
+div[role="dialog"] [data-testid="stNumberInput"] button {
+  background: #e6dcff !important;
+  color: #6c48c8 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* summary และปุ่ม */
+div[role="dialog"] .order-popup-shell,
+div[role="dialog"] .order-summary-box {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f2ff 100%) !important;
+  border: 1px solid rgba(125, 94, 219, 0.16) !important;
+  border-radius: 24px !important;
+}
+
+div[role="dialog"] [data-testid="stHorizontalBlock"] {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ===== END RESTORE ORDER POPUP DIALOG UI ONLY ===== */
+
