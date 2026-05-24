@@ -1075,38 +1075,27 @@ div[role="listbox"]::-webkit-scrollbar-thumb:hover {
 
 /* ===== SELECTBOX DROPDOWN FINAL FIX END ===== */
 
-/* ===== AGGRESSIVE SCROLLBAR & COLOR OVERRIDE START ===== */
+/* ===== FORCE LIGHT MODE + SCROLLBAR OVERRIDE START ===== */
 
-/* ล้างสีดำที่ BaseWeb ตั้งไว้เริ่มต้น */
+/* บังคับให้ browser เห็นเป็น light color-scheme */
 div[data-baseweb="popover"],
 div[data-baseweb="menu"],
 ul[role="listbox"],
-div[role="listbox"],
-li[role="option"],
-div[role="option"] {
-  color: #4a2e2a !important;
+div[role="listbox"] {
+  color-scheme: light !important;
+  scrollbar-color: #b79cff #f7f0ff !important;
+  scrollbar-width: thin !important;
 }
 
-/* ตัวใหญ่ - เซ็ตสี + ฟอนต์ให้ทั้งหมดในรายการ */
-div[data-baseweb="menu"] li,
-div[data-baseweb="menu"] div,
-ul[role="listbox"] li,
-ul[role="listbox"] div {
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
+/* ทิ้ง inherit color-scheme ที่มาจาก parent */
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"] *,
+ul[role="listbox"] *,
+div[role="listbox"] * {
+  color-scheme: light !important;
 }
 
-/* span / text nodes ข้างใน dropdown - ล้างสีดำ */
-div[data-baseweb="popover"] span,
-div[data-baseweb="menu"] span,
-ul[role="listbox"] span,
-div[role="listbox"] span,
-li[role="option"] span,
-div[role="option"] span {
-  color: #4a2e2a !important;
-}
-
-/* ===== AGGRESSIVE SCROLLBAR & COLOR OVERRIDE END ===== */
+/* ===== FORCE LIGHT MODE + SCROLLBAR OVERRIDE END ===== */
 
 /* ===== FIX DROPDOWN ACTIVE BLACK ROW START ===== */
 
