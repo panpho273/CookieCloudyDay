@@ -452,3 +452,36 @@ section[data-testid="stAppScrollToBottomContainer"] {
 }
 
 /* ===== BOTTOM AREA TRANSPARENT FIX END ===== */
+
+/* ===== CHAT INPUT FOCUS VISIBLE FIX START ===== */
+
+/* ตอนยังไม่คลิก */
+[data-testid="stChatInput"] > div {
+  transition: all 0.18s ease !important;
+}
+
+/* ตอนคลิก/กำลังพิมพ์ ให้มีวงม่วงนุ่ม ๆ รอบกล่อง */
+[data-testid="stChatInput"] > div:focus-within,
+[data-testid="stChatInput"] form:focus-within,
+[data-testid="stChatInput"] form > div:focus-within,
+[data-testid="stChatInput"] form > div > div:focus-within {
+  border-color: rgba(125, 94, 219, 0.72) !important;
+  box-shadow:
+    0 0 0 6px rgba(125, 94, 219, 0.14),
+    0 18px 42px rgba(86, 60, 140, 0.18) !important;
+  background: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* ตัว textarea ตอน focus */
+[data-testid="stChatInput"] textarea:focus {
+  outline: none !important;
+  caret-color: #7d5edb !important;
+}
+
+/* placeholder ให้ชัดขึ้นนิด */
+[data-testid="stChatInput"] textarea::placeholder {
+  color: rgba(74, 46, 42, 0.45) !important;
+}
+
+/* ===== CHAT INPUT FOCUS VISIBLE FIX END ===== */
