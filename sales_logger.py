@@ -118,23 +118,26 @@ def get_worksheet():
 
 def find_next_real_row(worksheet):
     """
-    หาแถวถัดไปจากข้อมูลจริงในคอลัมน์ A-E
-    ไม่ใช้ append_row เพราะ Google Sheets อาจนับแถวที่มีฟอร์แมต/เส้นตารางเป็นข้อมูล
+    หาแถวถัดไปจากข้อมูลจริงล่าสุดในคอลัมน์ A-E
+    ใช้ต่อท้ายข้อมูลจริง ไม่ใช้ append_row
     """
     values = worksheet.get("A:E")
-    last_row = 1
+
+    last_data_row = 1  # แถว 1 คือหัวตาราง
 
     for index, row in enumerate(values, start=1):
         cells = [str(cell).strip() for cell in row]
+
         if any(cells):
-            last_row = index
+            last_data_row = index
 
-    return last_row + 1
-
+    return last_data_row + 1
 
 def log_sale(menu_name: str, quantity: int, price: int):
     today = datetime.now(THAI_TZ).strftime("%Y-%m-%d")
-    total = int(quantity) * int(price)
+    quantity = int(quantity)
+    price = int(price)
+    total = quantity * price
 
     worksheet = get_worksheet()
     next_row = find_next_real_row(worksheet)
@@ -144,8 +147,8 @@ def log_sale(menu_name: str, quantity: int, price: int):
         [[
             today,
             menu_name,
-            int(quantity),
-            int(price),
+            quantity,
+            price,
             total,
         ]],
         value_input_option="USER_ENTERED",
