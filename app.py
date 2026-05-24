@@ -332,23 +332,48 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
     price = int(price)
     total = quantity * price
 
-    # ใช้ URL เดียวกับหน้าเว็บ script.js เพื่อให้ลงชีทเดียวกันแน่นอน
-    web_app_url = os.getenv("SHEET_WEB_APP_URL", "").strip()
+    base_dir = Path(__file__).resolve().parent
+
+    web_app_url = ""
+
+    # 1) อ่านจาก Streamlit secrets ก่อน
+    try:
+        web_app_url = str(st.secrets.get("SHEET_WEB_APP_URL", "")).strip()
+    except Exception:
+        web_app_url = ""
+
+    # 2) อ่านจาก environment
+    if not web_app_url:
+        web_app_url = os.getenv("SHEET_WEB_APP_URL", "").strip()
+
+    # 3) อ่านจาก script.js ใน repo
+    if not web_app_url:
+        possible_script_paths = [
+            base_dir / "script.js",
+            Path.cwd() / "script.js",
+        ]
+
+        for script_path in possible_script_paths:
+            try:
+                if not script_path.exists():
+                    continue
+
+                script_text = script_path.read_text(encoding="utf-8")
+                match = re.search(r'const\s+SHEET_WEB_APP_URL\s*=\s*"([^"]+)"', script_text)
+
+                if match:
+                    web_app_url = match.group(1).strip()
+                    break
+            except Exception:
+                pass
 
     if not web_app_url:
-        try:
-            script_text = Path("script.js").read_text(encoding="utf-8")
-            match = re.search(r'const\s+SHEET_WEB_APP_URL\s*=\s*"([^"]+)"', script_text)
-            if match:
-                web_app_url = match.group(1).strip()
-        except Exception:
-            pass
-
-    if not web_app_url:
-        raise RuntimeError("ไม่พบ SHEET_WEB_APP_URL สำหรับบันทึกออเดอร์")
+        raise RuntimeError(
+            "ไม่พบ SHEET_WEB_APP_URL สำหรับบันทึกออเดอร์ "
+            "ให้เพิ่มใน Streamlit Secrets หรือเช็กว่า script.js ถูก push ขึ้น Git แล้ว"
+        )
 
     payload = {
-        # ส่งหลายชื่อ field เพื่อให้เข้ากับ doPost เดิมได้
         "menu": menu_name,
         "menuName": menu_name,
         "menu_name": menu_name,
@@ -366,15 +391,12 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
         web_app_url,
         data=data,
         method="POST",
-        headers={
-            "Content-Type": "application/json",
-        },
+        headers={"Content-Type": "application/json"},
     )
 
     with request.urlopen(req, timeout=30) as res:
         response_text = res.read().decode("utf-8", errors="replace")
 
-    # log ไว้ใน terminal ของ Streamlit ด้วย
     print("append_order_to_sheet response:", response_text)
 
     return total
