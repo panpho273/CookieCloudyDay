@@ -968,112 +968,7 @@ div[role="dialog"] [data-testid="stSelectbox"] svg {
 }
 /* ===== TAROT POPUP STYLE END ===== */
 
-/* ===== SELECTBOX DROPDOWN FINAL FIX START ===== */
 
-/* ============= DROPDOWN CONTAINER ============= */
-div[data-baseweb="popover"],
-div[data-baseweb="popover"] > div,
-div[data-baseweb="popover"] > div > div,
-div[data-baseweb="menu"],
-div[data-baseweb="menu"] > div,
-ul[role="listbox"],
-div[role="listbox"] {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-  color: #4a2e2a !important;
-  border: 1px solid rgba(125, 94, 219, 0.20) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
-  overflow: auto !important;
-  font-family: 'Mitr', sans-serif !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: #b79cff #f7f0ff !important;
-}
-
-/* ============= ALL NESTED TEXT ============= */
-div[data-baseweb="popover"] *,
-div[data-baseweb="menu"] *,
-ul[role="listbox"] *,
-div[role="listbox"] * {
-  font-family: 'Mitr', sans-serif !important;
-  color: #4a2e2a !important;
-}
-
-/* ============= MENU ITEMS (ALL STATES) ============= */
-li[role="option"],
-div[role="option"],
-ul[role="listbox"] li,
-div[data-baseweb="menu"] div,
-div[data-baseweb="menu"] li {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  font-size: 0.96rem !important;
-  font-weight: 650 !important;
-  padding: 0.82rem 1rem !important;
-  line-height: 1.45 !important;
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* ============= HOVER / ACTIVE / SELECTED ============= */
-li[role="option"]:hover,
-div[role="option"]:hover,
-li[role="option"]:focus,
-div[role="option"]:focus,
-li[role="option"]:active,
-div[role="option"]:active,
-li[aria-selected="true"],
-div[aria-selected="true"],
-li[data-highlighted="true"],
-div[data-highlighted="true"],
-div[data-baseweb="menu"] div:hover,
-div[data-baseweb="menu"] div:focus,
-div[data-baseweb="menu"] div:active {
-  background: #eee7ff !important;
-  background-color: #eee7ff !important;
-  color: #4a2e2a !important;
-  border-radius: 10px !important;
-}
-
-/* ============= WEBKIT SCROLLBAR - WIDTH ============= */
-div[data-baseweb="popover"]::-webkit-scrollbar,
-div[data-baseweb="menu"]::-webkit-scrollbar,
-ul[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar {
-  width: 8px !important;
-}
-
-/* ============= WEBKIT SCROLLBAR - TRACK ============= */
-div[data-baseweb="popover"]::-webkit-scrollbar-track,
-div[data-baseweb="menu"]::-webkit-scrollbar-track,
-ul[role="listbox"]::-webkit-scrollbar-track,
-div[role="listbox"]::-webkit-scrollbar-track {
-  background: #f7f0ff !important;
-  border-radius: 999px !important;
-}
-
-/* ============= WEBKIT SCROLLBAR - THUMB (NORMAL) ============= */
-div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
-ul[role="listbox"]::-webkit-scrollbar-thumb,
-div[role="listbox"]::-webkit-scrollbar-thumb {
-  background: #b79cff !important;
-  border-radius: 999px !important;
-  border: 2px solid #f7f0ff !important;
-}
-
-/* ============= WEBKIT SCROLLBAR - THUMB (HOVER) ============= */
-div[data-baseweb="popover"]::-webkit-scrollbar-thumb:hover,
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb:hover,
-ul[role="listbox"]::-webkit-scrollbar-thumb:hover,
-div[role="listbox"]::-webkit-scrollbar-thumb:hover {
-  background: #8f6df5 !important;
-}
-
-/* ===== SELECTBOX DROPDOWN FINAL FIX END ===== */
 
 /* ===== FORCE LIGHT MODE + SCROLLBAR OVERRIDE START ===== */
 
@@ -1097,51 +992,11 @@ div[role="listbox"] * {
 
 /* ===== FORCE LIGHT MODE + SCROLLBAR OVERRIDE END ===== */
 
-/* ===== FIX DROPDOWN ACTIVE BLACK ROW START ===== */
+/* ===== CLEAN SELECTBOX DROPDOWN ONLY START ===== */
 
-/* ลบสีเริ่มต้นที่ Streamlit/BaseWeb ตั้งไว้ */
-div[data-baseweb="popover"] {
-  color: #4a2e2a !important;
-}
-
-div[data-baseweb="menu"] {
-  color: #4a2e2a !important;
-}
-
-ul[role="listbox"],
-div[role="listbox"] {
-  color: #4a2e2a !important;
-  outline: none !important;
-  box-shadow: none !important;
-  border-radius: 10px !important;
-}
-
-/* กันข้อความข้างในถูกทับเป็นสีขาว */
-li[role="option"] *,
-div[role="option"] *,
-div[data-baseweb="menu"] div * {
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-}
-
-/* ===== FIX DROPDOWN ACTIVE BLACK ROW END ===== */
-
-/* ===== HARD FIX SELECTBOX BLACK SCROLLBAR ===== */
-
-/* บังคับ dropdown ใช้ light color-scheme ไม่ให้ browser ทำ scrollbar ดำ */
+/* กล่อง dropdown หลัก */
 div[data-baseweb="popover"],
-div[data-baseweb="popover"] *,
-div[data-baseweb="menu"],
-div[data-baseweb="menu"] *,
-ul[role="listbox"],
-ul[role="listbox"] *,
-div[role="listbox"],
-div[role="listbox"] * {
-  color-scheme: light !important;
-}
-
-/* กล่อง dropdown */
-div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
 div[data-baseweb="menu"],
 ul[role="listbox"],
 div[role="listbox"] {
@@ -1151,108 +1006,103 @@ div[role="listbox"] {
   font-family: 'Mitr', sans-serif !important;
   border: 1px solid rgba(125, 94, 219, 0.20) !important;
   border-radius: 18px !important;
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
+  outline: none !important;
+}
+
+/* กันไม่ให้มี scrollbar ซ้อน 2 ชั้น */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
+div[data-baseweb="menu"] {
+  overflow: hidden !important;
+}
+
+/* ให้ listbox เป็นตัว scroll ตัวเดียว */
+ul[role="listbox"],
+div[role="listbox"] {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: 320px !important;
+}
+
+/* ซ่อน scrollbar ดำทั้งหมด เหลือ dropdown สะอาด */
+ul[role="listbox"],
+div[role="listbox"],
+ul[role="listbox"] *,
+div[role="listbox"] * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+ul[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar,
+ul[role="listbox"] *::-webkit-scrollbar,
+div[role="listbox"] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* รายการเมนู */
 li[role="option"],
-div[role="option"] {
+div[role="option"],
+ul[role="listbox"] li {
   background: #fffafd !important;
   background-color: #fffafd !important;
   color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
+  font-size: 0.96rem !important;
   font-weight: 650 !important;
+  line-height: 1.45 !important;
+  padding: 0.82rem 1rem !important;
+  border-radius: 10px !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
+/* ข้อความข้างใน */
+li[role="option"] *,
+div[role="option"] *,
+ul[role="listbox"] li * {
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  background: transparent !important;
+}
+
+/* hover / active / selected ห้ามดำ */
 li[role="option"]:hover,
 div[role="option"]:hover,
+li[role="option"]:focus,
+div[role="option"]:focus,
+li[role="option"]:active,
+div[role="option"]:active,
 li[aria-selected="true"],
-div[aria-selected="true"] {
+div[aria-selected="true"],
+li[data-highlighted="true"],
+div[data-highlighted="true"] {
   background: #eee7ff !important;
   background-color: #eee7ff !important;
   color: #4a2e2a !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-/* scrollbar ทุกชั้น */
-div[data-baseweb="popover"]::-webkit-scrollbar,
-div[data-baseweb="popover"] *::-webkit-scrollbar,
-div[data-baseweb="menu"]::-webkit-scrollbar,
-div[data-baseweb="menu"] *::-webkit-scrollbar,
-ul[role="listbox"]::-webkit-scrollbar,
-ul[role="listbox"] *::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"] *::-webkit-scrollbar {
-  width: 8px !important;
-  height: 8px !important;
-  background: #f7f0ff !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-track,
-div[data-baseweb="popover"] *::-webkit-scrollbar-track,
-div[data-baseweb="menu"]::-webkit-scrollbar-track,
-div[data-baseweb="menu"] *::-webkit-scrollbar-track,
-ul[role="listbox"]::-webkit-scrollbar-track,
-ul[role="listbox"] *::-webkit-scrollbar-track,
-div[role="listbox"]::-webkit-scrollbar-track,
-div[role="listbox"] *::-webkit-scrollbar-track {
-  background: #f7f0ff !important;
-  border-radius: 999px !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-track-piece,
-div[data-baseweb="popover"] *::-webkit-scrollbar-track-piece,
-div[data-baseweb="menu"]::-webkit-scrollbar-track-piece,
-div[data-baseweb="menu"] *::-webkit-scrollbar-track-piece,
-ul[role="listbox"]::-webkit-scrollbar-track-piece,
-ul[role="listbox"] *::-webkit-scrollbar-track-piece {
-  background: #f7f0ff !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
-div[data-baseweb="popover"] *::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"] *::-webkit-scrollbar-thumb,
-ul[role="listbox"]::-webkit-scrollbar-thumb,
-ul[role="listbox"] *::-webkit-scrollbar-thumb,
-div[role="listbox"]::-webkit-scrollbar-thumb,
-div[role="listbox"] *::-webkit-scrollbar-thumb {
-  background: #b79cff !important;
-  border-radius: 999px !important;
-  border: 2px solid #f7f0ff !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-button,
-div[data-baseweb="popover"] *::-webkit-scrollbar-button,
-div[data-baseweb="menu"]::-webkit-scrollbar-button,
-div[data-baseweb="menu"] *::-webkit-scrollbar-button,
-ul[role="listbox"]::-webkit-scrollbar-button,
-ul[role="listbox"] *::-webkit-scrollbar-button {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: #f7f0ff !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-corner,
-div[data-baseweb="popover"] *::-webkit-scrollbar-corner,
-div[data-baseweb="menu"]::-webkit-scrollbar-corner,
-div[data-baseweb="menu"] *::-webkit-scrollbar-corner,
-ul[role="listbox"]::-webkit-scrollbar-corner,
-ul[role="listbox"] *::-webkit-scrollbar-corner {
-  background: #f7f0ff !important;
-}
-
-/* Firefox */
-div[data-baseweb="popover"],
+/* ลบ focus/selection ดำของ browser */
 div[data-baseweb="popover"] *,
-div[data-baseweb="menu"],
 div[data-baseweb="menu"] *,
-ul[role="listbox"],
 ul[role="listbox"] *,
-div[role="listbox"],
 div[role="listbox"] * {
-  scrollbar-width: thin !important;
-  scrollbar-color: #b79cff #f7f0ff !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
-/* ===== END HARD FIX SELECTBOX BLACK SCROLLBAR ===== */
+div[data-baseweb="popover"] ::selection,
+div[data-baseweb="menu"] ::selection,
+ul[role="listbox"] ::selection,
+div[role="listbox"] ::selection {
+  background: transparent !important;
+  color: inherit !important;
+}
 
+/* ===== CLEAN SELECTBOX DROPDOWN ONLY END ===== */
