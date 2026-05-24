@@ -711,10 +711,26 @@ def render_menu_order_popup():
         st.error("ยังโหลดเมนูไม่ได้ค่ะ กรุณาตรวจสอบ shop_menu.json")
         return
 
+    st.markdown(
+        """
+        <div class="order-popup-shell">
+            <div class="order-popup-title-row">
+                <div>
+                    <div class="order-popup-kicker">🍪 CookieCloudyDay</div>
+                    <div class="order-popup-title">เลือกคุกกี้ที่อยากสั่ง</div>
+                    <div class="order-popup-subtitle">
+                        เลือกเมนูและจำนวนได้เลยน้า เดี๋ยว Demi สรุปออเดอร์ให้ค่ะ
+                    </div>
+                </div>
+            </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     menu_names = [f"{item['name']} — {item['price']} บาท" for item in menus]
 
     selected_label = st.selectbox(
-        "เลือกเมนู",
+        "เมนูที่อยากสั่ง",
         menu_names,
         key="popup_selected_menu",
     )
@@ -723,7 +739,7 @@ def render_menu_order_popup():
     selected_item = menus[selected_index]
 
     quantity = st.number_input(
-        "จำนวน",
+        "อยากรับกี่ชิ้น",
         min_value=1,
         max_value=999,
         value=1,
@@ -731,24 +747,41 @@ def render_menu_order_popup():
         key="popup_quantity",
     )
 
-    total = int(selected_item["price"]) * int(quantity)
+    menu_name_preview = str(selected_item["name"])
+    price_preview = int(selected_item["price"])
+    qty_preview = int(quantity)
+    total = price_preview * qty_preview
 
-    st.info(
-        f"รายการ: {selected_item['name']}\n\n"
-        f"จำนวน: {int(quantity)} ชิ้น\n\n"
-        f"ยอดรวม: {total:,} บาท"
+    st.markdown(
+        f"""
+        <div class="order-summary-box">
+            <div class="order-summary-title">สรุปออเดอร์ของคุณ</div>
+            <div class="order-summary-row">
+                <span>เมนู</span>
+                <strong>{menu_name_preview}</strong>
+            </div>
+            <div class="order-summary-row">
+                <span>จำนวน</span>
+                <strong>{qty_preview} ชิ้น</strong>
+            </div>
+            <div class="order-summary-total">
+                <span>รวมทั้งหมด</span>
+                <strong>{total:,} บาท</strong>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("บันทึกออเดอร์", type="primary", use_container_width=True):
-            menu_name = str(selected_item["name"])
-            price = int(selected_item["price"])
-            qty = int(quantity)
+        if st.button("เพิ่มลงออเดอร์", type="primary", use_container_width=True):
+            menu_name = menu_name_preview
+            price = price_preview
+            qty = qty_preview
             total = price * qty
 
-            # บันทึกลง Google Sheet และส่ง Telegram ผ่าน order_service.py
             save_result = save_order(menu_name, qty, price)
             total = int(save_result["total"])
 
@@ -767,10 +800,10 @@ def render_menu_order_popup():
                 st.session_state["show_lucky_tarot"] = False
 
             answer = (
-                f"รับออเดอร์เรียบร้อยค่ะ 🍪\n\n"
-                f"รายการ: {menu_name}\n"
+                f"เรียบร้อยค่า เพิ่มออเดอร์ให้แล้วนะคะ 🍪\n\n"
+                f"เมนู: {menu_name}\n"
                 f"จำนวน: {qty} ชิ้น\n"
-                f"ยอดรวม: {total:,} บาท"
+                f"รวมทั้งหมด: {total:,} บาท"
                 f"{promo_text}\n\n"
                 f"ขอบคุณที่สั่งคุกกี้กับ CookieCloudyDay นะคะ ☁️"
             )
@@ -784,19 +817,11 @@ def render_menu_order_popup():
             st.rerun()
 
     with col2:
-        if st.button("ปิด", use_container_width=True):
+        if st.button("ยกเลิก", use_container_width=True):
             st.session_state.show_menu_order_popup = False
             st.rerun()
 
-# =========================
-# Chatbot
-# =========================
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.write(msg["content"])
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 if st.session_state.get("show_menu_order_popup"):
