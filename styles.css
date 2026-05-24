@@ -1,22 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap');
 
 /* ================================
-   CookieCloudyDay - Clean Lavender UI
-   ไม่มีกรอบ input ซ้อนหลายชั้น
+   CookieCloudyDay Clean Berry Theme
+   ไม่มีกรอบซ้อน / ไม่ใช้สีดำ / คุม popup + chat input
 ================================ */
 
 :root {
-  --bg1: #fffaf7;
-  --bg2: #f4edff;
-  --bg3: #fff6fb;
+  --bg-a: #fff8fb;
+  --bg-b: #f1e8ff;
+  --bg-c: #eaf7ff;
+
+  --card: rgba(255, 255, 255, 0.82);
+  --card-strong: rgba(255, 255, 255, 0.94);
+
   --text: #4a2e2a;
-  --muted: rgba(74, 46, 42, 0.48);
-  --purple: #8d72e1;
-  --purple2: #c9b8ff;
-  --card: rgba(255, 255, 255, 0.78);
-  --border: rgba(141, 114, 225, 0.18);
-  --shadow: 0 18px 45px rgba(91, 70, 145, 0.13);
+  --muted: rgba(74, 46, 42, 0.58);
+
+  --berry: #8758d8;
+  --berry-2: #b18cff;
+  --berry-3: #e9dcff;
+
+  --rose: #f6c4dc;
+  --mint: #cbeee5;
+
+  --border: rgba(135, 88, 216, 0.18);
+  --shadow: 0 22px 60px rgba(86, 60, 140, 0.14);
 }
+
+/* ---------- Global ---------- */
 
 html,
 body,
@@ -26,9 +37,10 @@ body,
 main,
 section.main {
   background:
-    radial-gradient(circle at 15% 8%, rgba(201, 184, 255, 0.45), transparent 26%),
-    radial-gradient(circle at 88% 12%, rgba(255, 232, 246, 0.76), transparent 30%),
-    linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 52%, var(--bg3) 100%) !important;
+    radial-gradient(circle at 12% 8%, rgba(177, 140, 255, 0.38), transparent 27%),
+    radial-gradient(circle at 88% 10%, rgba(246, 196, 220, 0.58), transparent 30%),
+    radial-gradient(circle at 20% 84%, rgba(203, 238, 229, 0.42), transparent 27%),
+    linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 54%, var(--bg-c) 100%) !important;
   color: var(--text) !important;
   font-family: 'Mitr', sans-serif !important;
 }
@@ -42,64 +54,105 @@ header[data-testid="stHeader"] {
   background: transparent !important;
 }
 
-/* ห้ามมีกล่องใหญ่จาก Streamlit */
 [data-testid="stVerticalBlock"],
 [data-testid="stVerticalBlockBorderWrapper"],
 [data-testid="stElementContainer"] {
   background: transparent !important;
 }
 
-/* layout */
 .block-container {
-  max-width: 940px !important;
-  padding-top: 3rem !important;
-  padding-bottom: 7rem !important;
+  max-width: 980px !important;
+  padding-top: 2.2rem !important;
+  padding-bottom: 7.5rem !important;
 }
 
-/* title */
-h1 {
+/* ---------- Hero ---------- */
+
+.hero-card {
+  width: min(920px, 100%);
+  margin: 0 auto 2.8rem auto;
+  padding: 2.4rem 2.6rem;
+  border-radius: 34px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.88), rgba(248,241,255,0.78)),
+    radial-gradient(circle at top right, rgba(203, 238, 229, 0.38), transparent 40%);
+  border: 1px solid rgba(135, 88, 216, 0.15);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  backdrop-filter: blur(16px);
+}
+
+.hero-icon {
+  width: 74px;
+  height: 74px;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #ffffff, #e8ddff);
+  box-shadow: 0 14px 34px rgba(86, 60, 140, 0.15);
+  font-size: 2.45rem;
+  flex: 0 0 auto;
+}
+
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(135, 88, 216, 0.10);
+  color: #6d45bd;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.hero-card h1 {
   font-family: 'Baloo 2', 'Mitr', sans-serif !important;
   color: var(--text) !important;
-  font-size: clamp(2.8rem, 5.7vw, 4.9rem) !important;
-  line-height: 1.02 !important;
+  font-size: clamp(2.55rem, 5.1vw, 4.25rem) !important;
+  line-height: 0.98 !important;
   font-weight: 800 !important;
-  letter-spacing: -1.2px !important;
-  margin-bottom: 0.65rem !important;
-  text-shadow:
-    0 3px 0 rgba(255, 255, 255, 0.85),
-    0 14px 35px rgba(126, 96, 190, 0.12);
+  letter-spacing: -1px !important;
+  margin: 0 !important;
+  text-shadow: 0 3px 0 rgba(255,255,255,0.72);
 }
 
-[data-testid="stCaptionContainer"] {
+.hero-card p {
+  margin: 1rem 0 0 0 !important;
+  max-width: 680px;
   color: var(--muted) !important;
-  font-size: 1rem !important;
-  margin-bottom: 2rem !important;
+  font-size: 1.02rem !important;
+  line-height: 1.8 !important;
 }
 
-/* chat card */
+/* ---------- Chat Cards ---------- */
+
 [data-testid="stChatMessage"] {
   background: var(--card) !important;
   border: 1px solid var(--border) !important;
-  border-radius: 28px !important;
+  border-radius: 30px !important;
   padding: 1.05rem 1.15rem !important;
-  margin: 1.1rem 0 !important;
+  margin: 1rem auto !important;
   box-shadow: var(--shadow) !important;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
   overflow: hidden;
 }
 
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
-  background: linear-gradient(135deg, rgba(226, 212, 255, 0.88), rgba(255, 255, 255, 0.78)) !important;
+  background: linear-gradient(135deg, rgba(233, 220, 255, 0.82), rgba(255,255,255,0.78)) !important;
 }
 
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
-  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,242,255,0.88)) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,242,255,0.84)) !important;
 }
 
 [data-testid="chatAvatarIcon-user"],
 [data-testid="chatAvatarIcon-assistant"] {
   border-radius: 18px !important;
-  box-shadow: 0 8px 18px rgba(91, 70, 145, 0.16) !important;
+  box-shadow: 0 10px 24px rgba(86, 60, 140, 0.15) !important;
 }
 
 [data-testid="stMarkdownContainer"],
@@ -113,40 +166,28 @@ h1 {
 
 [data-testid="stMarkdownContainer"] ol,
 [data-testid="stMarkdownContainer"] ul {
-  padding-left: 1.6rem !important;
+  padding-left: 1.65rem !important;
 }
 
 [data-testid="stMarkdownContainer"] li {
-  margin-bottom: 0.38rem !important;
+  margin-bottom: 0.4rem !important;
   font-weight: 550 !important;
 }
 
-/* ================================
-   CHAT INPUT: ชั้นเดียวเท่านั้น
-================================ */
+/* ---------- Chat Input: one clean layer ---------- */
 
-/* ลบพื้นหลังกล่องล่างทุกชั้น */
 [data-testid="stBottom"],
 [data-testid="stBottomBlockContainer"],
-[data-testid="stBottom"] *,
-[data-testid="stBottomBlockContainer"] * {
-  background-color: transparent !important;
-  border-color: transparent !important;
+[data-testid="stBottom"] > div,
+[data-testid="stBottomBlockContainer"] > div {
+  background: linear-gradient(180deg, rgba(255,248,251,0), rgba(255,248,251,0.92)) !important;
+  border: none !important;
   box-shadow: none !important;
 }
 
-/* ตัวแถบล่างเป็นแค่ fade โปร่ง ๆ */
-[data-testid="stBottom"],
-[data-testid="stBottomBlockContainer"] {
-  background: linear-gradient(180deg, rgba(250,246,255,0), rgba(250,246,255,0.88)) !important;
-  border: none !important;
-}
-
-/* ล้าง parent ทุกตัวที่ครอบ textarea */
 [data-testid="stChatInput"],
 [data-testid="stChatInput"] > div,
 [data-testid="stChatInput"] > div > div,
-[data-testid="stChatInput"] > div > div > div,
 [data-testid="stChatInput"] form,
 [data-testid="stChatInput"] form > div,
 [data-testid="stChatInput"] form > div > div {
@@ -156,87 +197,263 @@ h1 {
   outline: none !important;
 }
 
-/* วาง input ลอยกลางจอ */
 [data-testid="stChatInput"] {
   max-width: 760px !important;
   margin: 0 auto !important;
-  padding: 0.6rem 1rem 1rem 1rem !important;
+  padding: 0.8rem 1rem 1.1rem !important;
 }
 
-/* ตัว textarea เป็น bubble เดียว */
-[data-testid="stChatInput"] textarea {
-  font-family: 'Mitr', sans-serif !important;
-  background: rgba(255,255,255,0.92) !important;
+[data-testid="stChatInput"] textarea,
+[data-testid="stChatInput"] textarea:focus,
+[data-testid="stChatInput"] textarea:active {
+  background: #ffffff !important;
   color: var(--text) !important;
-  border: 1.5px solid rgba(141, 114, 225, 0.35) !important;
+  border: 1.5px solid rgba(135, 88, 216, 0.32) !important;
   border-radius: 999px !important;
   min-height: 56px !important;
   padding: 1rem 4rem 1rem 1.35rem !important;
+  font-family: 'Mitr', sans-serif !important;
   font-size: 1rem !important;
-  box-shadow:
-    0 14px 34px rgba(126, 96, 190, 0.13),
-    inset 0 1px 4px rgba(82, 58, 130, 0.04) !important;
+  box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
+  outline: none !important;
 }
 
 [data-testid="stChatInput"] textarea::placeholder {
-  color: rgba(74, 46, 42, 0.38) !important;
+  color: rgba(74, 46, 42, 0.42) !important;
 }
 
-[data-testid="stChatInput"] textarea:focus {
-  border-color: rgba(141, 114, 225, 0.72) !important;
-  box-shadow:
-    0 0 0 4px rgba(141, 114, 225, 0.12),
-    0 16px 36px rgba(126, 96, 190, 0.15) !important;
-}
-
-/* ปุ่มส่ง */
 [data-testid="stChatInput"] button {
-  background: linear-gradient(135deg, #a58bff, #7d63d8) !important;
-  color: white !important;
+  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
+  color: #ffffff !important;
   border: none !important;
   border-radius: 999px !important;
   width: 46px !important;
   height: 46px !important;
-  box-shadow: 0 10px 22px rgba(125, 99, 216, 0.26) !important;
+  box-shadow: 0 12px 26px rgba(108, 72, 200, 0.26) !important;
 }
 
-[data-testid="stChatInput"] button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(125, 99, 216, 0.34) !important;
+/* ---------- Dialog / Popup ---------- */
+
+div[role="dialog"],
+div[data-testid="stDialog"] {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,242,255,0.96)) !important;
+  border: 1px solid rgba(135, 88, 216, 0.18) !important;
+  border-radius: 32px !important;
+  box-shadow: 0 28px 80px rgba(86, 60, 140, 0.22) !important;
+  color: var(--text) !important;
 }
 
-/* ปุ่มอื่น ๆ */
+div[role="dialog"] *,
+div[data-testid="stDialog"] * {
+  font-family: 'Mitr', sans-serif !important;
+}
+
+div[role="dialog"] button[aria-label="Close"],
+div[data-testid="stDialog"] button[aria-label="Close"] {
+  background: rgba(255,255,255,0.74) !important;
+  color: #6c48c8 !important;
+  border: 1px solid rgba(135, 88, 216, 0.20) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+/* popup header */
+.order-popup-shell {
+  max-width: 560px;
+  margin: 0 auto 1.1rem auto;
+  padding: 1.35rem 1.35rem 1.2rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(203, 238, 229, 0.35), transparent 42%),
+    linear-gradient(180deg, #ffffff 0%, #f7f0ff 100%) !important;
+  border: 1px solid rgba(135, 88, 216, 0.15);
+  box-shadow: 0 16px 40px rgba(86, 60, 140, 0.10);
+}
+
+.order-popup-kicker {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: rgba(74, 46, 42, 0.48);
+  margin-bottom: 0.25rem;
+}
+
+.order-popup-title {
+  font-size: 1.55rem;
+  line-height: 1.25;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.order-popup-subtitle {
+  margin-top: 0.4rem;
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: rgba(74, 46, 42, 0.62);
+}
+
+/* selectbox */
+div[role="dialog"] label,
+div[data-testid="stDialog"] label {
+  color: rgba(74, 46, 42, 0.76) !important;
+  font-weight: 750 !important;
+}
+
+[data-baseweb="select"] > div {
+  background: #ffffff !important;
+  color: var(--text) !important;
+  border: 1.5px solid rgba(135, 88, 216, 0.24) !important;
+  border-radius: 20px !important;
+  min-height: 50px !important;
+  box-shadow: none !important;
+}
+
+[data-baseweb="select"] span,
+[data-baseweb="select"] div {
+  color: var(--text) !important;
+}
+
+/* dropdown */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
+div[data-baseweb="menu"],
+ul[role="listbox"],
+div[role="listbox"] {
+  background: #fffafd !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(135, 88, 216, 0.18) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.18) !important;
+  overflow: hidden !important;
+}
+
+li[role="option"],
+div[role="option"] {
+  background: #fffafd !important;
+  color: var(--text) !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 0.96rem !important;
+  font-weight: 600 !important;
+  padding: 0.78rem 1rem !important;
+}
+
+li[role="option"]:hover,
+div[role="option"]:hover,
+li[aria-selected="true"],
+div[aria-selected="true"] {
+  background: #eee7ff !important;
+  color: var(--text) !important;
+}
+
+/* number input */
+div[role="dialog"] [data-testid="stNumberInput"] > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(135, 88, 216, 0.24) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 24px rgba(86, 60, 140, 0.08) !important;
+}
+
+div[role="dialog"] [data-testid="stNumberInput"] div,
+div[role="dialog"] [data-testid="stNumberInput"] div[data-baseweb="input"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+div[role="dialog"] [data-testid="stNumberInput"] input {
+  background: #ffffff !important;
+  color: var(--text) !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: 48px !important;
+  padding-left: 1rem !important;
+  font-weight: 650 !important;
+}
+
+/* ใช้สีเดียวกันทั้ง - และ + */
+div[role="dialog"] [data-testid="stNumberInput"] button,
+div[role="dialog"] [data-testid="stNumberInput"] button:disabled,
+div[role="dialog"] [data-testid="stNumberInput"] button[disabled],
+div[role="dialog"] [data-testid="stNumberInput"] [role="button"] {
+  background: #e8ddff !important;
+  background-color: #e8ddff !important;
+  color: #6c48c8 !important;
+  opacity: 1 !important;
+  border: none !important;
+  border-left: 1px solid rgba(135, 88, 216, 0.16) !important;
+  box-shadow: none !important;
+  min-width: 44px !important;
+  min-height: 48px !important;
+  font-weight: 900 !important;
+}
+
+div[role="dialog"] [data-testid="stNumberInput"] button:last-of-type {
+  border-radius: 0 999px 999px 0 !important;
+}
+
+/* summary */
+.order-summary-box {
+  max-width: 560px;
+  margin: 1rem auto 1rem auto;
+  padding: 1.05rem 1.1rem;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f0ff 100%) !important;
+  border: 1px solid rgba(135, 88, 216, 0.14);
+  box-shadow: 0 14px 32px rgba(86, 60, 140, 0.08);
+}
+
+.order-summary-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.85rem;
+}
+
+.order-summary-row,
+.order-summary-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  color: var(--text);
+  font-size: 0.96rem;
+}
+
+.order-summary-row span,
+.order-summary-total span {
+  color: rgba(74, 46, 42, 0.55);
+}
+
+.order-summary-row strong,
+.order-summary-total strong {
+  color: var(--text);
+  font-weight: 750;
+  text-align: right;
+}
+
+.order-summary-total {
+  margin-top: 0.35rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(135, 88, 216, 0.24);
+  font-size: 1.02rem;
+}
+
+/* buttons */
 div.stButton > button {
   font-family: 'Mitr', sans-serif !important;
   border-radius: 999px !important;
-  padding: 0.75rem 1.35rem !important;
-  font-weight: 650 !important;
-  border: none !important;
-  background: linear-gradient(135deg, #a58bff, #7d63d8) !important;
+  min-height: 48px !important;
+  font-weight: 750 !important;
+  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
   color: white !important;
-  box-shadow: 0 12px 26px rgba(125, 99, 216, 0.22) !important;
+  border: none !important;
+  box-shadow: 0 14px 30px rgba(108, 72, 200, 0.22) !important;
 }
 
 div.stButton > button:hover {
   transform: translateY(-1px);
   filter: brightness(1.04);
-}
-
-[data-testid="stAlert"] {
-  background: rgba(255,255,255,0.82) !important;
-  color: var(--text) !important;
-  border: 1px solid rgba(141, 114, 225, 0.16) !important;
-  border-radius: 22px !important;
-  box-shadow: var(--shadow) !important;
-}
-
-[data-baseweb="select"] > div,
-[data-testid="stNumberInput"] input {
-  font-family: 'Mitr', sans-serif !important;
-  background: #ffffff !important;
-  color: var(--text) !important;
-  border: 1px solid rgba(141, 114, 225, 0.25) !important;
-  border-radius: 16px !important;
 }
 
 /* scrollbar */
@@ -249,372 +466,39 @@ div.stButton > button:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(141, 114, 225, 0.45);
+  background: rgba(135, 88, 216, 0.48);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(141, 114, 225, 0.68);
+  background: rgba(135, 88, 216, 0.68);
 }
 
 @media (max-width: 768px) {
   .block-container {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
-    padding-top: 2rem !important;
+    padding-top: 1.4rem !important;
   }
 
-  h1 {
-    font-size: 2.45rem !important;
+  .hero-card {
+    padding: 1.6rem;
+    border-radius: 26px;
+    align-items: flex-start;
+  }
+
+  .hero-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.8rem;
+  }
+
+  .hero-card h1 {
+    font-size: 2.35rem !important;
   }
 
   [data-testid="stChatMessage"] {
-    border-radius: 23px !important;
+    border-radius: 24px !important;
     padding: 0.95rem !important;
   }
 }
-
-/* ===== ORDER POPUP START ===== */
-.order-popup-shell {
-  max-width: 560px;
-  margin: 0 auto 1.1rem auto;
-  padding: 1.25rem 1.25rem 1.15rem;
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(141, 114, 225, 0.18);
-  box-shadow: 0 18px 45px rgba(91, 70, 145, 0.12);
-  backdrop-filter: blur(14px);
-}
-
-.order-popup-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.order-popup-kicker {
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: rgba(74, 46, 42, 0.52);
-  margin-bottom: 0.25rem;
-}
-
-.order-popup-title {
-  font-size: 1.45rem;
-  line-height: 1.25;
-  font-weight: 800;
-  color: #4a2e2a;
-}
-
-.order-popup-subtitle {
-  margin-top: 0.35rem;
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: rgba(74, 46, 42, 0.62);
-}
-
-.order-summary-box {
-  max-width: 560px;
-  margin: 1rem auto 1rem auto;
-  padding: 1rem 1.05rem;
-  border-radius: 22px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(247,242,255,0.92));
-  border: 1px solid rgba(141, 114, 225, 0.16);
-  box-shadow: 0 14px 32px rgba(91, 70, 145, 0.10);
-}
-
-.order-summary-title {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #4a2e2a;
-  margin-bottom: 0.85rem;
-}
-
-.order-summary-row,
-.order-summary-total {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: flex-start;
-  padding: 0.45rem 0;
-  color: #4a2e2a;
-  font-size: 0.96rem;
-}
-
-.order-summary-row span,
-.order-summary-total span {
-  color: rgba(74, 46, 42, 0.58);
-}
-
-.order-summary-row strong,
-.order-summary-total strong {
-  text-align: right;
-  color: #4a2e2a;
-  font-weight: 700;
-}
-
-.order-summary-total {
-  margin-top: 0.35rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(141, 114, 225, 0.26);
-  font-size: 1.02rem;
-}
-
-/* selectbox + number input ใน popup */
-[data-testid="stSelectbox"] label,
-[data-testid="stNumberInput"] label {
-  color: rgba(74, 46, 42, 0.72) !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-}
-
-[data-testid="stSelectbox"] > div,
-[data-testid="stNumberInput"] > div {
-  max-width: 560px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-[data-baseweb="select"] > div,
-[data-testid="stNumberInput"] input {
-  min-height: 48px !important;
-  border-radius: 18px !important;
-  background: rgba(255,255,255,0.92) !important;
-  border: 1.5px solid rgba(141, 114, 225, 0.20) !important;
-  box-shadow: none !important;
-  color: #4a2e2a !important;
-}
-
-[data-baseweb="select"] > div:focus-within,
-[data-testid="stNumberInput"] input:focus {
-  border-color: rgba(141, 114, 225, 0.62) !important;
-  box-shadow: 0 0 0 4px rgba(141, 114, 225, 0.10) !important;
-}
-
-/* ปุ่มใน popup */
-div.stButton > button {
-  border-radius: 999px !important;
-  min-height: 48px !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #a58bff, #7d63d8) !important;
-  color: white !important;
-  border: none !important;
-  box-shadow: 0 12px 26px rgba(125, 99, 216, 0.20) !important;
-}
-
-div.stButton > button:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.04);
-}
-/* ===== ORDER POPUP END ===== */
-
-/* ===== ORDER POPUP COLOR FIX START ===== */
-
-/* กล่อง dialog หลักของ Streamlit: ห้ามดำ */
-div[role="dialog"],
-div[data-testid="stDialog"],
-div[data-testid="stDialog"] > div,
-div[data-testid="stDialog"] section,
-div[data-testid="stDialog"] div {
-  background-color: transparent !important;
-}
-
-/* ตัวกล่อง modal จริง */
-div[role="dialog"] {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.96), rgba(247,242,255,0.96)) !important;
-  border: 1px solid rgba(141, 114, 225, 0.18) !important;
-  border-radius: 30px !important;
-  box-shadow: 0 24px 70px rgba(91, 70, 145, 0.18) !important;
-  color: #4a2e2a !important;
-}
-
-/* ปุ่มปิด X */
-div[role="dialog"] button[aria-label="Close"],
-div[role="dialog"] button[kind="secondary"] {
-  background: rgba(255,255,255,0.75) !important;
-  color: #6b4fc4 !important;
-  border: 1px solid rgba(141, 114, 225, 0.22) !important;
-  border-radius: 14px !important;
-  box-shadow: none !important;
-}
-
-/* หัว popup ด้านใน */
-.order-popup-shell {
-  max-width: 560px;
-  margin: 0 auto 1.1rem auto;
-  padding: 1.35rem 1.35rem 1.2rem;
-  border-radius: 26px;
-  background:
-    radial-gradient(circle at top left, rgba(226, 212, 255, 0.72), transparent 42%),
-    linear-gradient(180deg, #ffffff 0%, #fbf7ff 100%) !important;
-  border: 1px solid rgba(141, 114, 225, 0.16);
-  box-shadow: 0 16px 38px rgba(91, 70, 145, 0.11);
-  backdrop-filter: blur(12px);
-}
-
-.order-popup-kicker {
-  font-size: 0.86rem;
-  font-weight: 700;
-  color: rgba(74, 46, 42, 0.45);
-  margin-bottom: 0.25rem;
-}
-
-.order-popup-title {
-  font-size: 1.55rem;
-  line-height: 1.25;
-  font-weight: 800;
-  color: #4a2e2a;
-}
-
-.order-popup-subtitle {
-  margin-top: 0.4rem;
-  font-size: 0.96rem;
-  line-height: 1.65;
-  color: rgba(74, 46, 42, 0.60);
-}
-
-/* label ใน popup */
-div[role="dialog"] label,
-div[data-testid="stDialog"] label {
-  color: rgba(74, 46, 42, 0.72) !important;
-  font-weight: 700 !important;
-}
-
-/* select / input */
-div[role="dialog"] [data-baseweb="select"] > div,
-div[role="dialog"] [data-testid="stNumberInput"] input {
-  background: #ffffff !important;
-  color: #4a2e2a !important;
-  border: 1.5px solid rgba(141, 114, 225, 0.22) !important;
-  border-radius: 18px !important;
-  min-height: 48px !important;
-  box-shadow: none !important;
-}
-
-div[role="dialog"] [data-baseweb="select"] > div:focus-within,
-div[role="dialog"] [data-testid="stNumberInput"] input:focus {
-  border-color: rgba(141, 114, 225, 0.62) !important;
-  box-shadow: 0 0 0 4px rgba(141, 114, 225, 0.11) !important;
-}
-
-/* สรุปออเดอร์ */
-.order-summary-box {
-  max-width: 560px;
-  margin: 1rem auto 1rem auto;
-  padding: 1.05rem 1.1rem;
-  border-radius: 22px;
-  background: linear-gradient(180deg, #ffffff 0%, #f7f2ff 100%) !important;
-  border: 1px solid rgba(141, 114, 225, 0.16);
-  box-shadow: 0 14px 32px rgba(91, 70, 145, 0.09);
-}
-
-.order-summary-title {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #4a2e2a;
-  margin-bottom: 0.85rem;
-}
-
-.order-summary-row,
-.order-summary-total {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.45rem 0;
-  color: #4a2e2a;
-  font-size: 0.96rem;
-}
-
-.order-summary-row span,
-.order-summary-total span {
-  color: rgba(74, 46, 42, 0.55);
-}
-
-.order-summary-row strong,
-.order-summary-total strong {
-  color: #4a2e2a;
-  font-weight: 750;
-  text-align: right;
-}
-
-.order-summary-total {
-  margin-top: 0.35rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(141, 114, 225, 0.26);
-  font-size: 1.02rem;
-}
-
-/* ปุ่ม popup */
-div[role="dialog"] .stButton > button {
-  background: linear-gradient(135deg, #a58bff, #7d63d8) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 999px !important;
-  min-height: 48px !important;
-  font-weight: 750 !important;
-  box-shadow: 0 12px 26px rgba(125, 99, 216, 0.20) !important;
-}
-
-div[role="dialog"] .stButton > button:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.04);
-}
-
-/* ===== ORDER POPUP COLOR FIX END ===== */
-
-/* ===== SELECTBOX DROPDOWN PASTEL FIX START ===== */
-
-/* กล่อง dropdown ที่เด้งออกมา */
-div[data-baseweb="popover"],
-div[data-baseweb="menu"],
-ul[role="listbox"] {
-  background: #fffafd !important;
-  border: 1px solid rgba(141, 114, 225, 0.22) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 18px 40px rgba(91, 70, 145, 0.16) !important;
-  overflow: hidden !important;
-}
-
-/* รายการแต่ละเมนู */
-li[role="option"],
-div[role="option"] {
-  background: #fffafd !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  font-size: 0.96rem !important;
-  font-weight: 500 !important;
-  padding: 0.75rem 0.95rem !important;
-}
-
-/* hover / active */
-li[role="option"]:hover,
-div[role="option"]:hover,
-li[aria-selected="true"],
-div[aria-selected="true"] {
-  background: #f0e9ff !important;
-  color: #4a2e2a !important;
-}
-
-/* ตัวเลือกที่กำลัง focus */
-li[role="option"][aria-selected="true"],
-div[role="option"][aria-selected="true"] {
-  background: linear-gradient(135deg, #efe8ff, #fff7fd) !important;
-  color: #4a2e2a !important;
-  font-weight: 700 !important;
-}
-
-/* ข้อความใน selectbox ด้านบน */
-[data-baseweb="select"] span,
-[data-baseweb="select"] div {
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-}
-
-/* ลบพื้นหลังดำของ list ชั้นใน */
-div[data-baseweb="popover"] *,
-ul[role="listbox"] * {
-  border-color: transparent !important;
-}
-
-/* ===== SELECTBOX DROPDOWN PASTEL FIX END ===== */
