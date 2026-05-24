@@ -992,84 +992,72 @@ div[role="listbox"] * {
 
 /* ===== FORCE LIGHT MODE + SCROLLBAR OVERRIDE END ===== */
 
-/* ===== CLEAN SELECTBOX DROPDOWN ONLY START ===== */
+/* ===== SELECTBOX DROPDOWN CLEAN FINAL START ===== */
+
+/* บังคับ dropdown ให้ใช้ธีมสว่าง */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] *,
+ul[role="listbox"],
+ul[role="listbox"] *,
+div[role="listbox"],
+div[role="listbox"] * {
+  color-scheme: light !important;
+  font-family: 'Mitr', sans-serif !important;
+  color: #4a2e2a !important;
+}
 
 /* กล่อง dropdown หลัก */
-div[data-baseweb="popover"],
-div[data-baseweb="popover"] > div,
+div[data-baseweb="popover"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ตัวเมนูจริง */
 div[data-baseweb="menu"],
 ul[role="listbox"],
 div[role="listbox"] {
   background: #fffafd !important;
   background-color: #fffafd !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  border: 1px solid rgba(125, 94, 219, 0.20) !important;
+  border: 1px solid rgba(125, 94, 219, 0.22) !important;
   border-radius: 18px !important;
   box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
-  outline: none !important;
-}
-
-/* กันไม่ให้มี scrollbar ซ้อน 2 ชั้น */
-div[data-baseweb="popover"],
-div[data-baseweb="popover"] > div,
-div[data-baseweb="menu"] {
-  overflow: hidden !important;
-}
-
-/* ให้ listbox เป็นตัว scroll ตัวเดียว */
-ul[role="listbox"],
-div[role="listbox"] {
   overflow-y: auto !important;
   overflow-x: hidden !important;
   max-height: 320px !important;
+  padding: 0.35rem !important;
 }
 
-/* ซ่อน scrollbar ดำทั้งหมด เหลือ dropdown สะอาด */
-ul[role="listbox"],
-div[role="listbox"],
-ul[role="listbox"] *,
-div[role="listbox"] * {
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
-ul[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar,
-ul[role="listbox"] *::-webkit-scrollbar,
-div[role="listbox"] *::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-/* รายการเมนู */
+/* รายการเมนู: ห้ามมีขอบมนใหญ่ เพราะทำให้เห็นพื้นดำด้านหลัง */
 li[role="option"],
 div[role="option"],
 ul[role="listbox"] li {
   background: #fffafd !important;
   background-color: #fffafd !important;
   color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
   font-size: 0.96rem !important;
   font-weight: 650 !important;
   line-height: 1.45 !important;
   padding: 0.82rem 1rem !important;
-  border-radius: 10px !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  border: none !important;
   outline: none !important;
   box-shadow: none !important;
 }
 
-/* ข้อความข้างใน */
+/* ข้อความข้างในรายการ */
 li[role="option"] *,
 div[role="option"] *,
 ul[role="listbox"] li * {
+  background: transparent !important;
   color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
-  background: transparent !important;
 }
 
-/* hover / active / selected ห้ามดำ */
+/* hover / selected / focus */
 li[role="option"]:hover,
 div[role="option"]:hover,
 li[role="option"]:focus,
@@ -1077,9 +1065,7 @@ div[role="option"]:focus,
 li[role="option"]:active,
 div[role="option"]:active,
 li[aria-selected="true"],
-div[aria-selected="true"],
-li[data-highlighted="true"],
-div[data-highlighted="true"] {
+div[aria-selected="true"] {
   background: #eee7ff !important;
   background-color: #eee7ff !important;
   color: #4a2e2a !important;
@@ -1087,22 +1073,42 @@ div[data-highlighted="true"] {
   box-shadow: none !important;
 }
 
-/* ลบ focus/selection ดำของ browser */
-div[data-baseweb="popover"] *,
-div[data-baseweb="menu"] *,
-ul[role="listbox"] *,
-div[role="listbox"] * {
-  outline: none !important;
-  box-shadow: none !important;
-  -webkit-tap-highlight-color: transparent !important;
+/* scrollbar ให้เหลืออันเดียวและไม่ดำ */
+ul[role="listbox"] {
+  scrollbar-width: thin !important;
+  scrollbar-color: #b79cff #f7f0ff !important;
 }
 
-div[data-baseweb="popover"] ::selection,
+ul[role="listbox"]::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+ul[role="listbox"]::-webkit-scrollbar-track {
+  background: #f7f0ff !important;
+  border-radius: 999px !important;
+}
+
+ul[role="listbox"]::-webkit-scrollbar-thumb {
+  background: #b79cff !important;
+  border-radius: 999px !important;
+  border: 2px solid #f7f0ff !important;
+}
+
+ul[role="listbox"]::-webkit-scrollbar-button {
+  display: none !important;
+}
+
+/* กัน selection/focus ดำ */
+div[data-baseweb="menu"] *:focus,
+ul[role="listbox"] *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 div[data-baseweb="menu"] ::selection,
-ul[role="listbox"] ::selection,
-div[role="listbox"] ::selection {
+ul[role="listbox"] ::selection {
   background: transparent !important;
   color: inherit !important;
 }
 
-/* ===== CLEAN SELECTBOX DROPDOWN ONLY END ===== */
+/* ===== SELECTBOX DROPDOWN CLEAN FINAL END ===== */
