@@ -18,6 +18,7 @@ from tarot import render_lucky_cookie_tarot
 from order_service import save_order
 from sales_logger import get_worksheet
 from hot_menu_service import build_hot_menu_reply, get_hot_menu_number_map
+import customer_language as cl
 
 load_dotenv(".env")
 
@@ -80,113 +81,36 @@ def normalize_thai_numbers(text: str) -> str:
 
 
 def parse_order_from_message(message: str):
-    normalized = normalize_thai_numbers(message or "").lower().strip()
+    menu_prices = {}
 
-    # คำถามทั่วไป ไม่ใช่ออเดอร์
-    question_terms = [
-        "กี่บาท", "กี่โมง", "เวลาเปิด", "ร้านเปิด",
-        "มีอะไร", "เมนูอะไร", "ขายอะไร", "ราคาเท่าไหร่",
-        "โปรอะไร", "โปรโมชั่นอะไร"
-    ]
-    if any(term in normalized for term in question_terms):
-        return None
-
-    # ต้องมีเจตนาสั่ง หรือมีจำนวนพร้อมหน่วย
-    order_intent = any(keyword in normalized for keyword in ORDER_KEYWORDS)
-    quantity_match = re.search(r"(\d+)\s*(ชิ้น|อัน|กล่อง)?", normalized)
-    quantity = int(quantity_match.group(1)) if quantity_match else None
-
-    if not order_intent and quantity is None:
-        return None
-
-    # อ่านเมนูจาก shop_menu.json เป็นหลัก
-    menu_sources = []
-
+    # อ่านเมนูจาก shop_menu.json
     try:
-        with open("shop_menu.json", "r", encoding="utf-8") as f:
-            shop_menus = json.load(f)
-
-        for item in shop_menus:
-            if not isinstance(item, dict):
-                continue
-
-            name = item.get("name") or item.get("menu") or item.get("title")
-            price = item.get("price") or item.get("cookie_price") or 0
-
-            if name:
-                menu_sources.append((str(name), int(price)))
+        menu_prices.update(cl.load_menu_prices_from_json("shop_menu.json"))
     except Exception:
         pass
 
-    # สำรองจาก MENU_PRICES เก่า
-    for name, price in MENU_PRICES.items():
-        menu_sources.append((name, price))
+    # สำรองจากตัวแปรเดิมใน app.py
+    try:
+        menu_prices.update(MENU_PRICES)
+    except Exception:
+        pass
 
-    unique_menus = {}
-    for name, price in menu_sources:
-        unique_menus[name] = price
+    try:
+        menu_prices.update(MENU_ITEMS)
+    except Exception:
+        pass
 
-    def clean_text(value):
-        value = str(value).lower()
-        value = value.replace("คุกกี้", "")
-        value = value.replace(" ", "")
-        value = value.replace("-", "")
-        value = value.replace("_", "")
-        value = re.sub(r"\d+", "", value)
+    # map เลขเมนูจากเมนูขายดี Top 5
+    try:
+        menu_number_map = get_dynamic_menu_number_map()
+    except Exception:
+        menu_number_map = {}
 
-        for word in [
-            "ชิ้น", "อัน", "กล่อง", "จำนวน",
-            "เอา", "รับ", "ซื้อ", "สั่ง", "ขอ", "อยากได้", "อยากสั่ง"
-        ]:
-            value = value.replace(word, "")
-
-        return value.strip()
-
-    cleaned_message = clean_text(normalized)
-
-    matched_name = None
-    matched_price = 0
-
-    for name in sorted(unique_menus.keys(), key=lambda x: -len(x)):
-        name_lower = name.lower()
-        name_clean = clean_text(name)
-
-        # รองรับทั้งพิมพ์ชื่อเต็มและพิมพ์แบบไม่มีคำว่า “คุกกี้”
-        if name_lower in normalized or (name_clean and name_clean in cleaned_message):
-            matched_name = name
-            matched_price = unique_menus[name]
-            break
-
-    if not matched_name:
-        return None
-
-    # ถ้าระบุเมนูแต่ไม่ระบุจำนวน ให้ถามจำนวนต่อ ไม่บันทึกมั่ว
-    if quantity is None:
-        return {
-            "menu": matched_name,
-            "menu_name": matched_name,
-            "name": matched_name,
-            "quantity": None,
-            "price": matched_price,
-            "need_quantity": True,
-        }
-
-    return {
-        "menu": matched_name,
-        "menu_name": matched_name,
-        "name": matched_name,
-        "quantity": quantity,
-        "price": matched_price,
-    }
-
-api_key = os.getenv("GOOGLE_API_KEY")
-client = genai.Client(api_key=api_key) if api_key else None
-
-
-# =========================
-# RAG / Chatbot
-# =========================
-@st.cache_resource
+    return cl.extract_order_from_text(
+        message=message,
+        menu_prices=menu_prices,
+        menu_number_map=menu_number_map,
+    )
 def load_rag():
     return RAGEngine(KB_PATH)
 
@@ -647,30 +571,26 @@ st.caption("ถามเรื่องเมนู เวลาเปิด ร
 def direct_customer_answer(message: str):
     q = (message or "").lower().strip()
 
-    hot_menu_keywords = [
-        "เมนูขายดี",
-        "ขายดี",
-        "เมนูยอดฮิต",
-        "ยอดฮิต",
-        "เมนูยอดนิยม",
-        "ยอดนิยม",
-        "แนะนำเมนู",
-        "เมนูแนะนำ",
-        "แนะนำหน่อย",
-        "อะไรอร่อย",
-        "ตัวไหนดี",
-    ]
-
-    order_keywords = ["ซื้อ", "สั่ง", "สั่งซื้อ", "ออเดอร์", "order"]
-
-    if q in order_keywords:
+    if cl.is_order_start(q):
         return build_hot_menu_reply()
 
-    if any(keyword in q for keyword in hot_menu_keywords):
+    if cl.is_hot_menu_question(q):
         return build_hot_menu_reply()
+
+    flavor_preference = cl.detect_flavor_preference(q)
+    if flavor_preference:
+        return cl.build_flavor_reply(flavor_preference)
+
+    if cl.has_order_intent(q):
+        return (
+            "ได้เลยค่าา รับคุกกี้อะไรดีคะ 🍪\n\n"
+            "ถ้าลูกค้ายังเลือกไม่ถูก พิมพ์ว่า “เมนูขายดี” ได้เลยน้า "
+            "เดี๋ยว Demi แนะนำตัวฮิตให้ค่ะ\n\n"
+            "หรือพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น "
+            "“เอาคุกกี้คอร์นเฟลกคาราเมล 2 ชิ้น”"
+        )
 
     return None
-
 def load_popup_menu_items():
     base_dir = Path(__file__).resolve().parent
 
