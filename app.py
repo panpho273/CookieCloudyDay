@@ -2,6 +2,7 @@
 import json
 import os
 import re
+from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -190,7 +191,7 @@ def clean_answer(text: str) -> str:
     text = text.strip()
     text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
     text = text.replace("===", "")
-    text = text.replace("\\n", "\n")
+    text = text.replace("\n", "\n")
     return text.strip()
 
 
@@ -601,28 +602,69 @@ def direct_customer_answer(message: str):
     return None
 
 def load_popup_menu_items():
-    try:
-        with open("shop_menu.json", "r", encoding="utf-8") as f:
-            menus = json.load(f)
+    base_dir = Path(__file__).resolve().parent
 
-        result = []
-        for item in menus:
-            if not isinstance(item, dict):
+    possible_paths = [
+        base_dir / "shop_menu.json",
+        Path.cwd() / "shop_menu.json",
+        base_dir / "knowledge" / "shop_menu.json",
+    ]
+
+    for menu_path in possible_paths:
+        try:
+            if not menu_path.exists():
                 continue
 
-            name = item.get("name") or item.get("menu") or item.get("title")
-            price = item.get("price") or item.get("cookie_price") or 0
+            with open(menu_path, "r", encoding="utf-8") as f:
+                menus = json.load(f)
 
-            if name:
-                result.append({
-                    "name": str(name),
-                    "price": int(price),
-                })
+            result = []
+            for item in menus:
+                if not isinstance(item, dict):
+                    continue
 
-        return result
-    except Exception:
-        return []
+                name = item.get("name") or item.get("menu") or item.get("title")
+                price = item.get("price") or item.get("cookie_price") or 0
 
+                if name:
+                    result.append({
+                        "name": str(name),
+                        "price": int(price),
+                    })
+
+            if result:
+                return result
+        except Exception:
+            pass
+
+    # fallback: ถ้า shop_menu.json ไม่อยู่ใน Streamlit ให้ดึงจาก knowledge แทน
+    kb_paths = [
+        base_dir / "knowledge" / "cookiecloudyday_kb.txt",
+        Path.cwd() / "knowledge" / "cookiecloudyday_kb.txt",
+    ]
+
+    for kb_path in kb_paths:
+        try:
+            if not kb_path.exists():
+                continue
+
+            text = kb_path.read_text(encoding="utf-8")
+            result = []
+
+            for line in text.splitlines():
+                match = re.search(r"\d+\.\s*(คุกกี้.+?)\s+ราคา\s+(\d+)\s+บาท", line)
+                if match:
+                    result.append({
+                        "name": match.group(1).strip(),
+                        "price": int(match.group(2)),
+                    })
+
+            if result:
+                return result
+        except Exception:
+            pass
+
+    return []
 
 def send_realtime_order_to_telegram(menu_name, quantity, price, total):
     token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
@@ -635,10 +677,10 @@ def send_realtime_order_to_telegram(menu_name, quantity, price, total):
         from urllib import parse, request
 
         message = (
-            "🍪 CookieCloudyDay มีออเดอร์ใหม่\\n"
-            f"เมนู: {menu_name}\\n"
-            f"จำนวน: {quantity} ชิ้น\\n"
-            f"ราคา/ชิ้น: {price:,} บาท\\n"
+            "🍪 CookieCloudyDay มีออเดอร์ใหม่\n"
+            f"เมนู: {menu_name}\n"
+            f"จำนวน: {quantity} ชิ้น\n"
+            f"ราคา/ชิ้น: {price:,} บาท\n"
             f"ยอดรวม: {total:,} บาท"
         )
 
@@ -702,8 +744,8 @@ def render_menu_order_popup():
     total = int(selected_item["price"]) * int(quantity)
 
     st.info(
-        f"รายการ: {selected_item['name']}\\n\\n"
-        f"จำนวน: {int(quantity)} ชิ้น\\n\\n"
+        f"รายการ: {selected_item['name']}\n\n"
+        f"จำนวน: {int(quantity)} ชิ้น\n\n"
         f"ยอดรวม: {total:,} บาท"
     )
 
@@ -727,14 +769,14 @@ def render_menu_order_popup():
 
             promo_text = ""
             if total >= 150:
-                promo_text = "\\n\\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ สามารถกดรับไพ่และคำทำนายได้เลย"
+                promo_text = "\n\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ สามารถกดรับไพ่และคำทำนายได้เลย"
 
             answer = (
-                f"รับออเดอร์เรียบร้อยค่ะ 🍪\\n\\n"
-                f"รายการ: {menu_name}\\n"
-                f"จำนวน: {qty} ชิ้น\\n"
+                f"รับออเดอร์เรียบร้อยค่ะ 🍪\n\n"
+                f"รายการ: {menu_name}\n"
+                f"จำนวน: {qty} ชิ้น\n"
                 f"ยอดรวม: {total:,} บาท"
-                f"{promo_text}\\n\\n"
+                f"{promo_text}\n\n"
                 f"ขอบคุณที่สั่งคุกกี้กับ CookieCloudyDay นะคะ ☁️"
             )
 
@@ -780,7 +822,7 @@ if prompt:
         st.session_state.show_menu_order_popup = True
 
         answer = (
-            "ได้เลยค่ะ เปิดเมนูทั้งหมดให้เลือกแล้วนะคะ 🍪\\n\\n"
+            "ได้เลยค่ะ เปิดเมนูทั้งหมดให้เลือกแล้วนะคะ 🍪\n\n"
             "ลูกค้าสามารถเลือกเมนูและจำนวนจากหน้าต่าง popup ได้เลยค่ะ"
         )
 
