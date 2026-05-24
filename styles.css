@@ -970,7 +970,7 @@ div[role="dialog"] [data-testid="stSelectbox"] svg {
 
 /* ===== SELECTBOX DROPDOWN FINAL FIX START ===== */
 
-/* กล่อง dropdown ที่เด้งออกมา: ไม่เอาแถบดำ */
+/* ============= DROPDOWN CONTAINER ============= */
 div[data-baseweb="popover"],
 div[data-baseweb="popover"] > div,
 div[data-baseweb="popover"] > div > div,
@@ -990,7 +990,7 @@ div[role="listbox"] {
   scrollbar-color: #b79cff #f7f0ff !important;
 }
 
-/* ทุกชั้นข้างใน dropdown ให้เป็นฟอนต์เดียวกัน */
+/* ============= ALL NESTED TEXT ============= */
 div[data-baseweb="popover"] *,
 div[data-baseweb="menu"] *,
 ul[role="listbox"] *,
@@ -999,10 +999,12 @@ div[role="listbox"] * {
   color: #4a2e2a !important;
 }
 
-/* รายการเมนู */
+/* ============= MENU ITEMS (ALL STATES) ============= */
 li[role="option"],
 div[role="option"],
-ul[role="listbox"] li {
+ul[role="listbox"] li,
+div[data-baseweb="menu"] div,
+div[data-baseweb="menu"] li {
   background: #fffafd !important;
   background-color: #fffafd !important;
   color: #4a2e2a !important;
@@ -1011,97 +1013,12 @@ ul[role="listbox"] li {
   font-weight: 650 !important;
   padding: 0.82rem 1rem !important;
   line-height: 1.45 !important;
-}
-
-/* รายการที่ hover / selected */
-li[role="option"]:hover,
-div[role="option"]:hover,
-li[aria-selected="true"],
-div[aria-selected="true"] {
-  background: #eee7ff !important;
-  background-color: #eee7ff !important;
-  color: #4a2e2a !important;
-  border-radius: 10px !important;
-}
-
-/* scrollbar Chrome/Edge/Safari */
-div[data-baseweb="popover"]::-webkit-scrollbar,
-div[data-baseweb="popover"] *::-webkit-scrollbar,
-div[data-baseweb="menu"]::-webkit-scrollbar,
-div[data-baseweb="menu"] *::-webkit-scrollbar,
-ul[role="listbox"]::-webkit-scrollbar,
-ul[role="listbox"] *::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"] *::-webkit-scrollbar {
-  width: 8px !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-track,
-div[data-baseweb="popover"] *::-webkit-scrollbar-track,
-div[data-baseweb="menu"]::-webkit-scrollbar-track,
-div[data-baseweb="menu"] *::-webkit-scrollbar-track,
-ul[role="listbox"]::-webkit-scrollbar-track,
-ul[role="listbox"] *::-webkit-scrollbar-track,
-div[role="listbox"]::-webkit-scrollbar-track,
-div[role="listbox"] *::-webkit-scrollbar-track {
-  background: #f7f0ff !important;
-  border-radius: 999px !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
-div[data-baseweb="popover"] *::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"] *::-webkit-scrollbar-thumb,
-ul[role="listbox"]::-webkit-scrollbar-thumb,
-ul[role="listbox"] *::-webkit-scrollbar-thumb,
-div[role="listbox"]::-webkit-scrollbar-thumb,
-div[role="listbox"] *::-webkit-scrollbar-thumb {
-  background: #b79cff !important;
-  border-radius: 999px !important;
-  border: 2px solid #f7f0ff !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-thumb:hover,
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb:hover,
-ul[role="listbox"]::-webkit-scrollbar-thumb:hover,
-div[role="listbox"]::-webkit-scrollbar-thumb:hover {
-  background: #8f6df5 !important;
-}
-
-/* ===== SELECTBOX DROPDOWN FINAL FIX END ===== */
-
-/* ===== FIX DROPDOWN ACTIVE BLACK ROW START ===== */
-
-/* กล่อง dropdown หลัก */
-div[data-baseweb="popover"],
-div[data-baseweb="popover"] > div,
-div[data-baseweb="menu"],
-ul[role="listbox"],
-div[role="listbox"] {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-  color: #4a2e2a !important;
-  border: 1px solid rgba(125, 94, 219, 0.20) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
-  font-family: 'Mitr', sans-serif !important;
-}
-
-/* รายการทุกตัวใน dropdown */
-li[role="option"],
-div[role="option"],
-ul[role="listbox"] li,
-div[data-baseweb="menu"] div {
-  background: #fffafd !important;
-  background-color: #fffafd !important;
-  color: #4a2e2a !important;
-  font-family: 'Mitr', sans-serif !important;
-  font-weight: 650 !important;
   outline: none !important;
   box-shadow: none !important;
+  border: none !important;
 }
 
-/* ตัวที่ถูก hover / focus / selected ห้ามเป็นดำ */
+/* ============= HOVER / ACTIVE / SELECTED ============= */
 li[role="option"]:hover,
 div[role="option"]:hover,
 li[role="option"]:focus,
@@ -1118,6 +1035,93 @@ div[data-baseweb="menu"] div:active {
   background: #eee7ff !important;
   background-color: #eee7ff !important;
   color: #4a2e2a !important;
+  border-radius: 10px !important;
+}
+
+/* ============= WEBKIT SCROLLBAR - WIDTH ============= */
+div[data-baseweb="popover"]::-webkit-scrollbar,
+div[data-baseweb="menu"]::-webkit-scrollbar,
+ul[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+/* ============= WEBKIT SCROLLBAR - TRACK ============= */
+div[data-baseweb="popover"]::-webkit-scrollbar-track,
+div[data-baseweb="menu"]::-webkit-scrollbar-track,
+ul[role="listbox"]::-webkit-scrollbar-track,
+div[role="listbox"]::-webkit-scrollbar-track {
+  background: #f7f0ff !important;
+  border-radius: 999px !important;
+}
+
+/* ============= WEBKIT SCROLLBAR - THUMB (NORMAL) ============= */
+div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
+ul[role="listbox"]::-webkit-scrollbar-thumb,
+div[role="listbox"]::-webkit-scrollbar-thumb {
+  background: #b79cff !important;
+  border-radius: 999px !important;
+  border: 2px solid #f7f0ff !important;
+}
+
+/* ============= WEBKIT SCROLLBAR - THUMB (HOVER) ============= */
+div[data-baseweb="popover"]::-webkit-scrollbar-thumb:hover,
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb:hover,
+ul[role="listbox"]::-webkit-scrollbar-thumb:hover,
+div[role="listbox"]::-webkit-scrollbar-thumb:hover {
+  background: #8f6df5 !important;
+}
+
+/* ===== SELECTBOX DROPDOWN FINAL FIX END ===== */
+
+/* ===== AGGRESSIVE SCROLLBAR & COLOR OVERRIDE START ===== */
+
+/* ล้างสีดำที่ BaseWeb ตั้งไว้เริ่มต้น */
+div[data-baseweb="popover"],
+div[data-baseweb="menu"],
+ul[role="listbox"],
+div[role="listbox"],
+li[role="option"],
+div[role="option"] {
+  color: #4a2e2a !important;
+}
+
+/* ตัวใหญ่ - เซ็ตสี + ฟอนต์ให้ทั้งหมดในรายการ */
+div[data-baseweb="menu"] li,
+div[data-baseweb="menu"] div,
+ul[role="listbox"] li,
+ul[role="listbox"] div {
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+}
+
+/* span / text nodes ข้างใน dropdown - ล้างสีดำ */
+div[data-baseweb="popover"] span,
+div[data-baseweb="menu"] span,
+ul[role="listbox"] span,
+div[role="listbox"] span,
+li[role="option"] span,
+div[role="option"] span {
+  color: #4a2e2a !important;
+}
+
+/* ===== AGGRESSIVE SCROLLBAR & COLOR OVERRIDE END ===== */
+
+/* ===== FIX DROPDOWN ACTIVE BLACK ROW START ===== */
+
+/* ลบสีเริ่มต้นที่ Streamlit/BaseWeb ตั้งไว้ */
+div[data-baseweb="popover"] {
+  color: #4a2e2a !important;
+}
+
+div[data-baseweb="menu"] {
+  color: #4a2e2a !important;
+}
+
+ul[role="listbox"],
+div[role="listbox"] {
+  color: #4a2e2a !important;
   outline: none !important;
   box-shadow: none !important;
   border-radius: 10px !important;
@@ -1129,44 +1133,6 @@ div[role="option"] *,
 div[data-baseweb="menu"] div * {
   color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
-}
-
-/* ลบ focus ring สีดำของ browser/baseweb */
-div[data-baseweb="popover"] *:focus,
-div[data-baseweb="menu"] *:focus,
-ul[role="listbox"] *:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* scrollbar ให้ไม่ดำ */
-div[data-baseweb="popover"]::-webkit-scrollbar,
-div[data-baseweb="popover"] *::-webkit-scrollbar,
-div[data-baseweb="menu"]::-webkit-scrollbar,
-div[data-baseweb="menu"] *::-webkit-scrollbar,
-ul[role="listbox"]::-webkit-scrollbar,
-ul[role="listbox"] *::-webkit-scrollbar {
-  width: 8px !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-track,
-div[data-baseweb="popover"] *::-webkit-scrollbar-track,
-div[data-baseweb="menu"]::-webkit-scrollbar-track,
-div[data-baseweb="menu"] *::-webkit-scrollbar-track,
-ul[role="listbox"]::-webkit-scrollbar-track,
-ul[role="listbox"] *::-webkit-scrollbar-track {
-  background: #f7f0ff !important;
-  border-radius: 999px !important;
-}
-
-div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
-div[data-baseweb="popover"] *::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
-div[data-baseweb="menu"] *::-webkit-scrollbar-thumb,
-ul[role="listbox"]::-webkit-scrollbar-thumb,
-ul[role="listbox"] *::-webkit-scrollbar-thumb {
-  background: #b79cff !important;
-  border-radius: 999px !important;
 }
 
 /* ===== FIX DROPDOWN ACTIVE BLACK ROW END ===== */
