@@ -1186,3 +1186,67 @@ html body [data-testid="stSelectbox"] * {
 
 /* ===== END FORCE DROPDOWN FONT AND TEXT COLOR FINAL ===== */
 
+
+/* ===== ABSOLUTE FORCE SELECTBOX FONT FINAL ===== */
+
+/* บังคับ font ให้ portal/dropdown ของ BaseWeb ทั้งหมด */
+html body [data-baseweb="popover"],
+html body [data-baseweb="popover"] *,
+html body [data-baseweb="menu"],
+html body [data-baseweb="menu"] *,
+html body [data-baseweb="select"],
+html body [data-baseweb="select"] *,
+html body [role="listbox"],
+html body [role="listbox"] *,
+html body [role="option"],
+html body [role="option"] *,
+html body [data-testid="stSelectbox"],
+html body [data-testid="stSelectbox"] * {
+  font-family: 'Mitr', 'Baloo 2', sans-serif !important;
+  color: #4a2e2a !important;
+  text-shadow: none !important;
+  letter-spacing: 0 !important;
+}
+
+/* ตัวหนังสือรายการเมนูใน dropdown */
+html body [role="option"],
+html body [role="option"] div,
+html body [role="option"] span,
+html body [role="option"] p,
+html body [role="listbox"] li,
+html body [role="listbox"] li div,
+html body [role="listbox"] li span,
+html body [role="listbox"] li p {
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 15.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.55 !important;
+  color: #4a2e2a !important;
+}
+
+/* ตัวหนังสือใน selectbox ตอนยังไม่เปิด */
+html body [data-baseweb="select"] div,
+html body [data-baseweb="select"] span,
+html body [data-baseweb="select"] p {
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 15.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  color: #4a2e2a !important;
+}
+
+/* hover/selected ให้ font ไม่เด้งกลับ */
+html body [role="option"]:hover,
+html body [role="option"]:hover *,
+html body [aria-selected="true"],
+html body [aria-selected="true"] *,
+html body [data-highlighted="true"],
+html body [data-highlighted="true"] * {
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 600 !important;
+  color: #4a2e2a !important;
+  background-color: #eee7ff !important;
+}
+
+/* ===== END ABSOLUTE FORCE SELECTBOX FONT FINAL ===== */
+
