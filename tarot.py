@@ -121,12 +121,12 @@ def lucky_cookie_tarot_dialog():
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("🔄 สุ่มไพ่ใหม่", use_container_width=True):
+        if st.button("🔄 สุ่มไพ่ใหม่", key="btn_redraw_lucky_cookie_tarot", use_container_width=True):
             st.session_state["lucky_tarot_card"] = draw_tarot_card()
             st.rerun()
 
     with col2:
-        if st.button("✅ จบออเดอร์และเริ่มแชทใหม่", use_container_width=True):
+        if st.button("✅ จบออเดอร์และเริ่มแชทใหม่", key="btn_finish_order_new_chat", use_container_width=True):
             reset_order_chat()
             st.rerun()
 
@@ -142,7 +142,7 @@ def render_lucky_cookie_tarot():
         f"ครบ {promo.get('quantity')} ชิ้น ยอดรวม {promo.get('total')} บาท"
     )
 
-    if st.button("🔮 รับไพ่คุกกี้และคำทำนาย", use_container_width=True):
+    if st.button("🔮 รับไพ่คุกกี้และคำทำนาย", key="btn_draw_lucky_cookie_tarot", use_container_width=True):
         st.session_state["show_lucky_tarot"] = True
         st.session_state["lucky_tarot_card"] = draw_tarot_card()
 

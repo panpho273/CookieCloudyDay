@@ -821,12 +821,6 @@ for msg in st.session_state.messages:
 if st.session_state.get("show_menu_order_popup"):
     render_menu_order_popup()
 
-if st.session_state.get("show_lucky_tarot") or st.session_state.get("show_tarot"):
-    try:
-        render_lucky_cookie_tarot()
-    except Exception as e:
-        st.warning(f"เปิด Lucky Cookie Tarot ไม่สำเร็จ: {e}")
-
 prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")
 
 
