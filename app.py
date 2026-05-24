@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import random
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -21,6 +22,47 @@ from hot_menu_service import build_hot_menu_reply, get_hot_menu_number_map
 import customer_language as cl
 
 load_dotenv(".env")
+
+# FORCE_MITR_FONT_FOR_PORTAL
+
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
+
+    html, body, div, span, p, label, input, textarea, button,
+    [data-baseweb="popover"],
+    [data-baseweb="popover"] *,
+    [data-baseweb="menu"],
+    [data-baseweb="menu"] *,
+    [data-baseweb="select"],
+    [data-baseweb="select"] *,
+    [role="listbox"],
+    [role="listbox"] *,
+    [role="option"],
+    [role="option"] * {
+        font-family: 'Mitr', sans-serif !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# =========================
+# Gemini Client Init
+# =========================
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
+
+client = None
+if GOOGLE_API_KEY:
+    try:
+        client = genai.Client(api_key=GOOGLE_API_KEY)
+    except Exception as e:
+        print("Gemini client init error:", repr(e))
+        client = None
+
 
 # =========================
 # Page Config
@@ -113,6 +155,17 @@ def parse_order_from_message(message: str):
     )
 def load_rag():
     return RAGEngine(KB_PATH)
+
+
+def get_genai_client():
+    """Initialize and return Google Gemini API client."""
+    try:
+        api_key = get_secret_value("GOOGLE_API_KEY")
+        if api_key:
+            return genai.Client(api_key=api_key)
+    except Exception:
+        pass
+    return None
 
 
 def clean_answer(text: str) -> str:
@@ -375,11 +428,11 @@ MENU_ITEMS = {
 HOT_MENU_REPLY = """ได้เลยค่ะ รับคุกกี้อะไรดีคะ 🍪
 
 วันนี้เมนูยอดฮิตของ CookieCloudyDay มี:
-1. คุกกี้ช็อกโกแลตชิพ — 45 บาท
-2. คุกกี้แมคคาเดเมียไวท์ช็อก — 65 บาท
-3. คุกกี้เนยสด — 55 บาท
-4. คุกกี้สตรอว์เบอร์รีชีสเค้ก — 59 บาท
-5. คุกกี้ช็อกโกแลตลาวา — 59 บาท
+1. คุกกี้ช็อกโกแลตชิพ ราคา 45 บาท
+2. คุกกี้แมคคาเดเมียไวท์ช็อก ราคา 65 บาท
+3. คุกกี้เนยสด ราคา 55 บาท
+4. คุกกี้สตรอว์เบอร์รีชีสเค้ก ราคา 59 บาท
+5. คุกกี้ช็อกโกแลตลาวา ราคา 59 บาท
 
 ลูกค้าพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น
 “เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"""
@@ -523,7 +576,7 @@ def get_hot_menu_reply():
         menu = item["menu"]
         price = item["price"] or MENU_PRICE_MAP.get(menu, 0)
         if price:
-            lines.append(f"{index}. {menu} — {price} บาท")
+            lines.append(f"{index}. {menu} ราคา {price} บาท")
         else:
             lines.append(f"{index}. {menu}")
 
@@ -563,13 +616,88 @@ def normalize_menu_number_order(message: str) -> str:
     return text
 
 rag = load_rag()
+client = get_genai_client()
 
-st.title("☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay")
-st.caption("ถามเรื่องเมนู เวลาเปิด ราคา หรือข้อมูลร้านได้เลย")
+st.markdown(
+    """
+    <section class="hero-card">
+        <div class="hero-content">
+            <div class="hero-kicker">CookieCloudyDay Assistant</div>
+            <h1><span class="hero-cloud">☁️</span>Demi ผู้ช่วย AI ของร้านคุกกี้</h1>
+            <p>ถามเมนู เวลาเปิดร้าน ราคา หรือให้ Demi ช่วยแนะนำคุกกี้ที่เหมาะกับคุณได้เลยค่ะ</p>
+        </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+
+
+def build_new_menu_reply(limit=5):
+    """
+    ตอบเมนูใหม่/เมนูน่าลอง โดยสุ่มจาก shop_menu.json
+    ไม่โชว์ยอดขายหลังร้านให้ลูกค้าเห็น
+    """
+    try:
+        menus = load_popup_menu_items()
+    except Exception:
+        menus = []
+
+    if not menus:
+        return (
+            "ได้เลยค่า 🍪\n\n"
+            "ตอนนี้ Demi ยังโหลดเมนูใหม่ให้ไม่ได้แป๊บนึงนะคะ "
+            "ลูกค้าพิมพ์ว่า “เมนูทั้งหมด” เพื่อดูเมนูที่มีในร้านได้เลยค่ะ"
+        )
+
+    # ถือว่าเมนูท้ายไฟล์คือกลุ่มที่เพิ่งเพิ่ม/เมนูใหม่กว่า
+    recent_pool = menus[-12:] if len(menus) > 12 else menus[:]
+
+    count = min(limit, len(recent_pool))
+    picked = random.SystemRandom().sample(recent_pool, count)
+
+    lines = [
+        "ได้เลยค่าา 🍪",
+        "",
+        "ถ้าถามหาเมนูใหม่ ๆ หรือเมนูน่าลอง ตอนนี้ Demi แนะนำประมาณนี้ค่ะ:",
+        "",
+    ]
+
+    for index, item in enumerate(picked, start=1):
+        name = item.get("name", "เมนูคุกกี้")
+        price = int(item.get("price", 0) or 0)
+
+        if price:
+            lines.append(f"{index}. {name} ราคา {price} บาท")
+        else:
+            lines.append(f"{index}. {name}")
+
+    lines += [
+        "",
+        "ถ้าชอบแนวไหนบอก Demi ได้เลยน้า เช่น ชอบช็อกโกแลต ชอบกรอบ ๆ หรือชอบหวานน้อย",
+        "หรือพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น “เอาเมนู 1 จำนวน 2 ชิ้น”",
+    ]
+
+    return "\n".join(lines)
 
 
 def direct_customer_answer(message: str):
     q = (message or "").lower().strip()
+
+    new_menu_keywords = [
+        "เมนูใหม่",
+        "มีเมนูใหม่ไหม",
+        "เมนูที่เพิ่งเพิ่ม",
+        "เมนูมาใหม่",
+        "คุกกี้ใหม่",
+        "แนะนำเมนูใหม่",
+        "ตัวใหม่",
+        "เมนูน่าลอง",
+    ]
+
+    if any(keyword in q for keyword in new_menu_keywords):
+        return build_new_menu_reply(limit=5)
 
     if cl.is_order_start(q):
         return build_hot_menu_reply()
@@ -727,7 +855,8 @@ def render_menu_order_popup():
         unsafe_allow_html=True,
     )
 
-    menu_names = [f"{item['name']} — {item['price']} บาท" for item in menus]
+    # แสดงแค่ชื่อเมนูใน dropdown เพราะราคาสรุปอยู่ในกล่องออเดอร์แล้ว
+    menu_names = [str(item["name"]) for item in menus]
 
     selected_label = st.selectbox(
         "เมนูที่อยากสั่ง",
@@ -926,7 +1055,7 @@ if prompt:
         else:
             try:
                 response = client.models.generate_content(
-                    model=MODEL_NAME,
+                    model=MODEL,
                     contents=full_prompt,
                 )
                 answer = response.text.strip() if response.text else fallback_answer(prompt)
@@ -940,6 +1069,10 @@ if prompt:
     with st.chat_message("assistant"):
         st.write(answer)
 
+    # แสดง Lucky Tarot dialog ถ้าลูกค้าเข้าเงื่อนไขโปร
+    if st.session_state.get("show_lucky_tarot"):
+        render_lucky_cookie_tarot()
+
 
 DEMI_CUSTOMER_RULES = """
 กฎการตอบลูกค้าของ Demi:
@@ -949,6 +1082,3 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
-
-
-render_lucky_cookie_tarot()

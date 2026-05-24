@@ -708,51 +708,479 @@ div[role="dialog"] .stButton > button {
 
 /* ===== FINAL POPUP RESTORE END ===== */
 
-/* ===== CLIP SELECTBOX BLACK SCROLLBAR START ===== */
+/* ===== POPUP CENTER ALIGN FIX START ===== */
 
-/* ตัดขอบ dropdown ไม่ให้เห็น scrollbar ดำด้านขวา */
-html body div[data-baseweb="popover"],
-html body div[data-baseweb="popover"] > div,
-html body div[data-baseweb="popover"] > div > div {
-  overflow: hidden !important;
-  border-radius: 18px !important;
-  background: #fffafd !important;
+/* ให้เนื้อหาใน dialog จัดกึ่งกลางทั้งหมด */
+div[role="dialog"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
 }
 
-/* ดัน scrollbar จริงออกไปนอกกรอบ */
-html body ul[role="listbox"],
-html body div[role="listbox"],
-html body div[data-baseweb="menu"] {
-  width: calc(100% + 18px) !important;
-  max-width: calc(100% + 18px) !important;
-  padding-right: 18px !important;
-  margin-right: -18px !important;
+/* กำหนดความกว้างหลักของทุกส่วนใน popup ให้เท่ากัน */
+div[role="dialog"] .order-popup-shell,
+div[role="dialog"] .order-summary-box,
+div[role="dialog"] [data-testid="stSelectbox"],
+div[role="dialog"] [data-testid="stNumberInput"] {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 
+/* ตัวเลือกเมนูให้กว้างเต็มกรอบเดียวกัน */
+div[role="dialog"] [data-testid="stSelectbox"] > div,
+div[role="dialog"] [data-baseweb="select"] {
+  width: 100% !important;
+}
+
+/* number input ให้กว้างเท่ากับ selectbox */
+div[role="dialog"] [data-testid="stNumberInput"] > div {
+  width: 100% !important;
+}
+
+/* กล่องสรุปให้ไม่ใหญ่/ไม่ลอยออก */
+div[role="dialog"] .order-summary-box {
+  box-sizing: border-box !important;
+}
+
+/* ปุ่มล่างให้กว้างเท่ากับกล่องด้านบน */
+div[role="dialog"] [data-testid="stHorizontalBlock"] {
+  width: 100% !important;
+  max-width: 460px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ปรับ label ให้เริ่มตรงกับ input */
+div[role="dialog"] [data-testid="stSelectbox"] label,
+div[role="dialog"] [data-testid="stNumberInput"] label {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* ลดความกว้างหัวด้านบนนิด ให้บาลานซ์กับ input */
+div[role="dialog"] .order-popup-shell {
+  padding: 1.25rem 1.25rem !important;
+}
+
+/* mobile */
+@media (max-width: 640px) {
+  div[role="dialog"] .order-popup-shell,
+  div[role="dialog"] .order-summary-box,
+  div[role="dialog"] [data-testid="stSelectbox"],
+  div[role="dialog"] [data-testid="stNumberInput"],
+  div[role="dialog"] [data-testid="stHorizontalBlock"] {
+    max-width: 100% !important;
+  }
+}
+
+/* ===== POPUP CENTER ALIGN FIX END ===== */
+
+/* ===== STOP POPUP TEXT SELECT AND BUTTON ACTIVE FIX START ===== */
+
+/* กันการลากเลือกข้อความทั้ง popup */
+div[role="dialog"],
+div[role="dialog"] *,
+div[data-testid="stDialog"],
+div[data-testid="stDialog"] * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* ยกเว้นช่องกรอก ให้ยังคลิก/พิมพ์ได้ */
+div[role="dialog"] input,
+div[role="dialog"] textarea,
+div[role="dialog"] [contenteditable="true"] {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+/* กันข้อความ summary โดยเฉพาะ ไม่ให้โดนเลือกเป็นแถบน้ำเงิน */
+.order-summary-box,
+.order-summary-box *,
+.order-popup-shell,
+.order-popup-shell * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* ปุ่ม - + ทุกสถานะ ให้สีเดียวกัน */
+div[role="dialog"] [data-testid="stNumberInput"] button,
+div[role="dialog"] [data-testid="stNumberInput"] button:hover,
+div[role="dialog"] [data-testid="stNumberInput"] button:focus,
+div[role="dialog"] [data-testid="stNumberInput"] button:focus-visible,
+div[role="dialog"] [data-testid="stNumberInput"] button:active,
+div[role="dialog"] [data-testid="stNumberInput"] button:disabled,
+div[role="dialog"] [data-testid="stNumberInput"] button[disabled] {
+  background: #e6dcff !important;
+  background-color: #e6dcff !important;
+  color: #6c48c8 !important;
+  opacity: 1 !important;
+  border: none !important;
+  border-left: 1px solid rgba(125, 94, 219, 0.14) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  min-width: 44px !important;
+  min-height: 48px !important;
+  font-weight: 900 !important;
+}
+
+/* ลบสี focus/active ของ browser ที่อาจติดมากับปุ่ม */
+div[role="dialog"] [data-testid="stNumberInput"] button * {
+  color: #6c48c8 !important;
+  fill: #6c48c8 !important;
+  stroke: #6c48c8 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* ถ้ามี selection เกิดขึ้นจริง ให้ทำเป็นโปร่งใส */
+div[role="dialog"] ::selection {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+div[role="dialog"] ::-moz-selection {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* ===== STOP POPUP TEXT SELECT AND BUTTON ACTIVE FIX END ===== */
+
+/* ===== POPUP SELECT TEXT CENTER FIX START ===== */
+
+/* กล่อง select ใน popup ให้จัดข้อความกลางแนวตั้ง */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+  min-height: 50px !important;
+  height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 18px !important;
+}
+
+/* ข้อความใน select ให้ไม่ลอย */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] span,
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] div {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1.2 !important;
+}
+
+/* ตัวข้อความเมนูที่เลือก */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] div[aria-haspopup="listbox"] {
+  height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ลด padding แปลก ๆ ที่ทำให้ข้อความลอย */
+div[role="dialog"] [data-testid="stSelectbox"] [data-baseweb="select"] > div > div {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* ลูกศร dropdown ให้อยู่กลางเหมือนกัน */
+div[role="dialog"] [data-testid="stSelectbox"] svg {
+  align-self: center !important;
+  color: rgba(125, 94, 219, 0.65) !important;
+}
+
+/* ===== POPUP SELECT TEXT CENTER FIX END ===== */
+
+/* ===== TAROT POPUP STYLE START ===== */
+.tarot-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  color: #4a2e2a;
+  font-family: 'Mitr', sans-serif;
+}
+
+.tarot-card {
+  width: 190px;
+  min-height: 260px;
+  margin: 0 auto 1.6rem auto;
+  padding: 1.5rem 1.1rem;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #ffe8dc 0%, #f7d7cb 100%);
+  border: 1px solid rgba(125, 94, 219, 0.18);
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tarot-cookie {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.tarot-name {
+  text-align: center;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.tarot-sub {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: rgba(74, 46, 42, 0.62);
+  font-weight: 700;
+}
+
+.tarot-section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.tarot-meaning {
+  line-height: 1.85;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tarot-keyword {
+  padding: 1rem;
+  border-radius: 14px;
+  background: #dceeff;
+  color: #4a2e2a;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.tarot-promo {
+  padding: 1rem;
+  border-radius: 14px;
+  background: #d8f5df;
+  color: #315c3c;
+  font-weight: 700;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+/* ===== TAROT POPUP STYLE END ===== */
+
+/* ===== RESTORE PURPLE SELECTBOX DROPDOWN START ===== */
+
+/* กล่อง dropdown หลัก */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
+div[data-baseweb="popover"] > div > div,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] > div,
+ul[role="listbox"],
+div[role="listbox"] {
   background: #fffafd !important;
   background-color: #fffafd !important;
   color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
+  border: 1px solid rgba(125, 94, 219, 0.20) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.16) !important;
+  color-scheme: light !important;
+}
 
+/* ให้ listbox เป็นตัว scroll แต่ซ่อน scrollbar ดำ */
+ul[role="listbox"],
+div[role="listbox"],
+div[data-baseweb="menu"] {
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  border-radius: 18px !important;
+  max-height: 320px !important;
+  padding: 0 !important;
+
+  /* ซ่อน scrollbar จริงที่เป็นดำ */
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
-/* สีรายการเมนู */
-html body [role="option"],
-html body [role="option"] * {
+/* Chrome / Edge / Safari: ซ่อน scrollbar ดำ */
+ul[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar,
+div[data-baseweb="menu"]::-webkit-scrollbar,
+ul[role="listbox"] *::-webkit-scrollbar,
+div[role="listbox"] *::-webkit-scrollbar,
+div[data-baseweb="menu"] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ทำรางม่วงปลอมด้านขวาแทน scrollbar ดำ */
+ul[role="listbox"],
+div[role="listbox"] {
+  box-shadow:
+    inset -7px 0 0 #f1e8ff,
+    0 18px 42px rgba(86, 60, 140, 0.16) !important;
+}
+
+/* รายการเมนู */
+li[role="option"],
+div[role="option"],
+ul[role="listbox"] li,
+div[data-baseweb="menu"] [role="option"] {
+  background: #fffafd !important;
   background-color: #fffafd !important;
   color: #4a2e2a !important;
   font-family: 'Mitr', sans-serif !important;
+  font-size: 0.96rem !important;
+  font-weight: 650 !important;
+  line-height: 1.45 !important;
+  padding: 0.82rem 1rem !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-/* แถวที่เลือก */
-html body [role="option"]:hover,
-html body [role="option"]:focus,
-html body [aria-selected="true"],
-html body [data-highlighted="true"] {
+/* ข้อความข้างใน */
+li[role="option"] *,
+div[role="option"] *,
+ul[role="listbox"] li *,
+div[data-baseweb="menu"] [role="option"] * {
+  background: transparent !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 650 !important;
+}
+
+/* hover / selected */
+li[role="option"]:hover,
+div[role="option"]:hover,
+li[role="option"]:focus,
+div[role="option"]:focus,
+li[aria-selected="true"],
+div[aria-selected="true"] {
+  background: #eee7ff !important;
   background-color: #eee7ff !important;
   color: #4a2e2a !important;
+  border: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-/* ===== CLIP SELECTBOX BLACK SCROLLBAR END ===== */
+/* กัน focus/selection สีดำ */
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"] *,
+ul[role="listbox"] *,
+div[role="listbox"] * {
+  outline: none !important;
+  text-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+div[data-baseweb="popover"] ::selection,
+div[data-baseweb="menu"] ::selection,
+ul[role="listbox"] ::selection,
+div[role="listbox"] ::selection {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* ===== RESTORE PURPLE SELECTBOX DROPDOWN END ===== */
+
+/* ===== HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
+
+/* ซ่อน scrollbar ดำใน dropdown แต่ยังเลื่อนได้ */
+html body div[data-baseweb="popover"],
+html body div[data-baseweb="popover"] *,
+html body div[data-baseweb="menu"],
+html body div[data-baseweb="menu"] *,
+html body ul[role="listbox"],
+html body ul[role="listbox"] *,
+html body div[role="listbox"],
+html body div[role="listbox"] * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html body div[data-baseweb="popover"]::-webkit-scrollbar,
+html body div[data-baseweb="popover"] *::-webkit-scrollbar,
+html body div[data-baseweb="menu"]::-webkit-scrollbar,
+html body div[data-baseweb="menu"] *::-webkit-scrollbar,
+html body ul[role="listbox"]::-webkit-scrollbar,
+html body ul[role="listbox"] *::-webkit-scrollbar,
+html body div[role="listbox"]::-webkit-scrollbar,
+html body div[role="listbox"] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* กันพื้นที่ดำด้านขวาที่เหลือจาก scrollbar */
+html body div[data-baseweb="menu"],
+html body div[data-baseweb="menu"] > div,
+html body div[data-baseweb="menu"] > div > div,
+html body ul[role="listbox"],
+html body div[role="listbox"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  padding-right: 0 !important;
+  border-right: 1px solid rgba(125, 94, 219, 0.20) !important;
+}
+
+/* ===== END HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
+
+/* ===== SELECTBOX FONT CLEAN FINAL START ===== */
+
+/* selectbox ตอนปิด */
+html body [data-baseweb="select"],
+html body [data-baseweb="select"] *,
+html body [data-testid="stSelectbox"],
+html body [data-testid="stSelectbox"] * {
+  font-family: 'Mitr', sans-serif !important;
+  color: #4a2e2a !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+
+/* dropdown ตอนเปิด */
+html body [data-baseweb="popover"],
+html body [data-baseweb="popover"] *,
+html body [data-baseweb="menu"],
+html body [data-baseweb="menu"] *,
+html body [role="listbox"],
+html body [role="listbox"] *,
+html body [role="option"],
+html body [role="option"] * {
+  font-family: 'Mitr', sans-serif !important;
+  color: #4a2e2a !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+
+/* รายการเมนูแต่ละแถว */
+html body [role="option"],
+html body [role="listbox"] li {
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 15.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+}
+
+/* hover / selected ให้สีเหมือนเดิม แต่ฟอนต์ไม่เด้ง */
+html body [role="option"]:hover,
+html body [role="option"]:hover *,
+html body [aria-selected="true"],
+html body [aria-selected="true"] *,
+html body [data-highlighted="true"],
+html body [data-highlighted="true"] * {
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 500 !important;
+  color: #4a2e2a !important;
+  background-color: #eee7ff !important;
+}
+
+/* ===== SELECTBOX FONT CLEAN FINAL END ===== */
