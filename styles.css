@@ -198,3 +198,41 @@ div.stButton > button {
     font-size: 2.25rem !important;
   }
 }
+
+/* ===== FIX ONLY BLACK BOTTOM AREA START ===== */
+
+/* ลบพื้นหลังดำตรงแถบล่างของ Streamlit */
+[data-testid="stBottom"],
+[data-testid="stBottomBlockContainer"],
+[data-testid="stBottom"] > div,
+[data-testid="stBottom"] > div > div,
+[data-testid="stBottomBlockContainer"] > div,
+[data-testid="stBottomBlockContainer"] > div > div {
+  background:
+    linear-gradient(180deg, rgba(255,248,251,0), rgba(246,238,255,0.96)) !important;
+  background-color: #f6eeff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ลบสีดำที่ container ลูกด้านล่างแอบใส่ */
+[data-testid="stBottom"] section,
+[data-testid="stBottom"] section > div,
+[data-testid="stBottomBlockContainer"] section,
+[data-testid="stBottomBlockContainer"] section > div {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ถ้า Streamlit ใส่ block สีเข้มไว้หลัง input ให้กลบเป็นสีเดียวกับพื้นหลัง */
+[data-testid="stBottom"] [data-testid="stVerticalBlock"],
+[data-testid="stBottomBlockContainer"] [data-testid="stVerticalBlock"],
+[data-testid="stBottom"] [data-testid="stElementContainer"],
+[data-testid="stBottomBlockContainer"] [data-testid="stElementContainer"] {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ===== FIX ONLY BLACK BOTTOM AREA END ===== */
