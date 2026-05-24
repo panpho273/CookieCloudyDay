@@ -6,14 +6,29 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 
-TAROT_FILE = Path("tarot_cards.json")
+TAROT_FILE_CANDIDATES = [
+    Path("tarot_cards.json"),
+    Path("tarot_cards.json.json"),
+    Path("tarot_cards_data.json"),
+    Path("tarot_menu_data.json"),
+    Path("tarot_cards_th.json"),
+]
+
+
+def find_tarot_file():
+    for file_path in TAROT_FILE_CANDIDATES:
+        if file_path.exists():
+            return file_path
+    return None
 
 
 def load_tarot_cards():
-    if not TAROT_FILE.exists():
+    tarot_file = find_tarot_file()
+
+    if tarot_file is None:
         return []
 
-    with open(TAROT_FILE, "r", encoding="utf-8") as f:
+    with open(tarot_file, "r", encoding="utf-8") as f:
         cards = json.load(f)
 
     if isinstance(cards, dict):
@@ -87,6 +102,12 @@ def draw_random_card():
 def render_lucky_cookie_tarot():
     if not st.session_state.get("show_lucky_tarot"):
         return
+
+    # กัน dialog ถูกเปิดซ้ำใน run เดียวกัน
+    if st.session_state.get("_lucky_tarot_dialog_opened"):
+        return
+
+    st.session_state["_lucky_tarot_dialog_opened"] = True
 
     if "lucky_tarot_card" not in st.session_state:
         st.session_state["lucky_tarot_card"] = draw_random_card()
@@ -220,6 +241,7 @@ def render_lucky_cookie_tarot():
         with col1:
             if st.button("🔄 สุ่มไพ่ใหม่", use_container_width=True):
                 st.session_state["lucky_tarot_card"] = draw_random_card()
+                st.session_state.pop("_lucky_tarot_dialog_opened", None)
                 st.rerun()
 
         with col2:
@@ -227,6 +249,7 @@ def render_lucky_cookie_tarot():
                 st.session_state["show_lucky_tarot"] = False
                 st.session_state.pop("lucky_tarot_card", None)
                 st.session_state.pop("lucky_cookie_promo", None)
+                st.session_state.pop("_lucky_tarot_dialog_opened", None)
                 st.rerun()
 
     lucky_tarot_dialog()
