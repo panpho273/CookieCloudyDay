@@ -832,11 +832,16 @@ def render_menu_order_popup():
     # แสดงแค่ชื่อเมนูใน dropdown เพราะราคาสรุปอยู่ในกล่องออเดอร์แล้ว
     menu_names = [str(item["name"]) for item in menus]
 
-    selected_label = st.selectbox(
+    st.markdown('<div class="menu-radio-wrap">', unsafe_allow_html=True)
+
+    selected_label = st.radio(
         "เมนูที่อยากสั่ง",
         menu_names,
         key="popup_selected_menu",
+        label_visibility="visible",
     )
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
     selected_index = menu_names.index(selected_label)
     selected_item = menus[selected_index]
