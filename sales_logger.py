@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import base64
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -39,6 +40,10 @@ def get_credentials():
     """
     ใช้ service-account.json ตอนรัน local
     ใช้ Streamlit Secrets ตอนรันบน Streamlit Cloud
+    รองรับทั้ง:
+    - [gcp_service_account]
+    - GOOGLE_SERVICE_ACCOUNT_JSON
+    - GOOGLE_SERVICE_ACCOUNT_JSON_B64
     """
 
     # 1) Local / Codespaces
@@ -48,25 +53,40 @@ def get_credentials():
             scopes=SCOPES,
         )
 
-    # 2) Streamlit Cloud Secrets แบบ [gcp_service_account]
+    # 2) Streamlit Cloud Secrets
     try:
         import streamlit as st
 
-        print("DEBUG Streamlit secret keys:", list(st.secrets.keys()))
-
+        # แบบที่ 1: ใส่เป็น section [gcp_service_account]
         if "gcp_service_account" in st.secrets:
-            print("DEBUG found gcp_service_account")
             service_account_info = dict(st.secrets["gcp_service_account"])
             return Credentials.from_service_account_info(
                 service_account_info,
                 scopes=SCOPES,
             )
-        else:
-            print("DEBUG gcp_service_account not found")
-    except Exception as e:
-        print("DEBUG Streamlit secrets error:", repr(e))
 
-    # 3) สำรอง: อ่านจาก env เป็น JSON string
+        # แบบที่ 2: ใส่เป็น JSON string ตรง ๆ
+        if "GOOGLE_SERVICE_ACCOUNT_JSON" in st.secrets:
+            service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT_JSON"])
+            return Credentials.from_service_account_info(
+                service_account_info,
+                scopes=SCOPES,
+            )
+
+        # แบบที่ 3: ใส่เป็น Base64 ตามที่ใช้อยู่
+        if "GOOGLE_SERVICE_ACCOUNT_JSON_B64" in st.secrets:
+            encoded = str(st.secrets["GOOGLE_SERVICE_ACCOUNT_JSON_B64"]).strip()
+            decoded = base64.b64decode(encoded).decode("utf-8")
+            service_account_info = json.loads(decoded)
+            return Credentials.from_service_account_info(
+                service_account_info,
+                scopes=SCOPES,
+            )
+
+    except Exception as e:
+        print("Streamlit secrets credentials error:", repr(e))
+
+    # 3) Environment variable fallback
     service_account_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
     if service_account_json:
         service_account_info = json.loads(service_account_json)
@@ -75,8 +95,17 @@ def get_credentials():
             scopes=SCOPES,
         )
 
+    service_account_json_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON_B64", "").strip()
+    if service_account_json_b64:
+        decoded = base64.b64decode(service_account_json_b64).decode("utf-8")
+        service_account_info = json.loads(decoded)
+        return Credentials.from_service_account_info(
+            service_account_info,
+            scopes=SCOPES,
+        )
+
     raise FileNotFoundError(
-        "ไม่พบ service-account.json และไม่พบ gcp_service_account ใน Streamlit Secrets"
+        "ไม่พบ service-account.json หรือ Google service account credentials ใน Streamlit Secrets"
     )
 
 
