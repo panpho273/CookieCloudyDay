@@ -16,6 +16,8 @@ from google.oauth2.service_account import Credentials
 from rag_engine import RAGEngine
 from tarot import render_lucky_cookie_tarot
 from order_service import save_order
+from sales_logger import get_worksheet
+from hot_menu_service import build_hot_menu_reply, get_hot_menu_number_map
 
 load_dotenv(".env")
 
@@ -521,88 +523,72 @@ def get_default_hot_menus(limit=5):
 
 def get_top_selling_menus(limit=5):
     """
-    อ่านยอดขายจาก Google Sheets แล้วสรุป Top menu ตามจำนวนขายจริง
-    cache 5 นาที เพื่อไม่ให้โหลดชีทถี่เกินไป
+    อ่านยอดขายจริงจาก Google Sheet แล้วจัดอันดับเมนูขายดี
+    อ่านแบบตรงคอลัมน์:
+    A = วันที่, B = เมนู, C = จำนวน, D = ราคา, E = ยอดรวม
     """
     try:
-        import os
-        import gspread
-        from collections import defaultdict
+        sheet = get_worksheet()
+        values = sheet.get_all_values()
 
-        sheet_id = os.getenv("GOOGLE_SHEETS_ID", "").strip()
-        cred_file = (
-            os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "").strip()
-            or "service-account.json"
-        )
+        summary = {}
 
-        if not sheet_id:
-            return get_default_hot_menus(limit)
+        # ข้ามแถวหัวตาราง
+        for row in values[1:]:
+            # เติมช่องว่างกัน index error
+            row = row + [""] * 5
 
-        gc = gspread.service_account(filename=cred_file)
-        sh = gc.open_by_key(sheet_id)
-        ws = sh.sheet1
-        rows = ws.get_all_records()
+            menu = str(row[1]).strip()
 
-        summary = defaultdict(lambda: {"quantity": 0, "total": 0, "price": 0})
-
-        for row in rows:
-            menu = (
-                row.get("เมนู")
-                or row.get("menu")
-                or row.get("Menu")
-                or row.get("ชื่อเมนู")
-                or ""
-            )
-            menu = str(menu).strip()
             if not menu:
                 continue
 
-            quantity = _to_int(
-                row.get("จำนวน")
-                or row.get("quantity")
-                or row.get("Quantity")
-                or 0
-            )
+            try:
+                quantity = int(float(str(row[2]).replace(",", "").strip() or 0))
+            except Exception:
+                quantity = 0
 
-            price = _to_int(
-                row.get("ราคา")
-                or row.get("price")
-                or row.get("Price")
-                or MENU_PRICE_MAP.get(menu, 0)
-            )
+            try:
+                price = int(float(str(row[3]).replace(",", "").strip() or 0))
+            except Exception:
+                price = 0
 
-            total = _to_int(
-                row.get("ยอดรวม")
-                or row.get("total")
-                or row.get("Total")
-                or (quantity * price)
-            )
+            try:
+                total = float(str(row[4]).replace(",", "").strip() or 0)
+            except Exception:
+                total = quantity * price
+
+            if quantity <= 0:
+                continue
+
+            if menu not in summary:
+                summary[menu] = {
+                    "menu": menu,
+                    "quantity": 0,
+                    "total": 0,
+                    "price": price,
+                }
 
             summary[menu]["quantity"] += quantity
             summary[menu]["total"] += total
-            summary[menu]["price"] = price or MENU_PRICE_MAP.get(menu, 0)
 
-        if not summary:
-            return get_default_hot_menus(limit)
+            if price:
+                summary[menu]["price"] = price
 
-        top = sorted(
-            summary.items(),
-            key=lambda item: (item[1]["quantity"], item[1]["total"]),
-            reverse=True
+        ranked = sorted(
+            summary.values(),
+            key=lambda item: (item["quantity"], item["total"]),
+            reverse=True,
         )
 
-        result = []
-        for menu, data in top[:limit]:
-            result.append({
-                "menu": menu,
-                "price": data["price"] or MENU_PRICE_MAP.get(menu, 0),
-                "quantity": data["quantity"],
-            })
+        print("DEBUG top menus:", ranked[:limit])
 
-        return result or get_default_hot_menus(limit)
+        return ranked[:limit] if ranked else get_default_hot_menus(limit)
 
-    except Exception:
+    except Exception as e:
+        print("get_top_selling_menus error:", repr(e))
         return get_default_hot_menus(limit)
+
 
 def get_hot_menu_reply():
     top_menus = get_top_selling_menus(limit=5)
@@ -628,11 +614,7 @@ def get_hot_menu_reply():
     return "\n".join(lines)
 
 def get_dynamic_menu_number_map():
-    top_menus = get_top_selling_menus(limit=5)
-    return {
-        str(index): item["menu"]
-        for index, item in enumerate(top_menus, start=1)
-    }
+    return get_hot_menu_number_map(limit=5)
 
 def normalize_menu_number_order(message: str) -> str:
     text = str(message or "").strip()
@@ -682,10 +664,10 @@ def direct_customer_answer(message: str):
     order_keywords = ["ซื้อ", "สั่ง", "สั่งซื้อ", "ออเดอร์", "order"]
 
     if q in order_keywords:
-        return get_hot_menu_reply()
+        return build_hot_menu_reply()
 
     if any(keyword in q for keyword in hot_menu_keywords):
-        return get_hot_menu_reply()
+        return build_hot_menu_reply()
 
     return None
 
