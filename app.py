@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from urllib import request, parse
 
 import gspread
 import streamlit as st
@@ -320,34 +321,63 @@ def get_sheet_client():
 
 
 def append_order_to_sheet(menu_name: str, quantity: int, price: int):
-    sheet_id = get_sheet_id()
+    import json
+    import os
+    import re
+    from pathlib import Path
+    from urllib import request
 
-    if not sheet_id:
-        raise RuntimeError("ยังไม่ได้ตั้งค่า GOOGLE_SHEETS_ID ใน Secrets")
-
-    now = datetime.now(THAI_TZ)
-    today = now.strftime("%Y-%m-%d")
+    menu_name = str(menu_name).strip()
+    quantity = int(quantity)
+    price = int(price)
     total = quantity * price
 
-    client_sheet = get_sheet_client()
-    spreadsheet = client_sheet.open_by_key(sheet_id)
-    worksheet = spreadsheet.sheet1
+    # ใช้ URL เดียวกับหน้าเว็บ script.js เพื่อให้ลงชีทเดียวกันแน่นอน
+    web_app_url = os.getenv("SHEET_WEB_APP_URL", "").strip()
 
-    # ให้ตรงกับหัวตารางเดิม:
-    # วันที่ | เมนู | จำนวน | ราคา | ยอดรวม
-    worksheet.append_row(
-        [
-            today,
-            menu_name,
-            quantity,
-            price,
-            total,
-        ],
-        value_input_option="USER_ENTERED",
+    if not web_app_url:
+        try:
+            script_text = Path("script.js").read_text(encoding="utf-8")
+            match = re.search(r'const\s+SHEET_WEB_APP_URL\s*=\s*"([^"]+)"', script_text)
+            if match:
+                web_app_url = match.group(1).strip()
+        except Exception:
+            pass
+
+    if not web_app_url:
+        raise RuntimeError("ไม่พบ SHEET_WEB_APP_URL สำหรับบันทึกออเดอร์")
+
+    payload = {
+        # ส่งหลายชื่อ field เพื่อให้เข้ากับ doPost เดิมได้
+        "menu": menu_name,
+        "menuName": menu_name,
+        "menu_name": menu_name,
+        "name": menu_name,
+        "quantity": quantity,
+        "qty": quantity,
+        "price": price,
+        "total": total,
+        "source": "streamlit_popup",
+    }
+
+    data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+
+    req = request.Request(
+        web_app_url,
+        data=data,
+        method="POST",
+        headers={
+            "Content-Type": "application/json",
+        },
     )
 
-    return total
+    with request.urlopen(req, timeout=30) as res:
+        response_text = res.read().decode("utf-8", errors="replace")
 
+    # log ไว้ใน terminal ของ Streamlit ด้วย
+    print("append_order_to_sheet response:", response_text)
+
+    return total
 
 # =========================
 # UI Header
