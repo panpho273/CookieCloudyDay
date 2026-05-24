@@ -564,8 +564,19 @@ def normalize_menu_number_order(message: str) -> str:
 
 rag = load_rag()
 
-st.title("☁️ Demi ผู้ช่วย AI ของร้าน CookieCloudyDay")
-st.caption("ถามเรื่องเมนู เวลาเปิด ราคา หรือข้อมูลร้านได้เลย")
+st.markdown(
+    """
+    <section class="hero-card">
+        <div class="hero-icon">☁️</div>
+        <div class="hero-content">
+            <div class="hero-kicker">CookieCloudyDay Assistant</div>
+            <h1>Demi ผู้ช่วย AI<br/>ของร้านคุกกี้</h1>
+            <p>ถามเมนู เวลาเปิดร้าน ราคา หรือให้ Demi ช่วยแนะนำคุกกี้ที่เหมาะกับคุณได้เลยค่ะ</p>
+        </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 def direct_customer_answer(message: str):
