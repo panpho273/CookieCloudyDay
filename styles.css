@@ -728,3 +728,160 @@ div[role="dialog"] [data-testid="stNumberInput"] * {
 }
 
 /* ===== POPUP SELECT AND NUMBER INPUT POLISH END ===== */
+
+/* ===== FORCE POPUP DROPDOWN AND NUMBER CONTROL FIX START ===== */
+
+/* dropdown ทุกชั้นของ BaseWeb/Streamlit */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
+div[data-baseweb="popover"] div,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] > div,
+ul[role="listbox"],
+div[role="listbox"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  border-color: rgba(141, 114, 225, 0.18) !important;
+}
+
+/* ตัวกล่อง dropdown หลัก */
+div[data-baseweb="popover"] {
+  border: 1px solid rgba(141, 114, 225, 0.22) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 42px rgba(91, 70, 145, 0.18) !important;
+  overflow: hidden !important;
+}
+
+/* รายการเมนู */
+li[role="option"],
+div[role="option"],
+ul[role="listbox"] li,
+div[role="listbox"] div {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 0.96rem !important;
+  font-weight: 600 !important;
+}
+
+/* hover / selected */
+li[role="option"]:hover,
+div[role="option"]:hover,
+li[aria-selected="true"],
+div[aria-selected="true"] {
+  background: #efe8ff !important;
+  background-color: #efe8ff !important;
+  color: #4a2e2a !important;
+}
+
+/* scrollbar ของ dropdown ทุกชั้น */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] *,
+ul[role="listbox"],
+ul[role="listbox"] *,
+div[role="listbox"],
+div[role="listbox"] * {
+  scrollbar-width: thin !important;
+  scrollbar-color: #a58bff #f7f0ff !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar,
+div[data-baseweb="popover"] *::-webkit-scrollbar,
+div[data-baseweb="menu"]::-webkit-scrollbar,
+div[data-baseweb="menu"] *::-webkit-scrollbar,
+ul[role="listbox"]::-webkit-scrollbar,
+ul[role="listbox"] *::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"] *::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-track,
+div[data-baseweb="popover"] *::-webkit-scrollbar-track,
+div[data-baseweb="menu"]::-webkit-scrollbar-track,
+div[data-baseweb="menu"] *::-webkit-scrollbar-track,
+ul[role="listbox"]::-webkit-scrollbar-track,
+ul[role="listbox"] *::-webkit-scrollbar-track,
+div[role="listbox"]::-webkit-scrollbar-track,
+div[role="listbox"] *::-webkit-scrollbar-track {
+  background: #f7f0ff !important;
+  border-radius: 999px !important;
+}
+
+div[data-baseweb="popover"]::-webkit-scrollbar-thumb,
+div[data-baseweb="popover"] *::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"]::-webkit-scrollbar-thumb,
+div[data-baseweb="menu"] *::-webkit-scrollbar-thumb,
+ul[role="listbox"]::-webkit-scrollbar-thumb,
+ul[role="listbox"] *::-webkit-scrollbar-thumb,
+div[role="listbox"]::-webkit-scrollbar-thumb,
+div[role="listbox"] *::-webkit-scrollbar-thumb {
+  background: #a58bff !important;
+  border-radius: 999px !important;
+}
+
+/* number input wrapper ใน popup */
+div[role="dialog"] [data-testid="stNumberInput"] > div,
+div[role="dialog"] [data-testid="stNumberInput"] div[data-baseweb="input"] {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(141, 114, 225, 0.24) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 24px rgba(91, 70, 145, 0.08) !important;
+}
+
+/* input ตัวเลข */
+div[role="dialog"] [data-testid="stNumberInput"] input {
+  background: #ffffff !important;
+  color: #4a2e2a !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-weight: 650 !important;
+}
+
+/* ปุ่ม - + ทุกสถานะ ให้สีเดียวกัน */
+div[role="dialog"] [data-testid="stNumberInput"] button,
+div[role="dialog"] [data-testid="stNumberInput"] button:disabled,
+div[role="dialog"] [data-testid="stNumberInput"] button[disabled],
+div[role="dialog"] [data-testid="stNumberInput"] [role="button"],
+div[role="dialog"] [data-testid="stNumberInput"] [aria-disabled="true"] {
+  background: linear-gradient(135deg, #e9e0ff, #d8ccff) !important;
+  background-color: #e9e0ff !important;
+  color: #6b4fc4 !important;
+  opacity: 1 !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-width: 44px !important;
+  min-height: 48px !important;
+  font-weight: 900 !important;
+}
+
+/* icon ในปุ่ม - + */
+div[role="dialog"] [data-testid="stNumberInput"] button svg,
+div[role="dialog"] [data-testid="stNumberInput"] [role="button"] svg {
+  fill: #6b4fc4 !important;
+  color: #6b4fc4 !important;
+}
+
+/* hover ปุ่ม - + */
+div[role="dialog"] [data-testid="stNumberInput"] button:hover,
+div[role="dialog"] [data-testid="stNumberInput"] [role="button"]:hover {
+  background: linear-gradient(135deg, #d8ccff, #c3b2ff) !important;
+  color: #ffffff !important;
+}
+
+/* ให้ minus/plus เป็นแคปซูลติดกันสวย ๆ */
+div[role="dialog"] [data-testid="stNumberInput"] button:first-of-type {
+  border-left: 1px solid rgba(141, 114, 225, 0.16) !important;
+}
+
+div[role="dialog"] [data-testid="stNumberInput"] button:last-of-type {
+  border-radius: 0 18px 18px 0 !important;
+}
+
+/* ===== FORCE POPUP DROPDOWN AND NUMBER CONTROL FIX END ===== */
