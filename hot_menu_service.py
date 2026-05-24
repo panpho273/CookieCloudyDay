@@ -80,18 +80,14 @@ def build_hot_menu_reply(limit=5):
     except Exception as e:
         print("build_hot_menu_reply error:", repr(e))
         return (
-            "ได้เลยค่า 🍪
-
-"
+            "ได้เลยค่า 🍪\n\n"
             "ตอนนี้ Demi ยังเช็กเมนูฮิตให้ไม่ได้แป๊บนึงนะคะ "
             "ลูกค้าพิมพ์ว่า “เมนูทั้งหมด” เพื่อเลือกดูเมนูได้เลยค่ะ"
         )
 
     if not top_menus:
         return (
-            "ได้เลยค่า 🍪
-
-"
+            "ได้เลยค่า 🍪\n\n"
             "ตอนนี้ยังไม่มีเมนูฮิตประจำวันนี้ให้แนะนำเป็นพิเศษน้า "
             "ลูกค้าพิมพ์ว่า “เมนูทั้งหมด” เพื่อเลือกดูเมนูได้เลยค่ะ"
         )
@@ -121,8 +117,7 @@ def build_hot_menu_reply(limit=5):
         "หรือถ้าจะเลือกจากลิสต์นี้ พิมพ์ได้เลยค่ะ เช่น “รับเมนู 1 จำนวน 3 ชิ้น”",
     ]
 
-    return "
-".join(lines)
+    return "\n".join(lines)
 
 
 def get_hot_menu_number_map(limit=5):
