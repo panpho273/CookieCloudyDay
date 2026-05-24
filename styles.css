@@ -1088,3 +1088,46 @@ div[role="listbox"] ::selection {
 }
 
 /* ===== RESTORE PURPLE SELECTBOX DROPDOWN END ===== */
+
+/* ===== HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
+
+/* ซ่อน scrollbar ดำใน dropdown แต่ยังเลื่อนได้ */
+html body div[data-baseweb="popover"],
+html body div[data-baseweb="popover"] *,
+html body div[data-baseweb="menu"],
+html body div[data-baseweb="menu"] *,
+html body ul[role="listbox"],
+html body ul[role="listbox"] *,
+html body div[role="listbox"],
+html body div[role="listbox"] * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html body div[data-baseweb="popover"]::-webkit-scrollbar,
+html body div[data-baseweb="popover"] *::-webkit-scrollbar,
+html body div[data-baseweb="menu"]::-webkit-scrollbar,
+html body div[data-baseweb="menu"] *::-webkit-scrollbar,
+html body ul[role="listbox"]::-webkit-scrollbar,
+html body ul[role="listbox"] *::-webkit-scrollbar,
+html body div[role="listbox"]::-webkit-scrollbar,
+html body div[role="listbox"] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* กันพื้นที่ดำด้านขวาที่เหลือจาก scrollbar */
+html body div[data-baseweb="menu"],
+html body div[data-baseweb="menu"] > div,
+html body div[data-baseweb="menu"] > div > div,
+html body ul[role="listbox"],
+html body div[role="listbox"] {
+  background: #fffafd !important;
+  background-color: #fffafd !important;
+  padding-right: 0 !important;
+  border-right: 1px solid rgba(125, 94, 219, 0.20) !important;
+}
+
+/* ===== END HIDE DROPDOWN NATIVE BLACK SCROLLBAR FINAL ===== */
+
