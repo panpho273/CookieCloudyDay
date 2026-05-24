@@ -618,3 +618,75 @@ div.stButton > button:hover {
 }
 
 /* ===== FINAL HERO AND CHAT INPUT FIX END ===== */
+
+/* ===== CUSTOM CHAT INPUT START ===== */
+
+/* ซ่อน/ยกเลิกสไตล์ stChatInput เดิม ถ้ามีเหลือ */
+[data-testid="stChatInput"] {
+  display: none !important;
+}
+
+/* กล่อง input ใหม่ */
+.custom-chat-input-wrap {
+  max-width: 760px;
+  margin: 0 auto 1.4rem auto;
+  padding: 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1.5px solid rgba(135, 88, 216, 0.24);
+  box-shadow: 0 18px 42px rgba(86, 60, 140, 0.14);
+  backdrop-filter: blur(16px);
+}
+
+/* form ไม่เอากรอบซ้อน */
+.custom-chat-input-wrap [data-testid="stForm"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* input */
+.custom-chat-input-wrap [data-testid="stTextInput"] input {
+  height: 54px !important;
+  background: #ffffff !important;
+  color: #4a2e2a !important;
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0 1.25rem !important;
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 1rem !important;
+  box-shadow: none !important;
+}
+
+.custom-chat-input-wrap [data-testid="stTextInput"] input::placeholder {
+  color: rgba(74, 46, 42, 0.42) !important;
+}
+
+.custom-chat-input-wrap [data-testid="stTextInput"] input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 4px rgba(135, 88, 216, 0.10) !important;
+}
+
+/* ปุ่มส่ง */
+.custom-chat-input-wrap .stButton > button,
+.custom-chat-input-wrap [data-testid="stFormSubmitButton"] button {
+  height: 54px !important;
+  min-height: 54px !important;
+  width: 54px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  box-shadow: 0 12px 26px rgba(108, 72, 200, 0.24) !important;
+  padding: 0 !important;
+}
+
+.custom-chat-input-wrap [data-testid="column"] {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ===== CUSTOM CHAT INPUT END ===== */

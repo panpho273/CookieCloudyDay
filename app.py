@@ -851,7 +851,28 @@ if "show_lucky_tarot" not in st.session_state:
 if st.session_state.get("show_menu_order_popup"):
     render_menu_order_popup()
 
-prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")
+prompt = None
+
+st.markdown('<div class="custom-chat-input-wrap">', unsafe_allow_html=True)
+
+with st.form("custom_chat_form", clear_on_submit=True):
+    c1, c2 = st.columns([10, 1])
+
+    with c1:
+        user_text = st.text_input(
+            "chat_input_text",
+            placeholder="ถามอะไรเกี่ยวกับร้านได้เลย...",
+            label_visibility="collapsed",
+            key="custom_chat_text",
+        )
+
+    with c2:
+        submitted = st.form_submit_button("↑", use_container_width=True)
+
+    if submitted and user_text.strip():
+        prompt = user_text.strip()
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 
 
