@@ -326,7 +326,7 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
     import os
     import re
     from pathlib import Path
-    from urllib import request
+    from urllib import parse, request
 
     menu_name = str(menu_name).strip()
     quantity = int(quantity)
@@ -347,15 +347,12 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
         if not value:
             return ""
 
-        # ถ้าเป็น URL จริงอยู่แล้ว ใช้ได้เลย
         if value.startswith("http://") or value.startswith("https://"):
             return value
 
-        # ถ้าเป็น base64 ให้ decode
         try:
             padding = "=" * (-len(value) % 4)
             decoded = base64.b64decode(value + padding).decode("utf-8").strip()
-
             if decoded.startswith("http://") or decoded.startswith("https://"):
                 return decoded
         except Exception:
@@ -363,75 +360,66 @@ def append_order_to_sheet(menu_name: str, quantity: int, price: int):
 
         return value
 
-    web_app_url = ""
+    web_app_url = (
+        decode_b64(read_secret("SHEET_WEB_APP_URL_B64"))
+        or decode_b64(read_secret("SHEET_WEB_APP_URL"))
+        or decode_b64(os.getenv("SHEET_WEB_APP_URL_B64", ""))
+        or decode_b64(os.getenv("SHEET_WEB_APP_URL", ""))
+    )
 
-    # 1) รองรับ secret แบบ base64 โดยตรง
-    web_app_url = decode_b64(read_secret("SHEET_WEB_APP_URL_B64"))
-
-    # 2) รองรับกรณีใส่ base64 ไว้ในชื่อเดิม SHEET_WEB_APP_URL
     if not web_app_url:
-        web_app_url = decode_b64(read_secret("SHEET_WEB_APP_URL"))
-
-    # 3) รองรับ env แบบ base64
-    if not web_app_url:
-        web_app_url = decode_b64(os.getenv("SHEET_WEB_APP_URL_B64", ""))
-
-    # 4) รองรับ env แบบเดิม
-    if not web_app_url:
-        web_app_url = decode_b64(os.getenv("SHEET_WEB_APP_URL", ""))
-
-    # 5) fallback อ่านจาก script.js
-    if not web_app_url:
-        possible_script_paths = [
-            base_dir / "script.js",
-            Path.cwd() / "script.js",
-        ]
-
-        for script_path in possible_script_paths:
+        for script_path in [base_dir / "script.js", Path.cwd() / "script.js"]:
             try:
-                if not script_path.exists():
-                    continue
-
-                script_text = script_path.read_text(encoding="utf-8")
-                match = re.search(r'const\s+SHEET_WEB_APP_URL\s*=\s*"([^"]+)"', script_text)
-
-                if match:
-                    web_app_url = decode_b64(match.group(1).strip())
-                    break
+                if script_path.exists():
+                    script_text = script_path.read_text(encoding="utf-8")
+                    match = re.search(r'const\s+SHEET_WEB_APP_URL\s*=\s*"([^"]+)"', script_text)
+                    if match:
+                        web_app_url = decode_b64(match.group(1).strip())
+                        break
             except Exception:
                 pass
 
     if not web_app_url or not web_app_url.startswith("https://"):
-        raise RuntimeError(
-            "ไม่พบ SHEET_WEB_APP_URL ที่ใช้งานได้ "
-            "ให้ใส่ SHEET_WEB_APP_URL_B64 เป็นค่า base64 ของ Apps Script Web App URL"
-        )
+        raise RuntimeError("ไม่พบ SHEET_WEB_APP_URL_B64 หรือ URL ที่ decode แล้วใช้งานได้")
 
     payload = {
         "menu": menu_name,
         "menuName": menu_name,
         "menu_name": menu_name,
         "name": menu_name,
-        "quantity": quantity,
-        "qty": quantity,
-        "price": price,
-        "total": total,
+        "quantity": str(quantity),
+        "qty": str(quantity),
+        "price": str(price),
+        "total": str(total),
         "source": "streamlit_popup",
     }
 
-    data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    print("append_order_to_sheet payload:", payload)
+    print("append_order_to_sheet url prefix:", web_app_url[:60])
+
+    # ใช้ form-urlencoded เพราะ Apps Script รับผ่าน e.parameter ได้ง่ายกว่า
+    data = parse.urlencode(payload).encode("utf-8")
 
     req = request.Request(
         web_app_url,
         data=data,
         method="POST",
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
     )
 
     with request.urlopen(req, timeout=30) as res:
         response_text = res.read().decode("utf-8", errors="replace")
 
     print("append_order_to_sheet response:", response_text)
+
+    try:
+        response_json = json.loads(response_text)
+        if response_json.get("ok") is False:
+            raise RuntimeError(response_text)
+    except json.JSONDecodeError:
+        pass
 
     return total
 
@@ -864,8 +852,8 @@ def render_menu_order_popup():
                     "total": total,
                     "menu": menu_name,
                 }
-                st.session_state["show_lucky_tarot"] = True
                 st.session_state.pop("lucky_tarot_card", None)
+                st.session_state["show_lucky_tarot"] = True
                 promo_text = "\n\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ กดรับไพ่และคำทำนายได้เลย"
             else:
                 st.session_state.pop("lucky_cookie_promo", None)

@@ -30,6 +30,7 @@ def load_tarot_cards():
     return FALLBACK_TAROT_CARDS
 
 def draw_tarot_card():
+    previous_card_name = st.session_state.get("lucky_tarot_card", {}).get("name") if isinstance(st.session_state.get("lucky_tarot_card"), dict) else None
     return random.choice(load_tarot_cards())
 
 def reset_order_chat():
