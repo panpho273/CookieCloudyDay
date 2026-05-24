@@ -90,7 +90,7 @@ def render_lucky_cookie_tarot():
 
     # ถ้าเคยค้างเป็น default เก่า ให้สุ่มใหม่จากไฟล์จริง
     old_card = st.session_state.get("lucky_tarot_card")
-    if old_card and old_card.get("name") == "The Choco Chip":
+    if old_card and old_card.get("name") in ["The Choco Chip", "Lucky Cookie"]:
         st.session_state.pop("lucky_tarot_card", None)
 
     if "lucky_tarot_card" not in st.session_state:
