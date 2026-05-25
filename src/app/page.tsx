@@ -52,18 +52,7 @@ export default function HomePage() {
   const [comment, setComment] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
-  const [reviews, setReviews] = useState<Review[]>([
-    {
-      rating: 5,
-      comment: "เว็บน่ารักมาก เมนูดูน่ากินและสั่งง่ายค่ะ",
-      createdAt: "ตัวอย่าง",
-    },
-    {
-      rating: 5,
-      comment: "Demi แนะนำเมนูดีมาก เหมาะกับร้านคุกกี้",
-      createdAt: "ตัวอย่าง",
-    },
-  ]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   const streamlitUrl = process.env.NEXT_PUBLIC_STREAMLIT_URL || "";
 
