@@ -1200,3 +1200,35 @@ html body [data-highlighted="true"] * {
 }
 
 /* ===== SELECTBOX FONT CLEAN FINAL END ===== */
+/* ===== CHAT AVATAR THEME: red/orange pastel ===== */
+[data-testid="stChatMessageAvatar"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #ff5a5f 0%, #ff8a3d 100%) !important;
+
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+
+  box-shadow:
+    0 10px 24px rgba(255, 106, 80, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+}
+
+/* ให้ตัว emoji / icon ข้างในไม่โดนสีดำทับ */
+[data-testid="stChatMessageAvatar"] * {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* ระยะห่างกล่องแชท */
+[data-testid="stChatMessage"] {
+  gap: 12px !important;
+}
