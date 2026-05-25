@@ -6,12 +6,21 @@ import { useRouter } from "next/navigation";
 export default function AdminLoginPage() {
   const router = useRouter();
 
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("1234");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin() {
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
     setLoading(true);
+
+    if (!username || !password) {
+      setError("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/admin/login", {
@@ -25,15 +34,17 @@ export default function AdminLoginPage() {
         }),
       });
 
-      if (!res.ok) {
-        throw new Error("Login failed");
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        setError(data.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+        return;
       }
 
-      const data = await res.json();
       localStorage.setItem("adminToken", data.token);
       router.push("/admin/dashboard");
-    } catch {
-      alert("เข้าสู่ระบบไม่สำเร็จ");
+    } catch (err) {
+      setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
     } finally {
       setLoading(false);
     }
@@ -45,12 +56,16 @@ export default function AdminLoginPage() {
         <h1>Admin Login</h1>
         <p>เข้าสู่ระบบหลังบ้าน CookieCloudyDay</p>
 
-        <div className="reviewForm">
+        <form className="reviewForm" onSubmit={handleLogin}>
+          {error && <div className="errorBox">{error}</div>}
+
           <input
             className="input"
+            type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
+            placeholder="ชื่อผู้ใช้"
+            disabled={loading}
           />
 
           <input
@@ -58,17 +73,18 @@ export default function AdminLoginPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
+            placeholder="รหัสผ่าน"
+            disabled={loading}
           />
 
-          <button className="btn primary" onClick={handleLogin} disabled={loading}>
+          <button type="submit" className="btn primary" disabled={loading}>
             {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
           </button>
 
           <a className="btn secondary" href="/">
             กลับหน้าเว็บ
           </a>
-        </div>
+        </form>
       </div>
     </main>
   );

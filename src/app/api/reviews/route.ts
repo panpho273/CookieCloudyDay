@@ -83,8 +83,21 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  const mockReviews = [
+    {
+      rating: 5,
+      comment: "เว็บน่ารัก เมนูดูน่ากินค่ะ",
+      createdAt: "25 พ.ค. 2026",
+    },
+    {
+      rating: 5,
+      comment: "Demi แนะนำเมนูดีมาก",
+      createdAt: "24 พ.ค. 2026",
+    },
+  ];
+
   return NextResponse.json({
     ok: true,
-    message: "Review API is running",
+    reviews: mockReviews,
   });
 }
