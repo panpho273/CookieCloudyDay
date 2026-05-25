@@ -2176,3 +2176,323 @@ th {
     height: calc(100vh - 112px);
   }
 }
+
+/* ===== CookieCloudyDay Original Demi Chat Theme ===== */
+/* ทำให้ Demi ไม่เหมือน widget สีฟ้าทั่วไป แต่เป็นธีมคุกกี้ของร้านเรา */
+
+.demiInfoCard {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 36px !important;
+  padding: 38px !important;
+  background:
+    radial-gradient(circle at 92% 12%, rgba(255, 213, 139, 0.28), transparent 28%),
+    radial-gradient(circle at 12% 88%, rgba(196, 167, 255, 0.26), transparent 30%),
+    linear-gradient(135deg, #fffaf4 0%, #fff5fb 52%, #f3edff 100%) !important;
+  border: 1px solid rgba(138, 86, 55, 0.12) !important;
+  box-shadow:
+    0 26px 70px rgba(90, 54, 42, 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.9) !important;
+}
+
+.demiInfoCard::after {
+  content: "🍪";
+  position: absolute;
+  right: 34px;
+  top: 30px;
+  font-size: 72px;
+  opacity: 0.12;
+  transform: rotate(-12deg);
+}
+
+.demiInfoCard h2 {
+  color: #57312a !important;
+  text-shadow: 0 5px 0 rgba(255, 255, 255, 0.75) !important;
+}
+
+.demiInfoCard p {
+  color: #8b675c !important;
+}
+
+.demiInfoButton,
+.demiInfoLink {
+  border-radius: 999px !important;
+  padding: 15px 22px !important;
+  font-weight: 900 !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease !important;
+}
+
+.demiInfoButton {
+  background:
+    radial-gradient(circle at 24% 20%, rgba(255,255,255,0.55), transparent 30%),
+    linear-gradient(135deg, #9b6bff 0%, #7c3aed 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 18px 36px rgba(124, 58, 237, 0.22) !important;
+}
+
+.demiInfoLink {
+  color: #6d3bd8 !important;
+  background: rgba(255,255,255,0.72) !important;
+  border: 1px solid rgba(124, 58, 237, 0.18) !important;
+  box-shadow: 0 14px 28px rgba(93, 65, 140, 0.08) !important;
+}
+
+.demiInfoButton:hover,
+.demiInfoLink:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* ปุ่มลอย เปลี่ยนจากแนวฟ้าเป็นคุกกี้พาสเทล */
+.demiFloatingWidget {
+  right: 26px !important;
+  bottom: 26px !important;
+}
+
+.demiFloatingButton {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 24px !important;
+  font-size: 31px !important;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(110, 62, 25, 0.32) 0 4px, transparent 5px),
+    radial-gradient(circle at 68% 40%, rgba(110, 62, 25, 0.24) 0 4px, transparent 5px),
+    radial-gradient(circle at 52% 70%, rgba(110, 62, 25, 0.22) 0 4px, transparent 5px),
+    linear-gradient(145deg, #ffe8a9 0%, #ffc86b 54%, #f2a84e 100%) !important;
+  box-shadow:
+    0 22px 46px rgba(138, 86, 55, 0.28),
+    0 0 0 7px rgba(255, 232, 169, 0.28),
+    inset 0 3px 0 rgba(255,255,255,0.72) !important;
+}
+
+.demiFloatingButton:hover {
+  transform: translateY(-3px) rotate(-3deg) scale(1.04) !important;
+}
+
+.demiFloatingButton span {
+  background: #8b5cf6 !important;
+  border: 3px solid #fff7ed !important;
+}
+
+/* หน้าต่างแชท เปลี่ยนเป็นการ์ดคุกกี้ ไม่ใช่กล่องฟ้า */
+.demiChatWindow {
+  width: min(430px, calc(100vw - 32px)) !important;
+  height: min(650px, calc(100vh - 124px)) !important;
+  border-radius: 30px !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(180deg, #fff9f2 0%, #fff4fb 52%, #f4efff 100%) !important;
+  border: 1px solid rgba(138, 86, 55, 0.14) !important;
+  box-shadow:
+    0 30px 86px rgba(90, 54, 42, 0.25),
+    0 0 0 8px rgba(255, 255, 255, 0.56) !important;
+}
+
+/* Header ไม่ใช้สีฟ้าแล้ว */
+.demiChatHeader {
+  height: 82px !important;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(255,255,255,0.35), transparent 26%),
+    linear-gradient(135deg, #7c3aed 0%, #9b6bff 46%, #c4a7ff 100%) !important;
+  color: #fff !important;
+  padding: 16px 18px !important;
+}
+
+.demiAvatar {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(110, 62, 25, 0.25) 0 3px, transparent 4px),
+    linear-gradient(145deg, #ffe7a3, #ffbf5f) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.7),
+    0 10px 20px rgba(80, 40, 20, 0.15) !important;
+}
+
+.demiChatHeader h3 {
+  font-size: 18px !important;
+  letter-spacing: 0.2px !important;
+}
+
+.demiChatHeader p {
+  font-size: 12px !important;
+  opacity: 0.95 !important;
+}
+
+.demiChatHeader p span {
+  background: #ffe58a !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.25) !important;
+}
+
+.demiCloseBtn {
+  background: rgba(255,255,255,0.22) !important;
+  color: #fff !important;
+}
+
+/* Body */
+.demiChatBody {
+  padding: 20px !important;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(255, 214, 139, 0.16), transparent 30%),
+    radial-gradient(circle at 90% 80%, rgba(196, 167, 255, 0.20), transparent 30%),
+    #fff8f5 !important;
+}
+
+/* Bubble */
+.demiMessage {
+  max-width: 84% !important;
+  border-radius: 22px !important;
+  padding: 13px 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.65 !important;
+  box-shadow: 0 12px 28px rgba(90, 54, 42, 0.08) !important;
+}
+
+.demiMessage.bot {
+  background: rgba(255,255,255,0.92) !important;
+  color: #57312a !important;
+  border: 1px solid rgba(138, 86, 55, 0.10) !important;
+  border-top-left-radius: 8px !important;
+}
+
+.demiMessage.user {
+  background: linear-gradient(135deg, #9b6bff, #7c3aed) !important;
+  color: #fff !important;
+  border-top-right-radius: 8px !important;
+}
+
+/* Footer input */
+.demiChatFooter {
+  height: 68px !important;
+  background: rgba(255,255,255,0.92) !important;
+  border-top: 1px solid rgba(138, 86, 55, 0.12) !important;
+  padding: 11px 14px !important;
+}
+
+.demiMenuBtn,
+.demiSendBtn {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 16px !important;
+}
+
+.demiMenuBtn {
+  color: #7c3aed !important;
+  background: #f2eaff !important;
+}
+
+.demiSendBtn {
+  background: linear-gradient(135deg, #ffbf5f, #f59e0b) !important;
+  color: #fff !important;
+}
+
+.demiChatFooter input {
+  border: 2px solid rgba(124, 58, 237, 0.28) !important;
+  background: #fffaf7 !important;
+  color: #57312a !important;
+  height: 44px !important;
+}
+
+.demiChatFooter input::placeholder {
+  color: rgba(87, 49, 42, 0.48) !important;
+}
+
+/* mobile */
+@media (max-width: 640px) {
+  .demiChatWindow {
+    width: calc(100vw - 24px) !important;
+    height: calc(100vh - 112px) !important;
+    border-radius: 26px !important;
+  }
+
+  .demiFloatingButton {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 22px !important;
+  }
+}
+
+/* ===== Demi Font Readability Fix ===== */
+/* ลดความหนาฟอนต์เฉพาะส่วน Demi ให้อ่านง่ายขึ้น */
+
+.demiInfoCard h2,
+.demiChatHeader h3,
+.demiPreviewCard h3,
+.demiIntroBox h3,
+.demiLaunchContent h2,
+.demiOneHeader h2 {
+  font-weight: 800 !important;
+  letter-spacing: -0.4px !important;
+}
+
+.demiInfoCard p,
+.demiLaunchContent > p,
+.demiOneHeader p,
+.demiPreviewCard p,
+.demiIntroBox p,
+.demiMessage,
+.demiChatFooter input,
+.demiFeatureItem p,
+.demiNotice,
+.demiEmbedFallback {
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.75 !important;
+}
+
+.demiInfoButton,
+.demiInfoLink,
+.demiLaunchButton,
+.demiHeaderButton,
+.demiQuickBtn,
+.demiPromptList a,
+.demiMenuBtn,
+.demiSendBtn {
+  font-weight: 700 !important;
+}
+
+.demiChatHeader p {
+  font-weight: 500 !important;
+}
+
+.demiMessage.bot {
+  font-weight: 500 !important;
+  color: #5b4039 !important;
+}
+
+.demiMessage.user {
+  font-weight: 600 !important;
+}
+
+.demiChatFooter input::placeholder {
+  font-weight: 400 !important;
+}
+
+/* ปรับหัวข้อ Demi ให้ดูนุ่มขึ้น ไม่หนาแน่นเกิน */
+.demiInfoCard h2 {
+  font-size: clamp(38px, 4.6vw, 60px) !important;
+  line-height: 1.08 !important;
+}
+
+.demiInfoCard p {
+  font-size: 16px !important;
+  color: #8a6a60 !important;
+}
+
+/* ปรับ bubble แชทให้โล่งขึ้น */
+.demiMessage {
+  padding: 12px 15px !important;
+  font-size: 15px !important;
+}
+
+/* ปรับช่องพิมพ์ให้อ่านง่าย */
+.demiChatFooter input {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* ปรับปุ่มลอยให้ยังน่ารักแต่ไม่เด่นแข็งเกิน */
+.demiFloatingButton {
+  font-weight: 700 !important;
+}
+
