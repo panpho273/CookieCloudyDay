@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { appendReview, getReviews } from "@/lib/google-sheets";
 
 type ReviewPayload = {
   rating?: number;
@@ -29,15 +28,54 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Save to Google Sheets
-    await appendReview(rating, comment, source);
+    const webhookUrl = process.env.GOOGLE_REVIEW_WEBHOOK_URL;
+
+    if (!webhookUrl) {
+      return NextResponse.json(
+        { ok: false, message: "Missing GOOGLE_REVIEW_WEBHOOK_URL" },
+        { status: 500 }
+      );
+    }
+
+    const googleRes = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },
+      body: JSON.stringify({
+        rating,
+        comment,
+        source,
+      }),
+      cache: "no-store",
+    });
+
+    const googleText = await googleRes.text();
+
+    if (!googleRes.ok) {
+      return NextResponse.json(
+        {
+          ok: false,
+          message: "Google Apps Script failed",
+          status: googleRes.status,
+          detail: googleText,
+        },
+        { status: 500 }
+      );
+    }
+
+    let googleData: unknown = googleText;
+
+    try {
+      googleData = JSON.parse(googleText);
+    } catch {}
 
     return NextResponse.json({
       ok: true,
-      message: "Review saved successfully",
+      savedToSheet: true,
+      google: googleData,
     });
   } catch (error) {
-    console.error("Error saving review:", error);
     return NextResponse.json(
       {
         ok: false,
@@ -50,17 +88,50 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   try {
-    const reviews = await getReviews();
+    const webhookUrl = process.env.GOOGLE_REVIEW_WEBHOOK_URL;
+
+    if (!webhookUrl) {
+      return NextResponse.json(
+        {
+          ok: false,
+          message: "Missing GOOGLE_REVIEW_WEBHOOK_URL",
+          reviews: [],
+        },
+        { status: 500 }
+      );
+    }
+
+    const googleRes = await fetch(webhookUrl, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    const googleText = await googleRes.text();
+
+    if (!googleRes.ok) {
+      return NextResponse.json(
+        {
+          ok: false,
+          message: "Cannot load reviews from Google Sheet",
+          detail: googleText,
+          reviews: [],
+        },
+        { status: 500 }
+      );
+    }
+
+    const data = JSON.parse(googleText);
+
     return NextResponse.json({
       ok: true,
-      reviews: reviews,
+      reviews: Array.isArray(data.reviews) ? data.reviews : [],
     });
   } catch (error) {
-    console.error("Error fetching reviews:", error);
     return NextResponse.json(
       {
         ok: false,
-        message: "Cannot fetch reviews",
+        message: error instanceof Error ? error.message : "Cannot load reviews",
+        reviews: [],
       },
       { status: 500 }
     );
