@@ -233,21 +233,50 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="demi" className="section">
-        <div className="sectionHeader">
-          <h2>คุยกับ Demi AI</h2>
-          <p>ฝังหน้า Streamlit chatbot ของร้านไว้ในเว็บ</p>
+      <section id="demi" className="section demiSection">
+        <div className="demiHeader">
+          <div>
+            <span className="miniBadge">Demi AI Assistant</span>
+            <h2>คุยกับ Demi AI</h2>
+            <p>
+              ผู้ช่วย AI ของ CookieCloudyDay สำหรับถามเมนู ราคา เวลาเปิดร้าน
+              และช่วยแนะนำคุกกี้ที่เหมาะกับคุณ
+            </p>
+          </div>
+
+          <div className="demiBubble">💬</div>
         </div>
 
-        <div className="iframeWrap">
+        <div className="demiShell">
+          <div className="demiInfoCard">
+            <div className="demiAvatar">🤖</div>
+            <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
+            <p>
+              ลองถามว่า “มีเมนูอะไรแนะนำบ้าง”, “คุกกี้ราคาเท่าไหร่”
+              หรือ “ช่วยแนะนำคุกกี้สำหรับเป็นของฝาก”
+            </p>
+
+            <div className="demiTips">
+              <span>🍪 ถามเมนู</span>
+              <span>💜 แนะนำรสชาติ</span>
+              <span>🛒 ช่วยสรุปออเดอร์</span>
+            </div>
+          </div>
+
           {streamlitUrl ? (
-            <iframe src={streamlitUrl} title="CookieCloudyDay Demi AI" />
+            <div className="demiFrameCard">
+              <iframe
+                className="demiIframe"
+                src={streamlitUrl}
+                title="CookieCloudyDay Demi AI"
+              />
+            </div>
           ) : (
-            <div className="panel">
-              <h3>ยังไม่ได้ตั้งค่า Streamlit URL</h3>
+            <div className="demiMissingCard">
+              <h3>ยังไม่ได้เชื่อม Streamlit URL</h3>
               <p>
-                เพิ่มค่า <b>NEXT_PUBLIC_STREAMLIT_URL</b> ในไฟล์ <b>.env.local</b>
-                เพื่อให้ iframe แสดงหน้าแชท Demi ตรงนี้
+                เพิ่มค่า <b>NEXT_PUBLIC_STREAMLIT_URL</b> ใน Vercel Environment Variables
+                แล้วกด Redeploy เพื่อให้หน้าแชท Demi แสดงตรงนี้
               </p>
             </div>
           )}

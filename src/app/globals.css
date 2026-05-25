@@ -486,3 +486,164 @@ th {
   margin-bottom: 1rem;
   font-weight: 500;
 }
+
+/* ===== Demi AI Section ===== */
+.demiSection {
+  margin-top: 72px;
+}
+
+.demiHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.demiHeader h2 {
+  margin: 10px 0 8px;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1;
+  color: var(--brown);
+  text-shadow: 0 5px 0 rgba(255, 255, 255, 0.72);
+}
+
+.demiHeader p {
+  margin: 0;
+  color: var(--soft-brown);
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: 720px;
+}
+
+.miniBadge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.13);
+  color: #7045dc;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.12);
+}
+
+.demiBubble {
+  width: 82px;
+  height: 82px;
+  border-radius: 28px;
+  display: grid;
+  place-items: center;
+  font-size: 38px;
+  background: linear-gradient(145deg, #ffffff, #f1e8ff);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  box-shadow: 0 24px 56px rgba(124, 58, 237, 0.18);
+}
+
+.demiShell {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.demiInfoCard,
+.demiFrameCard,
+.demiMissingCard {
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  box-shadow: 0 28px 72px rgba(88, 68, 137, 0.15);
+}
+
+.demiInfoCard {
+  padding: 28px;
+  min-height: 360px;
+}
+
+.demiAvatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  background: linear-gradient(135deg, #ffe7d9, #efe4ff);
+  box-shadow: 0 18px 36px rgba(124, 58, 237, 0.14);
+  margin-bottom: 18px;
+}
+
+.demiInfoCard h3,
+.demiMissingCard h3 {
+  margin: 0 0 12px;
+  color: var(--brown);
+  font-size: 26px;
+}
+
+.demiInfoCard p,
+.demiMissingCard p {
+  color: var(--soft-brown);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.demiTips {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.demiTips span {
+  display: inline-flex;
+  width: fit-content;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--brown);
+  font-weight: 700;
+  border: 1px solid rgba(139, 92, 246, 0.12);
+}
+
+.demiFrameCard {
+  overflow: hidden;
+  padding: 12px;
+}
+
+.demiIframe {
+  width: 100%;
+  height: 760px;
+  border: 0;
+  display: block;
+  border-radius: 26px;
+  background: #fff7ff;
+}
+
+.demiMissingCard {
+  padding: 30px;
+  min-height: 360px;
+  display: grid;
+  align-content: center;
+}
+
+@media (max-width: 920px) {
+  .demiHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .demiShell {
+    grid-template-columns: 1fr;
+  }
+
+  .demiBubble {
+    width: 66px;
+    height: 66px;
+    border-radius: 22px;
+    font-size: 30px;
+  }
+
+  .demiIframe {
+    height: 680px;
+  }
+}
