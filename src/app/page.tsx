@@ -245,64 +245,64 @@ export default function HomePage() {
         </div>
       </section>
       <section id="demi" className="section demiSection">
-        <div className="demiOneCard">
-          <div className="demiOneHeader">
-            <div>
-              <span className="miniBadge">Demi AI Assistant</span>
-              <h2>คุยกับ Demi AI</h2>
-              <p>
-                ผู้ช่วย AI ของ CookieCloudyDay สำหรับถามเมนู ราคา เวลาเปิดร้าน
-                และช่วยแนะนำคุกกี้ที่เหมาะกับคุณ
-              </p>
-            </div>
+        <div className="demiLaunchCard">
+          <div className="demiLaunchContent">
+            <span className="miniBadge">Demi AI Assistant</span>
 
-            <a
-              className="demiHeaderButton"
-              href={streamlitUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              เปิด Demi AI
-            </a>
-          </div>
+            <h2>คุยกับ Demi AI</h2>
 
-          <div className="demiOneBody">
-            <div className="demiIntroBox">
-              <div className="demiBotIcon">🤖</div>
+            <p>
+              Demi คือผู้ช่วย AI ของ CookieCloudyDay สำหรับถามเมนู ราคา เวลาเปิดร้าน
+              และช่วยแนะนำคุกกี้ที่เหมาะกับคุณ
+            </p>
 
-              <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
-              <p>
-                ลองถามว่า “มีเมนูอะไรแนะนำบ้าง”, “คุกกี้ราคาเท่าไหร่”
-                หรือ “ช่วยแนะนำคุกกี้สำหรับเป็นของฝาก”
-              </p>
+            <div className="demiFeatureGrid">
+              <div className="demiFeatureItem">
+                <span>🍪</span>
+                <strong>ถามเมนูคุกกี้</strong>
+                <p>ดูเมนูแนะนำและรสชาติที่เหมาะกับคุณ</p>
+              </div>
 
-              <div className="demiPromptList">
-                <a href={streamlitUrl} target="_blank" rel="noreferrer">
-                  🍪 ถามเมนู
-                </a>
+              <div className="demiFeatureItem">
+                <span>💜</span>
+                <strong>แนะนำรสชาติ</strong>
+                <p>ช่วยเลือกคุกกี้ตามความชอบหรือโอกาสพิเศษ</p>
+              </div>
 
-                <a href={streamlitUrl} target="_blank" rel="noreferrer">
-                  💜 แนะนำรสชาติ
-                </a>
-
-                <a href={streamlitUrl} target="_blank" rel="noreferrer">
-                  🛒 ช่วยสรุปออเดอร์
-                </a>
+              <div className="demiFeatureItem">
+                <span>🛒</span>
+                <strong>ช่วยสรุปออเดอร์</strong>
+                <p>ถามราคาและเตรียมรายการก่อนสั่งซื้อได้ง่ายขึ้น</p>
               </div>
             </div>
 
-            <div className="demiEmbedBox">
-              <iframe
-                className="demiIframe"
-                src={streamlitUrl}
-                title="CookieCloudyDay Demi AI"
-              />
+            <div className="demiNotice">
+              ไม่สามารถฝังหน้าแชท Streamlit ในเว็บนี้ได้โดยตรง
+              กรุณากดปุ่มด้านล่างเพื่อเปิด Demi AI ในแท็บใหม่
+            </div>
 
-              <div className="demiEmbedFallback">
-                ถ้ากล่องแชทไม่ขึ้น ให้กดปุ่ม
-                <a href={streamlitUrl} target="_blank" rel="noreferrer">
-                  เปิด Demi AI แบบเต็มหน้า
-                </a>
+            <a
+              href={streamlitUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="demiLaunchButton"
+            >
+              เปิด Demi AI แบบเต็มหน้า
+            </a>
+          </div>
+
+          <div className="demiPreviewCard">
+            <div className="demiRobot">🤖</div>
+            <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
+            <p>
+              ลองถามว่า “มีเมนูอะไรแนะนำบ้าง”, “คุกกี้ราคาเท่าไหร่”
+              หรือ “ช่วยแนะนำคุกกี้สำหรับเป็นของฝาก”
+            </p>
+
+            <div className="demiChatMock">
+              <div className="chatBubble user">อยากได้คุกกี้เป็นของฝาก แนะนำอะไรดี?</div>
+              <div className="chatBubble bot">
+                แนะนำคุกกี้ช็อกโกแลตชิพหรือคุกกี้เนยสดค่ะ หอม น่ารัก และเหมาะกับเป็นของฝากมาก 🍪
               </div>
             </div>
           </div>
