@@ -88,8 +88,11 @@ export default function HomePage() {
         }),
       });
 
-      if (!res.ok) {
-        throw new Error("Cannot submit review");
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        alert(JSON.stringify(data, null, 2));
+        throw new Error(data.message || "Cannot submit review");
       }
 
       const newReview: Review = {

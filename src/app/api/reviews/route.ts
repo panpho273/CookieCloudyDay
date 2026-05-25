@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           ok: false,
-          message: "Missing GOOGLE_REVIEW_WEBHOOK_URL",
+          message: "Missing GOOGLE_REVIEW_WEBHOOK_URL in Vercel",
         },
         { status: 500 }
       );
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           ok: false,
-          message: "Apps Script failed",
+          message: "Google Apps Script failed",
           status: googleRes.status,
           detail: googleText,
         },
@@ -60,18 +60,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let googleJson: unknown = null;
+    let googleData: unknown = googleText;
 
     try {
-      googleJson = JSON.parse(googleText);
-    } catch {
-      googleJson = googleText;
-    }
+      googleData = JSON.parse(googleText);
+    } catch {}
 
     return NextResponse.json({
       ok: true,
       savedToSheet: true,
-      google: googleJson,
+      google: googleData,
     });
   } catch (error) {
     return NextResponse.json(
