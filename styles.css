@@ -106,6 +106,22 @@ header[data-testid="stHeader"] {
   box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10) !important;
 }
 
+/* Avatar background - remove dark background from emoji container */
+[data-testid="stChatMessage"] > div[style] {
+  background: transparent !important;
+}
+
+[data-testid="stChatMessage"] > div > div[style] {
+  background: transparent !important;
+}
+
+/* Target any element with background color in avatar area */
+[data-testid="stChatMessage"] [style*="background-color"],
+[data-testid="stChatMessage"] [style*="background"] {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
 [data-testid="stMarkdownContainer"],
 [data-testid="stMarkdownContainer"] p,
 [data-testid="stMarkdownContainer"] li {
