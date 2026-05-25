@@ -1167,3 +1167,32 @@ th {
     font-size: 24px !important;
   }
 }
+
+/* ===== Review History Scroll Fix ===== */
+.reviewList,
+.latestReviews,
+.reviewsList {
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.reviewList::-webkit-scrollbar,
+.latestReviews::-webkit-scrollbar,
+.reviewsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reviewList::-webkit-scrollbar-thumb,
+.latestReviews::-webkit-scrollbar-thumb,
+.reviewsList::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.35);
+  border-radius: 999px;
+}
+
+.reviewList::-webkit-scrollbar-track,
+.latestReviews::-webkit-scrollbar-track,
+.reviewsList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+}
