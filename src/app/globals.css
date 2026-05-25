@@ -647,3 +647,435 @@ th {
     height: 680px;
   }
 }
+
+/* ===== Cute Cookie Rating Stars ===== */
+.ratingStars {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 8px;
+}
+
+.cuteStarBtn {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(181, 120, 35, 0.22);
+  border-radius: 20px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(123, 72, 22, 0.28) 0 3px, transparent 4px),
+    radial-gradient(circle at 66% 36%, rgba(123, 72, 22, 0.22) 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 68%, rgba(123, 72, 22, 0.2) 0 3px, transparent 4px),
+    linear-gradient(180deg, #fff0b9 0%, #ffd977 54%, #ffc85a 100%);
+  box-shadow:
+    0 12px 22px rgba(221, 150, 39, 0.18),
+    inset 0 3px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -4px 9px rgba(177, 105, 16, 0.18);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease,
+    border-color 0.18s ease;
+  overflow: hidden;
+}
+
+.cuteStarBtn:hover {
+  transform: translateY(-3px) rotate(-2deg) scale(1.05);
+  box-shadow:
+    0 18px 28px rgba(221, 150, 39, 0.28),
+    0 0 0 5px rgba(255, 218, 120, 0.25),
+    inset 0 3px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -4px 10px rgba(177, 105, 16, 0.22);
+}
+
+.cuteStarBtn:active {
+  transform: scale(0.95);
+}
+
+.cuteStarGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.78), transparent 34%),
+    radial-gradient(circle at 80% 84%, rgba(255, 255, 255, 0.34), transparent 30%);
+  pointer-events: none;
+}
+
+.cuteStarIcon {
+  position: relative;
+  z-index: 2;
+  font-size: 30px;
+  line-height: 1;
+  color: #9d6500;
+  text-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.65),
+    0 5px 12px rgba(121, 69, 0, 0.16);
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.cuteStarSparkle {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  z-index: 3;
+  font-size: 12px;
+  color: #fff9d8;
+  opacity: 0;
+  transform: scale(0.7) rotate(20deg);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.cuteStarBtn.active {
+  border-color: rgba(255, 174, 45, 0.62);
+  background:
+    radial-gradient(circle at 34% 30%, rgba(103, 56, 15, 0.32) 0 3px, transparent 4px),
+    radial-gradient(circle at 66% 36%, rgba(103, 56, 15, 0.26) 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 68%, rgba(103, 56, 15, 0.24) 0 3px, transparent 4px),
+    linear-gradient(180deg, #ffeaa0 0%, #ffd05d 50%, #ffb52e 100%);
+  box-shadow:
+    0 18px 34px rgba(255, 173, 45, 0.34),
+    0 0 0 5px rgba(255, 217, 101, 0.22),
+    inset 0 3px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -5px 12px rgba(165, 92, 5, 0.24);
+}
+
+.cuteStarBtn.active .cuteStarIcon {
+  color: #7a4a00;
+  transform: scale(1.12) rotate(-7deg);
+}
+
+.cuteStarBtn.active .cuteStarSparkle {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.cuteStarBtn:not(.active) {
+  filter: saturate(0.82) brightness(1.02);
+  opacity: 0.86;
+}
+
+.cuteStarBtn:not(.active):hover {
+  opacity: 1;
+  filter: saturate(1) brightness(1.03);
+}
+
+.ratingHint {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #8b5e3c;
+}
+
+@media (max-width: 768px) {
+  .ratingStars {
+    gap: 8px;
+  }
+
+  .cuteStarBtn {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+  }
+
+  .cuteStarIcon {
+    font-size: 25px;
+  }
+
+  .cuteStarSparkle {
+    top: 7px;
+    right: 8px;
+    font-size: 10px;
+  }
+}
+
+/* ===== Cute Cookie Rating Stars ===== */
+.ratingStars {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 8px;
+}
+
+.cuteStarBtn {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(181, 120, 35, 0.22);
+  border-radius: 20px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(123, 72, 22, 0.28) 0 3px, transparent 4px),
+    radial-gradient(circle at 66% 36%, rgba(123, 72, 22, 0.22) 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 68%, rgba(123, 72, 22, 0.2) 0 3px, transparent 4px),
+    linear-gradient(180deg, #fff0b9 0%, #ffd977 54%, #ffc85a 100%);
+  box-shadow:
+    0 12px 22px rgba(221, 150, 39, 0.18),
+    inset 0 3px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -4px 9px rgba(177, 105, 16, 0.18);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease,
+    border-color 0.18s ease;
+  overflow: hidden;
+}
+
+.cuteStarBtn:hover {
+  transform: translateY(-3px) rotate(-2deg) scale(1.05);
+  box-shadow:
+    0 18px 28px rgba(221, 150, 39, 0.28),
+    0 0 0 5px rgba(255, 218, 120, 0.25),
+    inset 0 3px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -4px 10px rgba(177, 105, 16, 0.22);
+}
+
+.cuteStarBtn:active {
+  transform: scale(0.95);
+}
+
+.cuteStarGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.78), transparent 34%),
+    radial-gradient(circle at 80% 84%, rgba(255, 255, 255, 0.34), transparent 30%);
+  pointer-events: none;
+}
+
+.cuteStarIcon {
+  position: relative;
+  z-index: 2;
+  font-size: 30px;
+  line-height: 1;
+  color: #9d6500;
+  text-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.65),
+    0 5px 12px rgba(121, 69, 0, 0.16);
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.cuteStarSparkle {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  z-index: 3;
+  font-size: 12px;
+  color: #fff9d8;
+  opacity: 0;
+  transform: scale(0.7) rotate(20deg);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.cuteStarBtn.active {
+  border-color: rgba(255, 174, 45, 0.62);
+  background:
+    radial-gradient(circle at 34% 30%, rgba(103, 56, 15, 0.32) 0 3px, transparent 4px),
+    radial-gradient(circle at 66% 36%, rgba(103, 56, 15, 0.26) 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 68%, rgba(103, 56, 15, 0.24) 0 3px, transparent 4px),
+    linear-gradient(180deg, #ffeaa0 0%, #ffd05d 50%, #ffb52e 100%);
+  box-shadow:
+    0 18px 34px rgba(255, 173, 45, 0.34),
+    0 0 0 5px rgba(255, 217, 101, 0.22),
+    inset 0 3px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -5px 12px rgba(165, 92, 5, 0.24);
+}
+
+.cuteStarBtn.active .cuteStarIcon {
+  color: #7a4a00;
+  transform: scale(1.12) rotate(-7deg);
+}
+
+.cuteStarBtn.active .cuteStarSparkle {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.cuteStarBtn:not(.active) {
+  filter: saturate(0.82) brightness(1.02);
+  opacity: 0.86;
+}
+
+.cuteStarBtn:not(.active):hover {
+  opacity: 1;
+  filter: saturate(1) brightness(1.03);
+}
+
+.ratingHint {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #8b5e3c;
+}
+
+@media (max-width: 768px) {
+  .ratingStars {
+    gap: 8px;
+  }
+
+  .cuteStarBtn {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+  }
+
+  .cuteStarIcon {
+    font-size: 25px;
+  }
+
+  .cuteStarSparkle {
+    top: 7px;
+    right: 8px;
+    font-size: 10px;
+  }
+}
+
+/* ===== Cute Cookie Rating Stars ===== */
+.ratingStars {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 8px;
+}
+
+.cuteStarBtn {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(181, 120, 35, 0.22);
+  border-radius: 20px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(123, 72, 22, 0.28) 0 3px, transparent 4px),
+    radial-gradient(circle at 66% 36%, rgba(123, 72, 22, 0.22) 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 68%, rgba(123, 72, 22, 0.2) 0 3px, transparent 4px),
+    linear-gradient(180deg, #fff0b9 0%, #ffd977 54%, #ffc85a 100%);
+  box-shadow:
+    0 12px 22px rgba(221, 150, 39, 0.18),
+    inset 0 3px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -4px 9px rgba(177, 105, 16, 0.18);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease,
+    border-color 0.18s ease;
+  overflow: hidden;
+}
+
+.cuteStarBtn:hover {
+  transform: translateY(-3px) rotate(-2deg) scale(1.05);
+  box-shadow:
+    0 18px 28px rgba(221, 150, 39, 0.28),
+    0 0 0 5px rgba(255, 218, 120, 0.25),
+    inset 0 3px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -4px 10px rgba(177, 105, 16, 0.22);
+}
+
+.cuteStarBtn:active {
+  transform: scale(0.95);
+}
+
+.cuteStarGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.78), transparent 34%),
+    radial-gradient(circle at 80% 84%, rgba(255, 255, 255, 0.34), transparent 30%);
+  pointer-events: none;
+}
+
+.cuteStarIcon {
+  position: relative;
+  z-index: 2;
+  font-size: 30px;
+  line-height: 1;
+  color: #9d6500;
+  text-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.65),
+    0 5px 12px rgba(121, 69, 0, 0.16);
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.cuteStarSparkle {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  z-index: 3;
+  font-size: 12px;
+  color: #fff9d8;
+  opacity: 0;
+  transform: scale(0.7) rotate(20deg);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.cuteStarBtn.active {
+  border-color: rgba(255, 174, 45, 0.62);
+  background:
+    radial-gradient(circle at 34% 30%, rgba(103, 56, 15, 0.32) 0 3px, transparent 4px),
+    radial-gradient(circle at 66% 36%, rgba(103, 56, 15, 0.26) 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 68%, rgba(103, 56, 15, 0.24) 0 3px, transparent 4px),
+    linear-gradient(180deg, #ffeaa0 0%, #ffd05d 50%, #ffb52e 100%);
+  box-shadow:
+    0 18px 34px rgba(255, 173, 45, 0.34),
+    0 0 0 5px rgba(255, 217, 101, 0.22),
+    inset 0 3px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -5px 12px rgba(165, 92, 5, 0.24);
+}
+
+.cuteStarBtn.active .cuteStarIcon {
+  color: #7a4a00;
+  transform: scale(1.12) rotate(-7deg);
+}
+
+.cuteStarBtn.active .cuteStarSparkle {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.cuteStarBtn:not(.active) {
+  filter: saturate(0.82) brightness(1.02);
+  opacity: 0.86;
+}
+
+.cuteStarBtn:not(.active):hover {
+  opacity: 1;
+  filter: saturate(1) brightness(1.03);
+}
+
+.ratingHint {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #8b5e3c;
+}
+
+@media (max-width: 768px) {
+  .ratingStars {
+    gap: 8px;
+  }
+
+  .cuteStarBtn {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+  }
+
+  .cuteStarIcon {
+    font-size: 25px;
+  }
+
+  .cuteStarSparkle {
+    top: 7px;
+    right: 8px;
+    font-size: 10px;
+  }
+}
