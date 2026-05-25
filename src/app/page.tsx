@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const menus = [
   {
@@ -72,6 +72,26 @@ export default function HomePage() {
     const avg = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
     return avg.toFixed(1);
   }, [reviews]);
+
+  useEffect(() => {
+    async function loadReviews() {
+      try {
+        const res = await fetch("/api/reviews", {
+          cache: "no-store",
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.ok && Array.isArray(data.reviews)) {
+          setReviews(data.reviews);
+        }
+      } catch {
+        // ถ้าโหลดจาก Google Sheet ไม่ได้ ให้หน้าเว็บยังไม่พัง
+      }
+    }
+
+    loadReviews();
+  }, []);
 
   async function submitReview() {
     if (!comment.trim()) {
