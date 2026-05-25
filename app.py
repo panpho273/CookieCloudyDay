@@ -1076,7 +1076,7 @@ if prompt:
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar="🤖"):
         st.write(answer)
 
 # แสดง Lucky Tarot dialog ถ้าลูกค้าเข้าเงื่อนไขโปร
