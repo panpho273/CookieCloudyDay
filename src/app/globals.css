@@ -2615,3 +2615,595 @@ th {
     font-size: 38px !important;
   }
 }
+
+/* =========================
+   FINAL Demi Professional Pastel UI
+   Override old Demi styles
+========================= */
+.demiSection {
+  margin-top: 72px !important;
+}
+
+.demiShell {
+  display: grid !important;
+  grid-template-columns: 1.02fr 1.1fr !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+  background: linear-gradient(135deg, #fffafc 0%, #faf7ff 55%, #f4f1ff 100%) !important;
+  border: 1px solid #e9ddff !important;
+  border-radius: 36px !important;
+  padding: 28px !important;
+  box-shadow: 0 18px 45px rgba(124, 58, 237, 0.08) !important;
+}
+
+.demiIntro,
+.demiChatCard {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1px solid #eee4ff !important;
+  border-radius: 30px !important;
+  box-shadow: 0 10px 28px rgba(124, 58, 237, 0.06) !important;
+}
+
+.demiIntro {
+  padding: 30px !important;
+}
+
+.demiBadge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 18px !important;
+  border-radius: 999px !important;
+  background: #f1e9ff !important;
+  color: #7c3aed !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
+
+.demiIntro h2 {
+  margin: 18px 0 12px !important;
+  font-size: clamp(34px, 4.4vw, 60px) !important;
+  line-height: 1.05 !important;
+  font-weight: 800 !important;
+  color: #4b2e2b !important;
+  letter-spacing: -0.02em !important;
+}
+
+.demiLead {
+  margin: 0 0 24px !important;
+  color: #7b6b77 !important;
+  font-size: 16px !important;
+  line-height: 1.9 !important;
+  font-weight: 500 !important;
+}
+
+.demiInfoCard {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+  padding: 18px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f4ff 100%) !important;
+  border: 1px solid #eadfff !important;
+  margin-bottom: 22px !important;
+}
+
+.demiInfoIcon {
+  width: 62px !important;
+  height: 62px !important;
+  min-width: 62px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(135deg, #d8b4fe 0%, #c4b5fd 50%, #f9d5e5 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.12) !important;
+}
+
+.demiBotSvg {
+  width: 38px !important;
+  height: 38px !important;
+  display: block !important;
+}
+
+.demiInfoText h3 {
+  margin: 2px 0 8px !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: #4b2e2b !important;
+}
+
+.demiInfoText p {
+  margin: 0 !important;
+  color: #7f7380 !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+  font-weight: 500 !important;
+}
+
+.demiQuickButtons {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
+.demiQuickButtons button {
+  border: 1px solid #e6d7ff !important;
+  background: #ffffff !important;
+  color: #6c4bb8 !important;
+  border-radius: 999px !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: 0.18s ease !important;
+}
+
+.demiQuickButtons button:hover {
+  background: #f7f2ff !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Chat Card */
+.demiChatCard {
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 640px !important;
+}
+
+.demiChatHeader {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 18px 20px !important;
+  background: linear-gradient(135deg, #c4b5fd 0%, #b497ff 48%, #d8b4fe 100%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+
+.demiHeaderLeft {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.demiAvatar {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(6px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55) !important;
+}
+
+.demiHeaderText h3 {
+  margin: 0 !important;
+  color: #ffffff !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+}
+
+.demiHeaderText span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-top: 4px !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  opacity: 0.95 !important;
+}
+
+.demiHeaderText span::before {
+  content: "" !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  background: #d9ffb3 !important;
+  box-shadow: 0 0 0 4px rgba(217, 255, 179, 0.18) !important;
+}
+
+.demiToggleBtn {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  background: rgba(255, 255, 255, 0.24) !important;
+  color: #ffffff !important;
+  font-size: 26px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+
+.demiSuggestionRow {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  padding: 18px 20px 0 !important;
+  background: #fff !important;
+}
+
+.demiSuggestionRow button {
+  border: 1px solid #ebddff !important;
+  background: #faf6ff !important;
+  color: #7b4dd8 !important;
+  border-radius: 999px !important;
+  padding: 10px 14px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+.demiMessages {
+  flex: 1 !important;
+  padding: 18px 20px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fcf9ff 100%) !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+.demiMessage {
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+}
+
+.demiMessage.user {
+  justify-content: flex-end !important;
+}
+
+.demiMessage.bot {
+  justify-content: flex-start !important;
+}
+
+.demiMessageIcon {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #eee7ff 0%, #f9ebf5 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.08) !important;
+}
+
+.demiMessageIcon .demiBotSvg {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.demiBubbleWrap {
+  max-width: 78% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.demiBubble {
+  border-radius: 20px !important;
+  padding: 14px 16px !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  font-weight: 500 !important;
+  color: #4a3d49 !important;
+  word-break: break-word !important;
+}
+
+.demiMessage.bot .demiBubble {
+  background: #ffffff !important;
+  border: 1px solid #efe5ff !important;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.05) !important;
+}
+
+.demiMessage.user .demiBubble {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.16) !important;
+}
+
+.demiBubbleWrap small {
+  color: #a18eab !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 0 4px !important;
+}
+
+.demiMessage.user .demiBubbleWrap {
+  align-items: flex-end !important;
+}
+
+.demiComposer {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px 20px 20px !important;
+  background: #ffffff !important;
+  border-top: 1px solid #f0e8ff !important;
+}
+
+.demiInput {
+  flex: 1 !important;
+  height: 52px !important;
+  border-radius: 999px !important;
+  border: 1.5px solid #d9c7ff !important;
+  background: #ffffff !important;
+  padding: 0 18px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: #4b3c4c !important;
+  outline: none !important;
+}
+
+.demiInput:focus {
+  border-color: #b78cff !important;
+  box-shadow: 0 0 0 4px rgba(183, 140, 255, 0.14) !important;
+}
+
+.demiSendBtn {
+  border: none !important;
+  height: 52px !important;
+  padding: 0 24px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #f8b53f 0%, #f59e0b 100%) !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  box-shadow: 0 12px 24px rgba(245, 158, 11, 0.2) !important;
+}
+
+@media (max-width: 980px) {
+  .demiShell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .demiChatCard {
+    min-height: 560px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .demiShell {
+    padding: 16px !important;
+    border-radius: 24px !important;
+  }
+
+  .demiIntro,
+  .demiChatCard {
+    border-radius: 22px !important;
+  }
+
+  .demiIntro {
+    padding: 22px !important;
+  }
+
+  .demiIntro h2 {
+    font-size: 34px !important;
+  }
+
+  .demiLead {
+    font-size: 15px !important;
+    line-height: 1.75 !important;
+  }
+
+  .demiChatHeader {
+    padding: 16px !important;
+  }
+
+  .demiHeaderText h3 {
+    font-size: 20px !important;
+  }
+
+  .demiMessages {
+    padding: 16px !important;
+  }
+
+  .demiComposer {
+    padding: 14px 16px 16px !important;
+  }
+
+  .demiBubbleWrap {
+    max-width: 88% !important;
+  }
+}
+
+/* ===== Cookie Club Member + Order Promotion ===== */
+.memberSection {
+  margin-top: 72px;
+}
+
+.memberShell {
+  border-radius: 38px;
+  padding: 34px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 213, 139, 0.28), transparent 30%),
+    linear-gradient(135deg, #fffaf3 0%, #fff4fb 50%, #f3edff 100%);
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  box-shadow: 0 28px 80px rgba(98, 67, 50, 0.12);
+}
+
+.memberHero h2 {
+  margin: 14px 0 10px;
+  font-size: clamp(36px, 5vw, 64px);
+  color: #4b2e2b;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.memberHero p {
+  max-width: 820px;
+  color: #8a6a60;
+  line-height: 1.85;
+  font-weight: 500;
+}
+
+.promoCard {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  max-width: 760px;
+  margin: 22px 0 28px;
+  padding: 20px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.promoIcon {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  background: linear-gradient(135deg, #ffe8a3, #d8b4fe);
+}
+
+.promoCard h3 {
+  margin: 0 0 8px;
+  color: #4b2e2b;
+}
+
+.promoCard p {
+  margin: 0;
+}
+
+.memberGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.shopPanel {
+  padding: 24px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  box-shadow: 0 14px 34px rgba(124, 58, 237, 0.06);
+}
+
+.shopPanel h3 {
+  margin: 0 0 18px;
+  color: #4b2e2b;
+  font-size: 26px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.formGrid input,
+.formGrid select {
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  border: 1.5px solid #eadfff;
+  padding: 0 14px;
+  background: #fff;
+  color: #4b3c4c;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+}
+
+.formGrid input:focus,
+.formGrid select:focus {
+  border-color: #b78cff;
+  box-shadow: 0 0 0 4px rgba(183, 140, 255, 0.14);
+}
+
+.fullInput {
+  grid-column: 1 / -1;
+}
+
+.shopButton {
+  margin-top: 16px;
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  box-shadow: 0 16px 30px rgba(124, 58, 237, 0.18);
+}
+
+.orderSummary {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 22px;
+  background: #fff8ed;
+  border: 1px solid rgba(245, 158, 11, 0.22);
+  display: grid;
+  gap: 4px;
+}
+
+.orderSummary span {
+  color: #8a6a60;
+  font-size: 14px;
+}
+
+.orderSummary strong {
+  color: #4b2e2b;
+  font-size: 30px;
+}
+
+.orderSummary small {
+  color: #9a6b37;
+  font-weight: 600;
+}
+
+.shopMessage,
+.fortuneResult {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  color: #4b2e2b;
+  font-weight: 700;
+}
+
+.fortuneResult h3 {
+  margin: 10px 0 8px;
+  font-size: 28px;
+}
+
+.fortuneResult p {
+  margin: 0;
+  color: #8a6a60;
+  line-height: 1.7;
+}
+
+@media (max-width: 920px) {
+  .memberGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .memberShell {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .memberHero h2 {
+    font-size: 36px;
+  }
+}

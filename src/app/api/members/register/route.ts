@@ -24,11 +24,12 @@ export async function POST(req: NextRequest) {
         "Content-Type": "text/plain;charset=utf-8",
       },
       body: JSON.stringify({
-        action: "createOrder",
-        memberKey: body.memberKey,
-        menu: body.menu,
-        quantity: body.quantity,
-        total: body.total,
+        action: "registerMember",
+        name: body.name,
+        phone: body.phone,
+        email: body.email,
+        birthday: body.birthday,
+        favoriteCookie: body.favoriteCookie,
       }),
       cache: "no-store",
     });
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
 
     if (!data.ok) {
       return NextResponse.json(
-        { ok: false, message: data.error || "Cannot create order" },
+        { ok: false, message: data.error || "Cannot register member" },
         { status: 400 }
       );
     }
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
         message:
           error instanceof Error
             ? error.message
-            : "Cannot create order",
+            : "Cannot register member",
       },
       { status: 500 }
     );
