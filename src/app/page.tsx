@@ -87,10 +87,10 @@ export default function HomePage() {
       return "ตอนนี้สามารถดูเมนูและสอบถาม Demi ได้ก่อนค่ะ หากต้องการสั่งซื้อ ให้ติดต่อร้านตามช่องทางที่ร้านแจ้งไว้ได้เลย";
     }
 
-    return "Demi ยังตอบแบบสั้น ๆ บนหน้าเว็บนะคะ ถ้าอยากคุยแบบเต็ม ให้กดปุ่มเปิด Demi AI ตัวเต็มได้เลยค่ะ 💜";
+    return "Demi ยังตอบแบบสั้น ๆ บนหน้าเว็บนะคะ ถ้าอยากคุยแบบเต็ม ให้กดปุ่มเปิดผู้ช่วย Demiได้เลยค่ะ 💜";
   }
 
-  function sendDemiMessage() {
+  async function sendDemiMessage() {
     const cleanInput = demiInput.trim();
 
     if (!cleanInput) return;
@@ -100,13 +100,41 @@ export default function HomePage() {
       text: cleanInput,
     };
 
-    const botMessage = {
-      role: "bot",
-      text: getDemiReply(cleanInput),
-    };
-
-    setDemiMessages((prev) => [...prev, userMessage, botMessage]);
+    setDemiMessages((prev) => [...prev, userMessage]);
     setDemiInput("");
+
+    try {
+      const res = await fetch("/api/demi/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
+        body: JSON.stringify({
+          message: cleanInput,
+        }),
+      });
+
+      const data = await res.json();
+
+      const botMessage = {
+        role: "bot",
+        text:
+          data.ok && data.reply
+            ? data.reply
+            : "ขออภัยค่ะ Demi ตอบไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ",
+      };
+
+      setDemiMessages((prev) => [...prev, botMessage]);
+    } catch {
+      setDemiMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: "ขออภัยค่ะ Demi ตอบไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ",
+        },
+      ]);
+    }
   }
 
 const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
@@ -204,7 +232,7 @@ const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
       <section className="hero">
         <div>
           <div className="badge">CookieCloudyDay Assistant</div>
-          <h1>Demi ผู้ช่วย AI ของร้านคุกกี้</h1>
+          <h1>คุกกี้โฮมเมดอบสด ในวันฟ้าครึ้ม</h1>
           <p>
             ถามเมนู เวลาเปิดร้าน ราคา หรือให้ Demi ช่วยแนะนำคุกกี้ที่เหมาะกับคุณได้เลย
             พร้อมระบบรีวิว 1–5 ดาว และหน้า Admin สำหรับดูข้อมูลหลังบ้าน
@@ -302,10 +330,10 @@ const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
       <section id="demi" className="section demiInfoSection">
         <div className="demiInfoCard">
           <span className="miniBadge">Demi AI Assistant</span>
-          <h2>คุยกับ Demi AI</h2>
+          <h2>ให้ Demi ช่วยเลือกคุกกี้</h2>
           <p>
-            กดปุ่มแชทมุมขวาล่างเพื่อคุยกับ Demi แบบรวดเร็ว
-            หรือเปิด Demi AI ตัวเต็มเพื่อถามเมนู ราคา และคำแนะนำเกี่ยวกับคุกกี้ของร้าน
+            กดปุ่มแชทมุมขวาล่างเพื่อคุยกับ Demi ได้ทันที
+            Demi ช่วยตอบเรื่องเมนู ราคา เวลาเปิดร้าน และช่วยแนะนำคุกกี้ที่เหมาะกับคุณ
           </p>
 
           <button
@@ -313,7 +341,7 @@ const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
             className="demiInfoButton"
             onClick={() => setDemiOpen(true)}
           >
-            เปิดกล่องแชท Demi
+            ถาม Demi เรื่องคุกกี้
           </button>
 
           <a
@@ -322,7 +350,7 @@ const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
             rel="noreferrer"
             className="demiInfoLink"
           >
-            เปิด Demi AI ตัวเต็ม
+            เปิดผู้ช่วย Demi
           </a>
         </div>
       </section>
@@ -334,10 +362,10 @@ const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
         {demiOpen && (
           <div className="demiChatWindow">
             <div className="demiChatHeader">
-              <div className="demiAvatar">✣</div>
+              <div className="demiAvatar">🍪</div>
               <div>
-                <h3>Demi AI</h3>
-                <p><span></span> ออนไลน์</p>
+                <h3>Demi Cookie Helper</h3>
+                <p><span></span> พร้อมช่วยเลือกคุกกี้</p>
               </div>
 
               <button
@@ -367,7 +395,7 @@ const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
                 target="_blank"
                 rel="noreferrer"
                 className="demiMenuBtn"
-                title="เปิด Demi AI ตัวเต็ม"
+                title="เปิดผู้ช่วย Demi"
               >
                 ☰
               </a>
@@ -380,7 +408,7 @@ const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
                     sendDemiMessage();
                   }
                 }}
-                placeholder='เช่น "มีเมนูอะไรแนะนำบ้าง"...'
+                placeholder='ถามเมนู ราคา หรือคุกกี้ของฝาก...'
               />
 
               <button
