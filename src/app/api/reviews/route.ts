@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { appendReview, getReviews } from "@/lib/google-sheets";
 
 type ReviewPayload = {
   rating?: number;
@@ -21,57 +22,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const webhookUrl = process.env.GOOGLE_REVIEW_WEBHOOK_URL;
-
-    if (!webhookUrl) {
+    if (!comment.trim()) {
       return NextResponse.json(
-        {
-          ok: false,
-          message: "Missing GOOGLE_REVIEW_WEBHOOK_URL in Vercel",
-        },
-        { status: 500 }
+        { ok: false, message: "Comment cannot be empty" },
+        { status: 400 }
       );
     }
 
-    const googleRes = await fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
-      body: JSON.stringify({
-        rating,
-        comment,
-        source,
-      }),
-      cache: "no-store",
-    });
-
-    const googleText = await googleRes.text();
-
-    if (!googleRes.ok) {
-      return NextResponse.json(
-        {
-          ok: false,
-          message: "Google Apps Script failed",
-          status: googleRes.status,
-          detail: googleText,
-        },
-        { status: 500 }
-      );
-    }
-
-    let googleData: unknown = googleText;
-
-    try {
-      googleData = JSON.parse(googleText);
-    } catch {}
+    // Save to Google Sheets
+    await appendReview(rating, comment, source);
 
     return NextResponse.json({
       ok: true,
-      savedToSheet: true,
-      google: googleData,
+      message: "Review saved successfully",
     });
   } catch (error) {
+    console.error("Error saving review:", error);
     return NextResponse.json(
       {
         ok: false,
@@ -83,21 +49,20 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  const mockReviews = [
-    {
-      rating: 5,
-      comment: "เว็บน่ารัก เมนูดูน่ากินค่ะ",
-      createdAt: "25 พ.ค. 2026",
-    },
-    {
-      rating: 5,
-      comment: "Demi แนะนำเมนูดีมาก",
-      createdAt: "24 พ.ค. 2026",
-    },
-  ];
-
-  return NextResponse.json({
-    ok: true,
-    reviews: mockReviews,
-  });
+  try {
+    const reviews = await getReviews();
+    return NextResponse.json({
+      ok: true,
+      reviews: reviews,
+    });
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Cannot fetch reviews",
+      },
+      { status: 500 }
+    );
+  }
 }

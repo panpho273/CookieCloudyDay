@@ -256,7 +256,8 @@ textarea {
 .reviewBox {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 24px;
+  align-items: start;
 }
 
 .reviewForm {
@@ -271,37 +272,69 @@ textarea {
 }
 
 .starBtn {
-  width: 48px;
-  height: 48px;
-  border: 1px solid rgba(139, 92, 246, 0.18);
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgba(139, 92, 246, 0.2);
   border-radius: 16px;
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   color: #d7c7b0;
-  font-size: 25px;
+  font-size: 28px;
+  transition: 0.2s ease;
+  font-weight: bold;
+}
+
+.starBtn:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.15);
 }
 
 .starBtn.active {
   color: #8a5a00;
   background: linear-gradient(135deg, #fff4bd, #ffd36b);
-  box-shadow: 0 12px 24px rgba(255, 191, 74, 0.25);
+  box-shadow: 0 12px 24px rgba(255, 191, 74, 0.3);
+  border-color: rgba(255, 191, 74, 0.5);
 }
 
 .input,
 .textarea {
   width: 100%;
-  border: 1px solid rgba(139, 92, 246, 0.18);
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 18px;
+  border: 2px solid rgba(139, 92, 246, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
   padding: 14px 16px;
   outline: none;
   color: var(--brown);
   font-size: 15px;
+  font-family: "Mitr", sans-serif;
+  transition: 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  background: rgba(255, 255, 255, 1);
 }
 
 .textarea {
   min-height: 118px;
-  resize: vertical;
+  resize: none;
+  font-family: "Mitr", sans-serif;
+  font-size: 15px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--brown);
+  transition: 0.2s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
 .reviewList {
@@ -312,8 +345,27 @@ textarea {
 .reviewItem {
   padding: 16px;
   border-radius: 20px;
-  background: rgba(255, 250, 255, 0.78);
-  border: 1px solid rgba(139, 92, 246, 0.12);
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(139, 92, 246, 0.08));
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  transition: 0.2s ease;
+}
+
+.reviewItem:hover {
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.1);
+}
+
+.reviewItem p {
+  margin: 8px 0 12px;
+  color: var(--brown);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.reviewItem small {
+  display: block;
+  color: var(--soft-brown);
+  font-size: 13px;
 }
 
 .reviewStars {
