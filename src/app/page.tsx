@@ -76,7 +76,7 @@ export default function HomePage() {
   useEffect(() => {
     async function loadReviews() {
       try {
-        const res = await fetch("/api/reviews", {
+        const res = await fetch(`/api/reviews?t=${Date.now()}`, {
           cache: "no-store",
           headers: {
             "Cache-Control": "no-cache",
@@ -106,7 +106,7 @@ export default function HomePage() {
     setError("");
 
     try {
-      const res = await fetch("/api/reviews", {
+      const res = await fetch(`/api/reviews?t=${Date.now()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

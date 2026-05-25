@@ -9,6 +9,17 @@ type ReviewPayload = {
   source?: string;
 };
 
+function noStoreResponse(data: unknown, status = 200) {
+  return NextResponse.json(data, {
+    status,
+    headers: {
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
+    },
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as ReviewPayload;
@@ -18,25 +29,25 @@ export async function POST(req: NextRequest) {
     const source = String(body.source || "CookieCloudyDay Website");
 
     if (!Number.isFinite(rating) || rating < 1 || rating > 5) {
-      return NextResponse.json(
+      return noStoreResponse(
         { ok: false, message: "Rating must be 1-5" },
-        { status: 400 }
+        400
       );
     }
 
     if (!comment.trim()) {
-      return NextResponse.json(
+      return noStoreResponse(
         { ok: false, message: "Comment cannot be empty" },
-        { status: 400 }
+        400
       );
     }
 
     const webhookUrl = process.env.GOOGLE_REVIEW_WEBHOOK_URL;
 
     if (!webhookUrl) {
-      return NextResponse.json(
+      return noStoreResponse(
         { ok: false, message: "Missing GOOGLE_REVIEW_WEBHOOK_URL" },
-        { status: 500 }
+        500
       );
     }
 
@@ -44,6 +55,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "text/plain;charset=utf-8",
+        "Cache-Control": "no-cache",
       },
       body: JSON.stringify({
         rating,
@@ -56,14 +68,14 @@ export async function POST(req: NextRequest) {
     const googleText = await googleRes.text();
 
     if (!googleRes.ok) {
-      return NextResponse.json(
+      return noStoreResponse(
         {
           ok: false,
           message: "Google Apps Script failed",
           status: googleRes.status,
           detail: googleText,
         },
-        { status: 500 }
+        500
       );
     }
 
@@ -73,18 +85,18 @@ export async function POST(req: NextRequest) {
       googleData = JSON.parse(googleText);
     } catch {}
 
-    return NextResponse.json({
+    return noStoreResponse({
       ok: true,
       savedToSheet: true,
       google: googleData,
     });
   } catch (error) {
-    return NextResponse.json(
+    return noStoreResponse(
       {
         ok: false,
         message: error instanceof Error ? error.message : "Cannot save review",
       },
-      { status: 500 }
+      500
     );
   }
 }
@@ -94,49 +106,52 @@ export async function GET() {
     const webhookUrl = process.env.GOOGLE_REVIEW_WEBHOOK_URL;
 
     if (!webhookUrl) {
-      return NextResponse.json(
+      return noStoreResponse(
         {
           ok: false,
           message: "Missing GOOGLE_REVIEW_WEBHOOK_URL",
           reviews: [],
         },
-        { status: 500 }
+        500
       );
     }
 
-    const googleRes = await fetch(webhookUrl, {
+    const googleRes = await fetch(`${webhookUrl}?t=${Date.now()}`, {
       method: "GET",
       cache: "no-store",
+      headers: {
+        "Cache-Control": "no-cache",
+      },
     });
 
     const googleText = await googleRes.text();
 
     if (!googleRes.ok) {
-      return NextResponse.json(
+      return noStoreResponse(
         {
           ok: false,
           message: "Cannot load reviews from Google Sheet",
           detail: googleText,
           reviews: [],
         },
-        { status: 500 }
+        500
       );
     }
 
     const data = JSON.parse(googleText);
 
-    return NextResponse.json({
+    return noStoreResponse({
       ok: true,
       reviews: Array.isArray(data.reviews) ? data.reviews : [],
     });
   } catch (error) {
-    return NextResponse.json(
+    return noStoreResponse(
       {
         ok: false,
         message: error instanceof Error ? error.message : "Cannot load reviews",
         reviews: [],
       },
-      { status: 500 }
+      500
     );
   }
 }
