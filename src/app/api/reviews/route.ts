@@ -6,26 +6,13 @@ type ReviewPayload = {
   source?: string;
 };
 
-const mockReviews = [
-  {
-    rating: 5,
-    comment: "เว็บน่ารัก ใช้งานง่าย",
-    createdAt: "mock",
-  },
-  {
-    rating: 5,
-    comment: "Demi แนะนำเมนูดีมาก",
-    createdAt: "mock",
-  },
-];
-
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as ReviewPayload;
 
     const rating = Number(body.rating);
     const comment = String(body.comment || "");
-    const source = String(body.source || "website");
+    const source = String(body.source || "CookieCloudyDay Website");
 
     if (!Number.isFinite(rating) || rating < 1 || rating > 5) {
       return NextResponse.json(
@@ -36,33 +23,62 @@ export async function POST(req: NextRequest) {
 
     const webhookUrl = process.env.GOOGLE_REVIEW_WEBHOOK_URL;
 
-    if (webhookUrl) {
-      await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    if (!webhookUrl) {
+      return NextResponse.json(
+        {
+          ok: false,
+          message: "Missing GOOGLE_REVIEW_WEBHOOK_URL",
         },
-        body: JSON.stringify({
-          rating,
-          comment,
-          source,
-          createdAt: new Date().toISOString(),
-        }),
-      });
+        { status: 500 }
+      );
+    }
+
+    const googleRes = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },
+      body: JSON.stringify({
+        rating,
+        comment,
+        source,
+      }),
+      cache: "no-store",
+    });
+
+    const googleText = await googleRes.text();
+
+    if (!googleRes.ok) {
+      return NextResponse.json(
+        {
+          ok: false,
+          message: "Apps Script failed",
+          status: googleRes.status,
+          detail: googleText,
+        },
+        { status: 500 }
+      );
+    }
+
+    let googleJson: unknown = null;
+
+    try {
+      googleJson = JSON.parse(googleText);
+    } catch {
+      googleJson = googleText;
     }
 
     return NextResponse.json({
       ok: true,
-      savedToSheet: Boolean(webhookUrl),
-      review: {
-        rating,
-        comment,
-        source,
-      },
+      savedToSheet: true,
+      google: googleJson,
     });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
-      { ok: false, message: "Cannot save review" },
+      {
+        ok: false,
+        message: error instanceof Error ? error.message : "Cannot save review",
+      },
       { status: 500 }
     );
   }
@@ -71,6 +87,6 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     ok: true,
-    reviews: mockReviews,
+    message: "Review API is running",
   });
 }
