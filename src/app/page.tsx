@@ -78,6 +78,9 @@ export default function HomePage() {
       try {
         const res = await fetch("/api/reviews", {
           cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
         });
 
         const data = await res.json();

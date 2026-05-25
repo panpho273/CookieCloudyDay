@@ -1079,3 +1079,91 @@ th {
     font-size: 10px;
   }
 }
+
+/* ===== Final Cute Cookie Star Override ===== */
+.ratingStars {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  margin: 14px 0 14px !important;
+}
+
+.ratingStars button {
+  position: relative !important;
+  width: 58px !important;
+  height: 58px !important;
+  border: 1px solid rgba(166, 99, 21, 0.22) !important;
+  border-radius: 22px !important;
+  cursor: pointer !important;
+  display: grid !important;
+  place-items: center !important;
+  color: #7a4a00 !important;
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(100, 58, 18, 0.34) 0 3px, transparent 4px),
+    radial-gradient(circle at 68% 36%, rgba(100, 58, 18, 0.25) 0 3px, transparent 4px),
+    radial-gradient(circle at 52% 70%, rgba(100, 58, 18, 0.22) 0 3px, transparent 4px),
+    linear-gradient(180deg, #fff3bf 0%, #ffd86c 52%, #ffbd43 100%) !important;
+  box-shadow:
+    0 16px 30px rgba(221, 150, 39, 0.24),
+    0 0 0 5px rgba(255, 223, 132, 0.16),
+    inset 0 3px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -5px 12px rgba(167, 94, 13, 0.2) !important;
+  text-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.65),
+    0 6px 12px rgba(112, 65, 0, 0.16) !important;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease !important;
+  overflow: hidden !important;
+}
+
+.ratingStars button::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.85), transparent 34%),
+    radial-gradient(circle at 82% 82%, rgba(255, 255, 255, 0.32), transparent 32%) !important;
+  pointer-events: none !important;
+}
+
+.ratingStars button::after {
+  content: "✦" !important;
+  position: absolute !important;
+  top: 7px !important;
+  right: 9px !important;
+  font-size: 12px !important;
+  color: #fff9df !important;
+  opacity: 0.9 !important;
+  filter: drop-shadow(0 2px 4px rgba(122, 74, 0, 0.18)) !important;
+}
+
+.ratingStars button:hover {
+  transform: translateY(-3px) rotate(-2deg) scale(1.05) !important;
+  box-shadow:
+    0 22px 36px rgba(221, 150, 39, 0.32),
+    0 0 0 7px rgba(255, 223, 132, 0.22),
+    inset 0 3px 0 rgba(255, 255, 255, 0.86),
+    inset 0 -5px 12px rgba(167, 94, 13, 0.24) !important;
+}
+
+.ratingStars button:active {
+  transform: scale(0.95) !important;
+}
+
+@media (max-width: 768px) {
+  .ratingStars {
+    gap: 8px !important;
+  }
+
+  .ratingStars button {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 17px !important;
+    font-size: 24px !important;
+  }
+}
