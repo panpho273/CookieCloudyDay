@@ -54,7 +54,9 @@ export default function HomePage() {
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  const streamlitUrl = process.env.NEXT_PUBLIC_STREAMLIT_URL || "";
+  const streamlitUrl =
+  process.env.NEXT_PUBLIC_STREAMLIT_URL ||
+  "https://cookiecloudyday-demi.streamlit.app/";
 
   const avgRating = useMemo(() => {
     if (!reviews.length) return "0.0";
@@ -230,7 +232,7 @@ export default function HomePage() {
             <h3>รีวิวล่าสุด</h3>
 
             <div className="reviewList">
-              {reviews.slice(0, 3).map((review, index) => (
+              {reviews.map((review, index) => (
                 <div className="reviewItem" key={`${review.createdAt}-${index}`}>
                   <div className="reviewStars">
                     {"★".repeat(review.rating)}
@@ -244,54 +246,95 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       <section id="demi" className="section demiSection">
-        <div className="demiHeader">
-          <div>
-            <span className="miniBadge">Demi AI Assistant</span>
-            <h2>คุยกับ Demi AI</h2>
-            <p>
-              ผู้ช่วย AI ของ CookieCloudyDay สำหรับถามเมนู ราคา เวลาเปิดร้าน
-              และช่วยแนะนำคุกกี้ที่เหมาะกับคุณ
-            </p>
-          </div>
-
-          <div className="demiBubble">💬</div>
-        </div>
-
-        <div className="demiShell">
-          <div className="demiInfoCard">
-            <div className="demiAvatar">🤖</div>
-            <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
-            <p>
-              ลองถามว่า “มีเมนูอะไรแนะนำบ้าง”, “คุกกี้ราคาเท่าไหร่”
-              หรือ “ช่วยแนะนำคุกกี้สำหรับเป็นของฝาก”
-            </p>
-
-            <div className="demiTips">
-              <span>🍪 ถามเมนู</span>
-              <span>💜 แนะนำรสชาติ</span>
-              <span>🛒 ช่วยสรุปออเดอร์</span>
-            </div>
-          </div>
-
-          {streamlitUrl ? (
-            <div className="demiFrameCard">
-              <iframe
-                className="demiIframe"
-                src={streamlitUrl}
-                title="CookieCloudyDay Demi AI"
-              />
-            </div>
-          ) : (
-            <div className="demiMissingCard">
-              <h3>ยังไม่ได้เชื่อม Streamlit URL</h3>
+        <div className="demiUnifiedCard">
+          <div className="demiTop">
+            <div>
+              <span className="miniBadge">Demi AI Assistant</span>
+              <h2>คุยกับ Demi AI</h2>
               <p>
-                เพิ่มค่า <b>NEXT_PUBLIC_STREAMLIT_URL</b> ใน Vercel Environment Variables
-                แล้วกด Redeploy เพื่อให้หน้าแชท Demi แสดงตรงนี้
+                ผู้ช่วย AI ของ CookieCloudyDay สำหรับถามเมนู ราคา เวลาเปิดร้าน
+                และช่วยแนะนำคุกกี้ที่เหมาะกับคุณ
               </p>
             </div>
-          )}
+
+            <div className="demiFloatingIcon">💬</div>
+          </div>
+
+          <div className="demiContent">
+            <div className="demiSide">
+              <div className="demiBotIcon">🤖</div>
+
+              <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
+              <p>
+                ลองถาม Demi ได้เลย เช่น เมนูแนะนำ ราคา หรือคุกกี้ที่เหมาะกับการซื้อเป็นของฝาก
+              </p>
+
+              <div className="demiQuickActions">
+                <a
+                  href={streamlitUrl || "#demi"}
+                  target={streamlitUrl ? "_blank" : undefined}
+                  rel={streamlitUrl ? "noreferrer" : undefined}
+                  className="demiQuickBtn"
+                >
+                  🍪 ถามเมนู
+                </a>
+
+                <a
+                  href={streamlitUrl || "#demi"}
+                  target={streamlitUrl ? "_blank" : undefined}
+                  rel={streamlitUrl ? "noreferrer" : undefined}
+                  className="demiQuickBtn"
+                >
+                  💜 แนะนำรสชาติ
+                </a>
+
+                <a
+                  href={streamlitUrl || "#demi"}
+                  target={streamlitUrl ? "_blank" : undefined}
+                  rel={streamlitUrl ? "noreferrer" : undefined}
+                  className="demiQuickBtn"
+                >
+                  🛒 ช่วยสรุปออเดอร์
+                </a>
+              </div>
+
+              {streamlitUrl && (
+                <a
+                  href={streamlitUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="demiOpenBtn"
+                >
+                  เปิด Demi AI แบบเต็มหน้า
+                </a>
+              )}
+            </div>
+
+            <div className="demiChatPanel">
+              {streamlitUrl ? (
+                <>
+                  <iframe
+                    className="demiIframe"
+                    src={streamlitUrl}
+                    title="CookieCloudyDay Demi AI"
+                  />
+
+                  <div className="demiIframeNote">
+                    ถ้ากล่องแชทโหลดไม่ขึ้น ให้กด “เปิด Demi AI แบบเต็มหน้า”
+                  </div>
+                </>
+              ) : (
+                <div className="demiMissingCard">
+                  <h3>ยังไม่ได้ตั้งค่า Streamlit URL</h3>
+                  <p>
+                    เพิ่มค่า <b>NEXT_PUBLIC_STREAMLIT_URL</b> ใน Vercel Environment Variables
+                    แล้ว Redeploy เพื่อให้หน้าแชท Demi แสดงตรงนี้
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
