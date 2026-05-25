@@ -54,7 +54,62 @@ export default function HomePage() {
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
+  
+  const [demiOpen, setDemiOpen] = useState(false);
+  const [demiInput, setDemiInput] = useState("");
+  const [demiMessages, setDemiMessages] = useState([
+    {
+      role: "bot",
+      text: "สวัสดีค่ะ! ยินดีให้บริการ มีอะไรให้ช่วยไหมคะ? 😊",
+    },
+  ]);
+
+  function getDemiReply(message: string) {
+    const msg = message.toLowerCase();
+
+    if (msg.includes("เมนู") || msg.includes("แนะนำ") || msg.includes("คุกกี้")) {
+      return "เมนูแนะนำของร้านคือคุกกี้ช็อกโกแลตชิพ คุกกี้เนยสด และคุกกี้ดับเบิลช็อกโกแลตค่ะ 🍪";
+    }
+
+    if (msg.includes("ราคา") || msg.includes("กี่บาท") || msg.includes("เท่าไหร่")) {
+      return "ราคาคุกกี้เริ่มประมาณ 45–69 บาท แล้วแต่เมนูค่ะ ดูเมนูยอดฮิตด้านบนของเว็บได้เลยนะคะ";
+    }
+
+    if (msg.includes("เปิด") || msg.includes("เวลา") || msg.includes("ร้าน")) {
+      return "ร้าน CookieCloudyDay เปิดทุกวัน เวลา 10:00–20:00 น. ค่ะ";
+    }
+
+    if (msg.includes("ของฝาก") || msg.includes("ฝาก") || msg.includes("ของขวัญ")) {
+      return "ถ้าซื้อเป็นของฝาก แนะนำคุกกี้เนยสดหรือคุกกี้ช็อกโกแลตชิพค่ะ แพ็กเกจน่ารักและรสชาติทานง่ายมาก";
+    }
+
+    if (msg.includes("สั่ง") || msg.includes("ออเดอร์")) {
+      return "ตอนนี้สามารถดูเมนูและสอบถาม Demi ได้ก่อนค่ะ หากต้องการสั่งซื้อ ให้ติดต่อร้านตามช่องทางที่ร้านแจ้งไว้ได้เลย";
+    }
+
+    return "Demi ยังตอบแบบสั้น ๆ บนหน้าเว็บนะคะ ถ้าอยากคุยแบบเต็ม ให้กดปุ่มเปิด Demi AI ตัวเต็มได้เลยค่ะ 💜";
+  }
+
+  function sendDemiMessage() {
+    const cleanInput = demiInput.trim();
+
+    if (!cleanInput) return;
+
+    const userMessage = {
+      role: "user",
+      text: cleanInput,
+    };
+
+    const botMessage = {
+      role: "bot",
+      text: getDemiReply(cleanInput),
+    };
+
+    setDemiMessages((prev) => [...prev, userMessage, botMessage]);
+    setDemiInput("");
+  }
+
+const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
 
   const avgRating = useMemo(() => {
     if (!reviews.length) return "0.0";
@@ -244,74 +299,113 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <section id="demi" className="section demiSection">
-        <div className="demiLaunchCard">
-          <div className="demiLaunchContent">
-            <span className="miniBadge">Demi AI Assistant</span>
+      <section id="demi" className="section demiInfoSection">
+        <div className="demiInfoCard">
+          <span className="miniBadge">Demi AI Assistant</span>
+          <h2>คุยกับ Demi AI</h2>
+          <p>
+            กดปุ่มแชทมุมขวาล่างเพื่อคุยกับ Demi แบบรวดเร็ว
+            หรือเปิด Demi AI ตัวเต็มเพื่อถามเมนู ราคา และคำแนะนำเกี่ยวกับคุกกี้ของร้าน
+          </p>
 
-            <h2>คุยกับ Demi AI</h2>
+          <button
+            type="button"
+            className="demiInfoButton"
+            onClick={() => setDemiOpen(true)}
+          >
+            เปิดกล่องแชท Demi
+          </button>
 
-            <p>
-              Demi คือผู้ช่วย AI ของ CookieCloudyDay สำหรับถามเมนู ราคา เวลาเปิดร้าน
-              และช่วยแนะนำคุกกี้ที่เหมาะกับคุณ
-            </p>
-
-            <div className="demiFeatureGrid">
-              <div className="demiFeatureItem">
-                <span>🍪</span>
-                <strong>ถามเมนูคุกกี้</strong>
-                <p>ดูเมนูแนะนำและรสชาติที่เหมาะกับคุณ</p>
-              </div>
-
-              <div className="demiFeatureItem">
-                <span>💜</span>
-                <strong>แนะนำรสชาติ</strong>
-                <p>ช่วยเลือกคุกกี้ตามความชอบหรือโอกาสพิเศษ</p>
-              </div>
-
-              <div className="demiFeatureItem">
-                <span>🛒</span>
-                <strong>ช่วยสรุปออเดอร์</strong>
-                <p>ถามราคาและเตรียมรายการก่อนสั่งซื้อได้ง่ายขึ้น</p>
-              </div>
-            </div>
-
-            <div className="demiNotice">
-              ไม่สามารถฝังหน้าแชท Streamlit ในเว็บนี้ได้โดยตรง
-              กรุณากดปุ่มด้านล่างเพื่อเปิด Demi AI ในแท็บใหม่
-            </div>
-
-            <a
-              href={streamlitUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="demiLaunchButton"
-            >
-              เปิด Demi AI แบบเต็มหน้า
-            </a>
-          </div>
-
-          <div className="demiPreviewCard">
-            <div className="demiRobot">🤖</div>
-            <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
-            <p>
-              ลองถามว่า “มีเมนูอะไรแนะนำบ้าง”, “คุกกี้ราคาเท่าไหร่”
-              หรือ “ช่วยแนะนำคุกกี้สำหรับเป็นของฝาก”
-            </p>
-
-            <div className="demiChatMock">
-              <div className="chatBubble user">อยากได้คุกกี้เป็นของฝาก แนะนำอะไรดี?</div>
-              <div className="chatBubble bot">
-                แนะนำคุกกี้ช็อกโกแลตชิพหรือคุกกี้เนยสดค่ะ หอม น่ารัก และเหมาะกับเป็นของฝากมาก 🍪
-              </div>
-            </div>
-          </div>
+          <a
+            href={streamlitUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="demiInfoLink"
+          >
+            เปิด Demi AI ตัวเต็ม
+          </a>
         </div>
       </section>
 
       <footer className="footer">
         CookieCloudyDay © 2026 | Pastel Cookie Cloud Experience
       </footer>
+      <div className={`demiFloatingWidget ${demiOpen ? "open" : ""}`}>
+        {demiOpen && (
+          <div className="demiChatWindow">
+            <div className="demiChatHeader">
+              <div className="demiAvatar">✣</div>
+              <div>
+                <h3>Demi AI</h3>
+                <p><span></span> ออนไลน์</p>
+              </div>
+
+              <button
+                type="button"
+                className="demiCloseBtn"
+                onClick={() => setDemiOpen(false)}
+                aria-label="ปิดแชท Demi"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="demiChatBody">
+              {demiMessages.map((message, index) => (
+                <div
+                  className={`demiMessage ${message.role === "user" ? "user" : "bot"}`}
+                  key={`${message.role}-${index}`}
+                >
+                  {message.text}
+                </div>
+              ))}
+            </div>
+
+            <div className="demiChatFooter">
+              <a
+                href={streamlitUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="demiMenuBtn"
+                title="เปิด Demi AI ตัวเต็ม"
+              >
+                ☰
+              </a>
+
+              <input
+                value={demiInput}
+                onChange={(e) => setDemiInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    sendDemiMessage();
+                  }
+                }}
+                placeholder='เช่น "มีเมนูอะไรแนะนำบ้าง"...'
+              />
+
+              <button
+                type="button"
+                className="demiSendBtn"
+                onClick={sendDemiMessage}
+                aria-label="ส่งข้อความ"
+              >
+                ➤
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button
+          type="button"
+          className="demiFloatingButton"
+          onClick={() => setDemiOpen((prev) => !prev)}
+          aria-label="เปิดแชท Demi"
+        >
+          🤖
+          <span></span>
+        </button>
+      </div>
+
     </main>
   );
 }
