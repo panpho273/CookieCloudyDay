@@ -106,20 +106,20 @@ header[data-testid="stHeader"] {
   box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10) !important;
 }
 
-/* Avatar background - remove dark background from emoji container */
+/* Avatar background - change from dark to white */
 [data-testid="stChatMessage"] > div[style] {
-  background: transparent !important;
+  background: #ffffff !important;
+  border-radius: 50% !important;
 }
 
-[data-testid="stChatMessage"] > div > div[style] {
-  background: transparent !important;
+[data-testid="stChatMessage"] > div > div {
+  background: #ffffff !important;
 }
 
-/* Target any element with background color in avatar area */
-[data-testid="stChatMessage"] [style*="background-color"],
-[data-testid="stChatMessage"] [style*="background"] {
-  background-color: transparent !important;
-  background: transparent !important;
+/* Override inline styles for avatar */
+[data-testid="stChatMessage"] div[style*="background"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
 }
 
 [data-testid="stMarkdownContainer"],
