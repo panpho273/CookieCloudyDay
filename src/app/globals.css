@@ -1323,3 +1323,59 @@ th {
     border-radius: 20px !important;
   }
 }
+
+/* ===== Fix Review Box Vertical Scroll ===== */
+
+/* กล่องขวาที่เก็บรายการรีวิว */
+.reviewFeed,
+.reviewList,
+.latestReviews,
+.reviewsList {
+  max-height: 430px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 10px !important;
+  scroll-behavior: smooth !important;
+}
+
+/* ทำให้รายการเรียงลงล่าง */
+.reviewFeed,
+.reviewList,
+.latestReviews,
+.reviewsList {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+/* scrollbar น่ารัก ๆ */
+.reviewFeed::-webkit-scrollbar,
+.reviewList::-webkit-scrollbar,
+.latestReviews::-webkit-scrollbar,
+.reviewsList::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.reviewFeed::-webkit-scrollbar-track,
+.reviewList::-webkit-scrollbar-track,
+.latestReviews::-webkit-scrollbar-track,
+.reviewsList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 999px !important;
+}
+
+.reviewFeed::-webkit-scrollbar-thumb,
+.reviewList::-webkit-scrollbar-thumb,
+.latestReviews::-webkit-scrollbar-thumb,
+.reviewsList::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d8c2ff, #8b5cf6) !important;
+  border-radius: 999px !important;
+}
+
+/* บังคับไม่ให้กล่องรีวิวด้านขวาขยายสูงตามข้อมูลจนล้น */
+.reviewPanel,
+.reviewListPanel,
+.latestReviewPanel {
+  max-height: 560px !important;
+  overflow: hidden !important;
+}
