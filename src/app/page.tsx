@@ -51,6 +51,7 @@ export default function HomePage() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [reviews, setReviews] = useState<Review[]>([
     {
       rating: 5,
@@ -73,7 +74,13 @@ export default function HomePage() {
   }, [reviews]);
 
   async function submitReview() {
+    if (!comment.trim()) {
+      setError("กรุณาเขียนรีวิวก่อนส่ง");
+      return;
+    }
+
     setSending(true);
+    setError("");
 
     try {
       const res = await fetch("/api/reviews", {
@@ -91,21 +98,21 @@ export default function HomePage() {
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
-        alert(JSON.stringify(data, null, 2));
         throw new Error(data.message || "Cannot submit review");
       }
 
       const newReview: Review = {
         rating,
-        comment: comment || "ไม่มีความคิดเห็นเพิ่มเติม",
+        comment,
         createdAt: new Date().toLocaleString("th-TH"),
       };
 
       setReviews((prev) => [newReview, ...prev]);
       setComment("");
-      alert("ขอบคุณสำหรับรีวิวค่ะ 🍪");
-    } catch {
-      alert("ส่งรีวิวไม่สำเร็จ ลองใหม่อีกครั้งนะคะ");
+      setRating(5);
+      setError("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "ส่งรีวิวไม่สำเร็จ ลองใหม่อีกครั้ง");
     } finally {
       setSending(false);
     }
@@ -178,6 +185,8 @@ export default function HomePage() {
             <h3>ให้คะแนนร้าน ⭐</h3>
 
             <div className="reviewForm">
+              {error && <div className="errorBox">{error}</div>}
+
               <div className="stars">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
