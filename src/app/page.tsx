@@ -54,9 +54,7 @@ export default function HomePage() {
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  const streamlitUrl =
-  process.env.NEXT_PUBLIC_STREAMLIT_URL ||
-  "https://cookiecloudyday-demi.streamlit.app/";
+  const streamlitUrl = "https://cookiecloudyday-demi.streamlit.app/";
 
   const avgRating = useMemo(() => {
     if (!reviews.length) return "0.0";
@@ -247,8 +245,8 @@ export default function HomePage() {
         </div>
       </section>
       <section id="demi" className="section demiSection">
-        <div className="demiUnifiedCard">
-          <div className="demiTop">
+        <div className="demiOneCard">
+          <div className="demiOneHeader">
             <div>
               <span className="miniBadge">Demi AI Assistant</span>
               <h2>คุยกับ Demi AI</h2>
@@ -258,81 +256,54 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="demiFloatingIcon">💬</div>
+            <a
+              className="demiHeaderButton"
+              href={streamlitUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              เปิด Demi AI
+            </a>
           </div>
 
-          <div className="demiContent">
-            <div className="demiSide">
+          <div className="demiOneBody">
+            <div className="demiIntroBox">
               <div className="demiBotIcon">🤖</div>
 
               <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
               <p>
-                ลองถาม Demi ได้เลย เช่น เมนูแนะนำ ราคา หรือคุกกี้ที่เหมาะกับการซื้อเป็นของฝาก
+                ลองถามว่า “มีเมนูอะไรแนะนำบ้าง”, “คุกกี้ราคาเท่าไหร่”
+                หรือ “ช่วยแนะนำคุกกี้สำหรับเป็นของฝาก”
               </p>
 
-              <div className="demiQuickActions">
-                <a
-                  href={streamlitUrl || "#demi"}
-                  target={streamlitUrl ? "_blank" : undefined}
-                  rel={streamlitUrl ? "noreferrer" : undefined}
-                  className="demiQuickBtn"
-                >
+              <div className="demiPromptList">
+                <a href={streamlitUrl} target="_blank" rel="noreferrer">
                   🍪 ถามเมนู
                 </a>
 
-                <a
-                  href={streamlitUrl || "#demi"}
-                  target={streamlitUrl ? "_blank" : undefined}
-                  rel={streamlitUrl ? "noreferrer" : undefined}
-                  className="demiQuickBtn"
-                >
+                <a href={streamlitUrl} target="_blank" rel="noreferrer">
                   💜 แนะนำรสชาติ
                 </a>
 
-                <a
-                  href={streamlitUrl || "#demi"}
-                  target={streamlitUrl ? "_blank" : undefined}
-                  rel={streamlitUrl ? "noreferrer" : undefined}
-                  className="demiQuickBtn"
-                >
+                <a href={streamlitUrl} target="_blank" rel="noreferrer">
                   🛒 ช่วยสรุปออเดอร์
                 </a>
               </div>
-
-              {streamlitUrl && (
-                <a
-                  href={streamlitUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="demiOpenBtn"
-                >
-                  เปิด Demi AI แบบเต็มหน้า
-                </a>
-              )}
             </div>
 
-            <div className="demiChatPanel">
-              {streamlitUrl ? (
-                <>
-                  <iframe
-                    className="demiIframe"
-                    src={streamlitUrl}
-                    title="CookieCloudyDay Demi AI"
-                  />
+            <div className="demiEmbedBox">
+              <iframe
+                className="demiIframe"
+                src={streamlitUrl}
+                title="CookieCloudyDay Demi AI"
+              />
 
-                  <div className="demiIframeNote">
-                    ถ้ากล่องแชทโหลดไม่ขึ้น ให้กด “เปิด Demi AI แบบเต็มหน้า”
-                  </div>
-                </>
-              ) : (
-                <div className="demiMissingCard">
-                  <h3>ยังไม่ได้ตั้งค่า Streamlit URL</h3>
-                  <p>
-                    เพิ่มค่า <b>NEXT_PUBLIC_STREAMLIT_URL</b> ใน Vercel Environment Variables
-                    แล้ว Redeploy เพื่อให้หน้าแชท Demi แสดงตรงนี้
-                  </p>
-                </div>
-              )}
+              <div className="demiEmbedFallback">
+                ถ้ากล่องแชทไม่ขึ้น ให้กดปุ่ม
+                <a href={streamlitUrl} target="_blank" rel="noreferrer">
+                  เปิด Demi AI แบบเต็มหน้า
+                </a>
+              </div>
             </div>
           </div>
         </div>
