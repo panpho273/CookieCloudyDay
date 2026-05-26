@@ -279,17 +279,7 @@ const [isDemiOpen, setIsDemiOpen] = useState(true);
       setDemiMessages((prev) => [...prev, botMessage]);
     }, 350);
   }
-
-const [demiOpen, setDemiOpen] = useState(false);
-  const [demiInput, setDemiInput] = useState("");
-  const [demiMessages, setDemiMessages] = useState([
-    {
-      role: "bot",
-      text: "สวัสดีค่ะ! ยินดีให้บริการ มีอะไรให้ช่วยไหมคะ? 😊",
-    },
-  ]);
-
-  function getDemiReply(message: string) {
+function getDemiReply(message: string) {
     const msg = message.toLowerCase();
 
     if (msg.includes("เมนู") || msg.includes("แนะนำ") || msg.includes("คุกกี้")) {
@@ -314,54 +304,6 @@ const [demiOpen, setDemiOpen] = useState(false);
 
     return "Demi ยังตอบแบบสั้น ๆ บนหน้าเว็บนะคะ ถ้าอยากคุยแบบเต็ม ให้กดปุ่มเปิดผู้ช่วย Demiได้เลยค่ะ 💜";
   }
-
-  async function sendDemiMessage() {
-    const cleanInput = demiInput.trim();
-
-    if (!cleanInput) return;
-
-    const userMessage = {
-      role: "user",
-      text: cleanInput,
-    };
-
-    setDemiMessages((prev) => [...prev, userMessage]);
-    setDemiInput("");
-
-    try {
-      const res = await fetch("/api/demi/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-        },
-        body: JSON.stringify({
-          message: cleanInput,
-        }),
-      });
-
-      const data = await res.json();
-
-      const botMessage = {
-        role: "bot",
-        text:
-          data.ok && data.reply
-            ? data.reply
-            : "ขออภัยค่ะ Demi ตอบไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ",
-      };
-
-      setDemiMessages((prev) => [...prev, botMessage]);
-    } catch {
-      setDemiMessages((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: "ขออภัยค่ะ Demi ตอบไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ",
-        },
-      ]);
-    }
-  }
-
 
 
   const avgRating = useMemo(() => {
@@ -839,82 +781,6 @@ const [demiOpen, setDemiOpen] = useState(false);
       <footer className="footer">
         CookieCloudyDay © 2026 | Pastel Cookie Cloud Experience
       </footer>
-      <div className={`demiFloatingWidget ${demiOpen ? "open" : ""}`}>
-        {demiOpen && (
-          <div className="demiChatWindow">
-            <div className="demiChatHeader">
-              <div className="demiAvatar">🍪</div>
-              <div>
-                <h3>Demi Cookie Helper</h3>
-                <p><span></span> พร้อมช่วยเลือกคุกกี้</p>
-              </div>
-
-              <button
-                type="button"
-                className="demiCloseBtn"
-                onClick={() => setDemiOpen(false)}
-                aria-label="ปิดแชท Demi"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="demiChatBody">
-              {demiMessages.map((message, index) => (
-                <div
-                  className={`demiMessage ${message.role === "user" ? "user" : "bot"}`}
-                  key={`${message.role}-${index}`}
-                >
-                  {message.text}
-                </div>
-              ))}
-            </div>
-
-            <div className="demiChatFooter">
-              <a
-                href={streamlitUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="demiMenuBtn"
-                title="เปิดผู้ช่วย Demi"
-              >
-                ☰
-              </a>
-
-              <input
-                value={demiInput}
-                onChange={(e) => setDemiInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    sendDemiMessage();
-                  }
-                }}
-                placeholder='ถามเมนู ราคา หรือคุกกี้ของฝาก...'
-              />
-
-              <button
-                type="button"
-                className="demiSendBtn"
-                onClick={sendDemiMessage}
-                aria-label="ส่งข้อความ"
-              >
-                ➤
-              </button>
-            </div>
-          </div>
-        )}
-
-        <button
-          type="button"
-          className="demiFloatingButton"
-          onClick={() => setDemiOpen((prev) => !prev)}
-          aria-label="เปิดแชท Demi"
-        >
-          🤖
-          <span></span>
-        </button>
-      </div>
-
-    </main>
+</main>
   );
 }
