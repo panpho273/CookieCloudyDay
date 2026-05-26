@@ -4918,3 +4918,137 @@ main {
   }
 }
 
+
+/* ===== Cookie Club single section layout ===== */
+.cookieClubSection {
+  margin-top: 36px !important;
+}
+
+.cookieClubShell {
+  border-radius: 38px !important;
+  padding: 32px !important;
+  background:
+    radial-gradient(circle at top right, rgba(255, 213, 139, 0.28), transparent 30%),
+    linear-gradient(135deg, #fffaf3 0%, #fff4fb 50%, #f3edff 100%) !important;
+  border: 1px solid rgba(139, 92, 246, 0.16) !important;
+  box-shadow: 0 28px 80px rgba(98, 67, 50, 0.12) !important;
+}
+
+.cookieClubHeader h2 {
+  margin: 12px 0 8px !important;
+  font-size: clamp(42px, 6vw, 72px) !important;
+  color: #4b2e2b !important;
+  line-height: 0.96 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.cookieClubHeader p {
+  max-width: 860px !important;
+  margin: 0 !important;
+  color: #8a6a60 !important;
+  line-height: 1.75 !important;
+  font-weight: 500 !important;
+}
+
+.cookieClubPromoGrid {
+  margin-top: 22px !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.cookieClubPromoCard {
+  display: flex !important;
+  gap: 12px !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1px solid rgba(139, 92, 246, 0.14) !important;
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.06) !important;
+}
+
+.cookieClubPromoIcon {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  border-radius: 17px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 25px !important;
+  background: linear-gradient(135deg, #ffe8a3, #d8b4fe) !important;
+}
+
+.cookieClubPromoCard h3 {
+  margin: 0 0 6px !important;
+  color: #4b2e2b !important;
+  font-size: 17px !important;
+}
+
+.cookieClubPromoCard p {
+  margin: 0 !important;
+  color: #8a6a60 !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  font-weight: 500 !important;
+}
+
+.cookieClubFormGrid {
+  margin-top: 20px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 18px !important;
+}
+
+.cookieClubPanel {
+  padding: 24px !important;
+  border-radius: 30px !important;
+}
+
+.cookieClubPanel h3 {
+  margin: 0 0 6px !important;
+  color: #4b2e2b !important;
+  font-size: 28px !important;
+}
+
+.cookieClubPanelDesc {
+  margin: 0 0 16px !important;
+  color: #8a6a60 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.7 !important;
+}
+
+/* ซ่อน section เก่าถ้ายังมี style ค้าง */
+#promotions,
+#order {
+  display: none !important;
+}
+
+#reviews {
+  margin-top: 30px !important;
+}
+
+@media (max-width: 980px) {
+  .cookieClubPromoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .cookieClubFormGrid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .cookieClubShell {
+    padding: 22px !important;
+  }
+
+  .cookieClubPromoGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cookieClubHeader h2 {
+    font-size: 42px !important;
+  }
+}
+

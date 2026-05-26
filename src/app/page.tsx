@@ -600,82 +600,56 @@ ${data.card.meaning}
         </div>
       </section>
 
-      <section id="promotions" className="section promoSection">
-        <div className="promoShell">
-          <div className="promoHeader">
-            <span className="miniBadge">Cookie Club Promotion</span>
-            <h2>โปรพิเศษสำหรับสมาชิก</h2>
+      <section id="member" className="section cookieClubSection">
+        <div className="cookieClubShell">
+          <div className="cookieClubHeader">
+            <span className="miniBadge">Cookie Club Member</span>
+            <h2>Cookie Club</h2>
             <p>
-              สมัคร Cookie Club ก่อนสั่งซื้อ เพื่อรับสิทธิ์โปรโมชันของร้าน
-              ทั้งส่วนลด ของแถม และสุ่มไพ่ Cookie Fortune เมื่อซื้อครบตามเงื่อนไข
+              สมัครสมาชิกก่อนสั่งซื้อ เพื่อใช้สิทธิ์โปรโมชันของร้าน
+              ทั้งส่วนลด ของแถม และสุ่มไพ่ Cookie Fortune เมื่อซื้อครบ 150 บาท
             </p>
           </div>
 
-          <div className="promoSlider">
-            <div className="promoTrack">
-              {[
-                {
-                  icon: "🔮",
-                  title: "ซื้อครบ 150 บาท",
-                  desc: "รับสิทธิ์สุ่มไพ่ Cookie Fortune ฟรี 1 ใบ พร้อมข้อความน่ารักจากร้าน",
-                },
-                {
-                  icon: "🎉",
-                  title: "สมาชิกใหม่ลด 10%",
-                  desc: "สมัคร Cookie Club ครั้งแรก รับส่วนลดสำหรับออเดอร์แรกของคุณ",
-                },
-                {
-                  icon: "🎂",
-                  title: "โปรวันเกิด",
-                  desc: "สมาชิกที่มีวันเกิดในเดือนนั้น รับส่วนลดพิเศษหรือของแถมจากร้าน",
-                },
-                {
-                  icon: "🍪",
-                  title: "ซื้อครบ 5 ชิ้น แถม 1",
-                  desc: "เหมาะสำหรับซื้อฝากเพื่อนหรือเก็บไว้กินหลายรสชาติ",
-                },
-                {
-                  icon: "💜",
-                  title: "Demi Pick",
-                  desc: "ให้ Demi ช่วยแนะนำเมนูที่เหมาะกับรสชาติที่คุณชอบ",
-                },
-              ].map((promo, index) => (
-                <div className="promoSlideCard" key={`${promo.title}-${index}`}>
-                  <div className="promoSlideIcon">{promo.icon}</div>
+          <div className="cookieClubPromoGrid">
+            {[
+              {
+                icon: "🔮",
+                title: "ซื้อครบ 150 บาท",
+                desc: "สุ่มไพ่ Cookie Fortune ฟรี 1 ใบ พร้อมข้อความน่ารักจากร้าน",
+              },
+              {
+                icon: "🎉",
+                title: "สมาชิกใหม่ลด 10%",
+                desc: "รับส่วนลดสำหรับออเดอร์แรกของสมาชิกใหม่",
+              },
+              {
+                icon: "🎂",
+                title: "โปรวันเกิด",
+                desc: "สมาชิกที่มีวันเกิดรับส่วนลดหรือของแถมพิเศษ",
+              },
+              {
+                icon: "🍪",
+                title: "ซื้อครบ 5 ชิ้น แถม 1",
+                desc: "เหมาะสำหรับซื้อฝากหรือกินหลายรสชาติ",
+              },
+            ].map((promo, index) => (
+              <div className="cookieClubPromoCard" key={`${promo.title}-${index}`}>
+                <div className="cookieClubPromoIcon">{promo.icon}</div>
+                <div>
                   <h3>{promo.title}</h3>
                   <p>{promo.desc}</p>
-                  <span>สำหรับสมาชิกเท่านั้น</span>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="member" className="section memberSection">
-        <div className="memberShell memberRegisterShell">
-          <div className="memberHero">
-            <span className="miniBadge">Cookie Club Member</span>
-            <h2>สมัครสมาชิก Cookie Club</h2>
-            <p>
-              สมัครสมาชิกก่อนสั่งซื้อ เพื่อใช้สิทธิ์โปรโมชัน สะสมข้อมูลออเดอร์
-              และรับสิทธิ์สุ่มไพ่ Cookie Fortune เมื่อซื้อครบ 150 บาท
-            </p>
+              </div>
+            ))}
           </div>
 
-          <div className="registerCard">
-            <div className="registerInfo">
-              <h3>สิทธิ์ของสมาชิก</h3>
-              <ul>
-                <li>สมัครใหม่รับส่วนลด 10%</li>
-                <li>ซื้อครบ 150 บาท สุ่มไพ่ Cookie Fortune ฟรี</li>
-                <li>วันเกิดรับส่วนลดหรือของแถมพิเศษ</li>
-                <li>ซื้อครบ 5 ชิ้น แถม 1 ชิ้น</li>
-              </ul>
-            </div>
-
-            <div className="shopPanel registerPanel">
-              <h3>ฟอร์มสมัครสมาชิก</h3>
+          <div className="cookieClubFormGrid">
+            <div className="shopPanel cookieClubPanel">
+              <h3>สมัครสมาชิก</h3>
+              <p className="cookieClubPanelDesc">
+                สมัคร Cookie Club เพื่อใช้โปรของร้านและสั่งซื้อคุกกี้ได้ง่ายขึ้น
+              </p>
 
               <div className="formGrid">
                 <input
@@ -727,35 +701,12 @@ ${data.card.meaning}
                 สมัคร Cookie Club
               </button>
             </div>
-          </div>
 
-          {shopMessage && <div className="shopMessage">{shopMessage}</div>}
-        </div>
-      </section>
-
-      <section id="order" className="section orderSection">
-        <div className="orderShell">
-          <div className="orderHeader">
-            <span className="miniBadge">Order for Members</span>
-            <h2>สั่งซื้อสำหรับสมาชิก</h2>
-            <p>
-              กรอกเบอร์โทร อีเมล หรือรหัสสมาชิกก่อนสั่งซื้อ
-              หากยังไม่ได้สมัคร ระบบจะแจ้งให้สมัคร Cookie Club ก่อน
-            </p>
-          </div>
-
-          <div className="orderLayout">
-            <div className="orderPromoCard">
-              <div className="orderPromoIcon">🔮</div>
-              <h3>Cookie Fortune</h3>
-              <p>
-                ยอดครบ 150 บาท รับสิทธิ์สุ่มไพ่ฟรี 1 ใบ
-                พร้อมข้อความในการ์ดพิเศษจาก CookieCloudyDay
+            <div className="shopPanel cookieClubPanel">
+              <h3>สั่งซื้อสำหรับสมาชิก</h3>
+              <p className="cookieClubPanelDesc">
+                กรอกเบอร์โทร อีเมล หรือรหัสสมาชิกก่อนสั่งซื้อ
               </p>
-            </div>
-
-            <div className="shopPanel orderPanel">
-              <h3>ฟอร์มสั่งซื้อ</h3>
 
               <div className="formGrid">
                 <input
@@ -810,10 +761,6 @@ ${data.card.meaning}
                 onClick={() => {
                   if (!orderForm.memberKey.trim()) {
                     setShopMessage("กรุณาสมัครสมาชิกหรือกรอกเบอร์โทร/อีเมลสมาชิกก่อนสั่งซื้อค่ะ");
-                    document.getElementById("member")?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
                     return;
                   }
 
@@ -824,6 +771,8 @@ ${data.card.meaning}
               </button>
             </div>
           </div>
+
+          {shopMessage && <div className="shopMessage">{shopMessage}</div>}
 
           {orderResult && (
             <div className="fortuneResult">
@@ -842,8 +791,7 @@ ${data.card.meaning}
         </div>
       </section>
 
-
-            <section id="reviews" className="section">
+      <section id="reviews" className="section">
         <div className="reviewBox">
           <div className="reviewBoxHeader">
             <span className="miniBadge">Customer Reviews</span>
