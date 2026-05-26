@@ -155,6 +155,57 @@ export default function HomePage() {
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
+    const reviewVerticalAutoScroll = document.querySelector<HTMLElement>(
+      "#reviews .reviewList"
+    );
+
+    if (!reviewVerticalAutoScroll) return;
+
+    let paused = false;
+
+    const pause = () => {
+      paused = true;
+    };
+
+    const resume = () => {
+      paused = false;
+    };
+
+    const timer = window.setInterval(() => {
+      if (paused) return;
+
+      const maxScroll =
+        reviewVerticalAutoScroll.scrollHeight -
+        reviewVerticalAutoScroll.clientHeight;
+
+      if (maxScroll <= 0) return;
+
+      const currentTop = reviewVerticalAutoScroll.scrollTop;
+
+      if (currentTop >= maxScroll - 8) {
+        reviewVerticalAutoScroll.scrollTop = 0;
+        return;
+      }
+
+      reviewVerticalAutoScroll.scrollTop = currentTop + 1;
+    }, 40);
+
+    reviewVerticalAutoScroll.addEventListener("mouseenter", pause);
+    reviewVerticalAutoScroll.addEventListener("mouseleave", resume);
+    reviewVerticalAutoScroll.addEventListener("touchstart", pause);
+    reviewVerticalAutoScroll.addEventListener("touchend", resume);
+
+    return () => {
+      window.clearInterval(timer);
+      reviewVerticalAutoScroll.removeEventListener("mouseenter", pause);
+      reviewVerticalAutoScroll.removeEventListener("mouseleave", resume);
+      reviewVerticalAutoScroll.removeEventListener("touchstart", pause);
+      reviewVerticalAutoScroll.removeEventListener("touchend", resume);
+    };
+  }, [reviews]);
+
+
+  useEffect(() => {
     const cookieClubPromoAutoScroll = document.querySelector<HTMLElement>(
       ".cookieClubPromoGrid"
     );
@@ -239,57 +290,8 @@ export default function HomePage() {
   }, []);
 
 
-  useEffect(() => {
-    const reviewVerticalAutoScroll = document.querySelector<HTMLElement>(
-      "#reviews .reviewList"
-    );
 
-    if (!reviewVerticalAutoScroll) return;
 
-    let paused = false;
-
-    const pause = () => {
-      paused = true;
-    };
-
-    const resume = () => {
-      paused = false;
-    };
-
-    const timer = window.setInterval(() => {
-      if (paused) return;
-
-      const maxScroll =
-        reviewVerticalAutoScroll.scrollHeight -
-        reviewVerticalAutoScroll.clientHeight;
-
-      if (maxScroll <= 0) return;
-
-      const nearBottom = reviewVerticalAutoScroll.scrollTop >= maxScroll - 4;
-
-      if (nearBottom) {
-        reviewVerticalAutoScroll.scrollTo({
-          top: 0,
-          behavior: "auto",
-        });
-      } else {
-        reviewVerticalAutoScroll.scrollTop += 1;
-      }
-    }, 45);
-
-    reviewVerticalAutoScroll.addEventListener("mouseenter", pause);
-    reviewVerticalAutoScroll.addEventListener("mouseleave", resume);
-    reviewVerticalAutoScroll.addEventListener("touchstart", pause);
-    reviewVerticalAutoScroll.addEventListener("touchend", resume);
-
-    return () => {
-      window.clearInterval(timer);
-      reviewVerticalAutoScroll.removeEventListener("mouseenter", pause);
-      reviewVerticalAutoScroll.removeEventListener("mouseleave", resume);
-      reviewVerticalAutoScroll.removeEventListener("touchstart", pause);
-      reviewVerticalAutoScroll.removeEventListener("touchend", resume);
-    };
-  }, [reviews]);
 
 
 

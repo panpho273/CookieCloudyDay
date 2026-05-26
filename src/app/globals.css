@@ -5236,3 +5236,10 @@ main {
   }
 }
 
+
+/* ===== Fix review auto scroll loop reset ===== */
+#reviews .reviewList {
+  scroll-behavior: auto !important;
+  overscroll-behavior: contain !important;
+}
+
