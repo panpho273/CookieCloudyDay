@@ -4146,3 +4146,114 @@ nav a[href="#demi"],
   }
 }
 
+
+/* ===== Tighten vertical spacing between main sections ===== */
+
+/* ลดช่องว่างใหญ่ระหว่าง section */
+.section,
+.promoSection,
+.memberSection,
+.orderSection,
+#reviews {
+  margin-top: 38px !important;
+}
+
+/* ลด padding บนล่างของกล่องใหญ่ */
+.promoShell,
+.memberShell,
+.memberRegisterShell,
+.orderShell,
+#reviews .reviewBox {
+  padding-top: 28px !important;
+  padding-bottom: 28px !important;
+}
+
+/* ลดช่องว่างหลังฟอร์มสมัครสมาชิก */
+.memberSection {
+  margin-bottom: 28px !important;
+}
+
+.memberRegisterShell {
+  padding-bottom: 24px !important;
+}
+
+/* ลดช่องว่างก่อน section สั่งซื้อ */
+.orderSection {
+  margin-top: 30px !important;
+}
+
+/* ลดช่องว่างหลัง section สั่งซื้อก่อนรีวิว */
+.orderShell {
+  margin-bottom: 0 !important;
+  padding-bottom: 26px !important;
+}
+
+#reviews {
+  margin-top: 32px !important;
+}
+
+/* ลดช่องว่างภายใน heading ของแต่ละ section */
+.promoHeader,
+.memberHero,
+.orderHeader,
+#reviews .reviewBoxHeader {
+  margin-bottom: 18px !important;
+}
+
+.promoHeader h2,
+.memberHero h2,
+.orderHeader h2,
+#reviews .reviewBoxHeader h2 {
+  margin-bottom: 8px !important;
+}
+
+.promoHeader p,
+.memberHero p,
+.orderHeader p,
+#reviews .reviewBoxHeader p {
+  margin-bottom: 0 !important;
+}
+
+/* ลดระยะระหว่าง header กับเนื้อหา */
+.promoSlider,
+.registerCard,
+.orderLayout {
+  margin-top: 20px !important;
+}
+
+/* ลดความสูงกล่อง order ให้ไม่ดูโล่งเกิน */
+.orderPromoCard,
+.orderPanel,
+.registerInfo,
+.registerPanel,
+.shopPanel {
+  padding-top: 22px !important;
+  padding-bottom: 22px !important;
+}
+
+/* ลดช่องว่างของหน้าโดยรวม */
+main,
+.page,
+.container {
+  row-gap: 0 !important;
+}
+
+/* มือถือให้ยังหายใจได้ */
+@media (max-width: 768px) {
+  .section,
+  .promoSection,
+  .memberSection,
+  .orderSection,
+  #reviews {
+    margin-top: 28px !important;
+  }
+
+  .promoShell,
+  .memberShell,
+  .memberRegisterShell,
+  .orderShell,
+  #reviews .reviewBox {
+    padding: 22px !important;
+  }
+}
+
