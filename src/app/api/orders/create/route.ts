@@ -20,9 +20,7 @@ export async function POST(req: NextRequest) {
 
     const googleRes = await fetch(webhookUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         action: "createOrder",
         memberKey: body.memberKey,
@@ -48,10 +46,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
-        message:
-          error instanceof Error
-            ? error.message
-            : "Cannot create order",
+        message: error instanceof Error ? error.message : "Cannot create order",
       },
       { status: 500 }
     );

@@ -20,9 +20,7 @@ export async function POST(req: NextRequest) {
 
     const googleRes = await fetch(webhookUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         action: "registerMember",
         name: body.name,
@@ -50,9 +48,7 @@ export async function POST(req: NextRequest) {
       {
         ok: false,
         message:
-          error instanceof Error
-            ? error.message
-            : "Cannot register member",
+          error instanceof Error ? error.message : "Cannot register member",
       },
       { status: 500 }
     );

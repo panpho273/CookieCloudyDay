@@ -105,7 +105,17 @@ function getDemiReply(message: string) {
     return "ถ้าชอบช็อกโกแลตเข้ม ๆ Demi แนะนำคุกกี้ดับเบิ้ลช็อกโกแลตค่ะ แต่ถ้าชอบหวานละมุน ลองเรดเวลเวทได้เลย";
   }
 
-  return "Demi ช่วยแนะนำเมนู ราคา เวลาเปิดร้าน และคุกกี้ที่เหมาะกับคุณได้นะคะ ลองพิมพ์ว่า “เมนูแนะนำ” หรือ “ราคาเท่าไหร่” ได้เลย 🍪";
+  if (
+    text.includes("โปร") ||
+    text.includes("โปรโมชั่น") ||
+    text.includes("150") ||
+    text.includes("ไพ่") ||
+    text.includes("สุ่ม")
+  ) {
+    return "โปร Cookie Fortune สำหรับสมาชิก: ซื้อคุกกี้ครบ 150 บาท รับสิทธิ์สุ่มไพ่ฟรี 1 ใบ พร้อมข้อความในการ์ดน่ารัก ๆ จาก CookieCloudyDay ค่ะ 🔮🍪";
+  }
+
+  return "Demi ช่วยแนะนำเมนู ราคา เวลาเปิดร้าน โปรโมชัน และคุกกี้ที่เหมาะกับคุณได้นะคะ ลองพิมพ์ว่า “เมนูแนะนำ”, “ราคาเท่าไหร่” หรือกด “สุ่มไพ่” ได้เลย 🍪";
 }
 
 function DemiBotIcon() {
@@ -391,7 +401,7 @@ function getDemiReply(message: string) {
         <div className="navLinks">
           <a href="#menu">เมนู</a>
           <a href="#reviews">รีวิว</a>
-          <a href="#demi">ผู้ช่วยร้าน</a>
+          <a href="#demi">Demi</a>
           <a href="/admin/login" className="adminPill">Admin</a>
         </div>
       </nav>
@@ -406,7 +416,7 @@ function getDemiReply(message: string) {
           </p>
 
           <div className="heroActions">
-            <a className="btn primary" href="#demi">เลือกคุกกี้กับผู้ช่วยร้าน</a>
+            <a className="btn primary" href="#demi">เลือกคุกกี้กับDemi</a>
             <a className="btn secondary" href="#menu">ดูเมนูคุกกี้</a>
           </div>
         </div>
@@ -651,9 +661,9 @@ function getDemiReply(message: string) {
       <section id="demi" className="section demiSection">
         <div className="demiShell">
           <div className="demiIntro">
-            <span className="demiBadge">ผู้ช่วยร้าน Assistant</span>
+            <span className="demiBadge">Demi AI Assistant</span>
 
-            <h2>ผู้ช่วยเลือกคุกกี้ของร้าน</h2>
+            <h2>คุยกับ Demi</h2>
 
             <p className="demiLead">
               CookieCloudyDay คือร้านคุกกี้โฮมเมดโทนอบอุ่น หอมเนย
@@ -667,7 +677,7 @@ function getDemiReply(message: string) {
               </div>
 
               <div className="demiInfoText">
-                <h3>ให้เราช่วยแนะนำเมนูนะคะ</h3>
+                <h3>Demi พร้อมช่วยแล้วค่ะ</h3>
                 <p>
                   ลองถามเรื่องเมนู ราคา เวลาเปิดร้าน
                   หรือขอให้แนะนำคุกกี้สำหรับกินเล่นและซื้อฝากได้เลย
@@ -688,6 +698,9 @@ function getDemiReply(message: string) {
               <button type="button" onClick={() => sendDemiMessage("แนะนำคุกกี้ซื้อฝาก")}>
                 🎁 ของฝาก
               </button>
+              <button type="button" onClick={drawFortuneCard}>
+                🔮 สุ่มไพ่
+              </button>
             </div>
           </div>
 
@@ -699,7 +712,7 @@ function getDemiReply(message: string) {
                 </div>
 
                 <div className="demiHeaderText">
-                  <h3>ผู้ช่วยร้าน</h3>
+                  <h3>Demi</h3>
                   <span>ออนไลน์</span>
                 </div>
               </div>
@@ -725,6 +738,9 @@ function getDemiReply(message: string) {
                   </button>
                   <button type="button" onClick={() => sendDemiMessage("แนะนำคุกกี้ซื้อฝาก")}>
                     ซื้อฝาก
+                  </button>
+                  <button type="button" onClick={drawFortuneCard}>
+                    สุ่มไพ่
                   </button>
                 </div>
 
