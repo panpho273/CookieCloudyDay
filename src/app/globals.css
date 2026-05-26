@@ -3585,3 +3585,200 @@ nav a[href="#demi"],
     font-size: 36px;
   }
 }
+
+/* ===== Separate Promo / Register / Order Sections ===== */
+
+.promoSection,
+.memberSection,
+.orderSection {
+  margin-top: 76px;
+}
+
+.promoShell,
+.memberRegisterShell,
+.orderShell {
+  border-radius: 38px;
+  padding: 34px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 213, 139, 0.28), transparent 30%),
+    linear-gradient(135deg, #fffaf3 0%, #fff4fb 50%, #f3edff 100%);
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  box-shadow: 0 28px 80px rgba(98, 67, 50, 0.12);
+  overflow: hidden;
+}
+
+.promoHeader h2,
+.memberHero h2,
+.orderHeader h2 {
+  margin: 14px 0 10px;
+  font-size: clamp(36px, 5vw, 64px);
+  color: #4b2e2b;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.promoHeader p,
+.memberHero p,
+.orderHeader p {
+  max-width: 820px;
+  color: #8a6a60;
+  line-height: 1.85;
+  font-weight: 500;
+}
+
+.promoSlider {
+  margin-top: 28px;
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+.promoTrack {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  animation: promoAutoScroll 26s linear infinite;
+}
+
+.promoSlider:hover .promoTrack {
+  animation-play-state: paused;
+}
+
+.promoSlideCard {
+  width: 300px;
+  min-height: 230px;
+  padding: 24px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  box-shadow: 0 14px 34px rgba(124, 58, 237, 0.08);
+  flex-shrink: 0;
+}
+
+.promoSlideIcon {
+  width: 62px;
+  height: 62px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  background: linear-gradient(135deg, #ffe8a3, #d8b4fe);
+  margin-bottom: 16px;
+}
+
+.promoSlideCard h3 {
+  margin: 0 0 10px;
+  color: #4b2e2b;
+  font-size: 22px;
+}
+
+.promoSlideCard p {
+  margin: 0 0 14px;
+  color: #8a6a60;
+  line-height: 1.65;
+  font-weight: 500;
+}
+
+.promoSlideCard span {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f1e9ff;
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+@keyframes promoAutoScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-55%);
+  }
+}
+
+.registerCard {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.registerInfo,
+.orderPromoCard {
+  padding: 26px;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  box-shadow: 0 14px 34px rgba(124, 58, 237, 0.06);
+}
+
+.registerInfo h3,
+.orderPromoCard h3 {
+  margin: 0 0 14px;
+  color: #4b2e2b;
+  font-size: 28px;
+}
+
+.registerInfo ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #8a6a60;
+  line-height: 1.9;
+  font-weight: 600;
+}
+
+.orderLayout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.orderPromoIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 26px;
+  display: grid;
+  place-items: center;
+  font-size: 38px;
+  background: linear-gradient(135deg, #ffe8a3, #d8b4fe);
+  margin-bottom: 16px;
+}
+
+.orderPromoCard p {
+  margin: 0;
+  color: #8a6a60;
+  line-height: 1.75;
+  font-weight: 500;
+}
+
+.orderPanel,
+.registerPanel {
+  min-height: auto;
+}
+
+@media (max-width: 920px) {
+  .registerCard,
+  .orderLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .promoShell,
+  .memberRegisterShell,
+  .orderShell {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .promoSlideCard {
+    width: 260px;
+  }
+
+  .promoHeader h2,
+  .memberHero h2,
+  .orderHeader h2 {
+    font-size: 36px;
+  }
+}

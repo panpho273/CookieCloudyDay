@@ -119,43 +119,6 @@ function getDemiReply(message: string) {
 }
 
 function DemiBotIcon() {
-  async function drawFortuneCard() {
-    try {
-      const res = await fetch("/api/fortune", {
-        cache: "no-store",
-      });
-
-      const data = await res.json();
-
-      if (!data.ok || !data.card) {
-        throw new Error("สุ่มไพ่ไม่สำเร็จ");
-      }
-
-      const cardText = `${data.card.emoji} คุณได้ไพ่ ${data.card.name}
-${data.card.meaning}
-เมนูที่เหมาะกับคุณ: ${data.card.recommend}`;
-
-      setDemiMessages((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: cardText,
-          time: getThaiTime(),
-        },
-      ]);
-    } catch {
-      setDemiMessages((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: "Demi สุ่มไพ่ไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ",
-          time: getThaiTime(),
-        },
-      ]);
-    }
-  }
-
-
   return (
     <svg
       viewBox="0 0 64 64"
@@ -427,6 +390,43 @@ function getDemiReply(message: string) {
     }
   }
 
+  async function drawFortuneCard() {
+    try {
+      const res = await fetch("/api/fortune", {
+        cache: "no-store",
+      });
+
+      const data = await res.json();
+
+      if (!data.ok || !data.card) {
+        throw new Error("สุ่มไพ่ไม่สำเร็จ");
+      }
+
+      const cardText = `${data.card.emoji} คุณได้ไพ่ ${data.card.name}
+${data.card.meaning}
+เมนูที่เหมาะกับคุณ: ${data.card.recommend}`;
+
+      setDemiMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: cardText,
+          time: getThaiTime(),
+        },
+      ]);
+    } catch {
+      setDemiMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: "Demi สุ่มไพ่ไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ",
+          time: getThaiTime(),
+        },
+      ]);
+    }
+  }
+
+
   return (
     <main className="page">
       <nav className="nav">
@@ -483,33 +483,82 @@ function getDemiReply(message: string) {
         </div>
       </section>
 
-
-      <section id="member" className="section memberSection">
-        <div className="memberShell">
-          <div className="memberHero">
-            <span className="miniBadge">Cookie Club Member</span>
-            <h2>สมัครสมาชิกก่อนสั่งซื้อ</h2>
+      <section id="promotions" className="section promoSection">
+        <div className="promoShell">
+          <div className="promoHeader">
+            <span className="miniBadge">Cookie Club Promotion</span>
+            <h2>โปรพิเศษสำหรับสมาชิก</h2>
             <p>
-              สมัคร Cookie Club เพื่อใช้สิทธิ์โปรโมชันของร้าน
-              เมื่อซื้อครบ 150 บาท รับสิทธิ์สุ่มไพ่ Cookie Fortune ฟรี
-              พร้อมข้อความน่ารักในการ์ดจากร้าน
+              สมัคร Cookie Club ก่อนสั่งซื้อ เพื่อรับสิทธิ์โปรโมชันของร้าน
+              ทั้งส่วนลด ของแถม และสุ่มไพ่ Cookie Fortune เมื่อซื้อครบตามเงื่อนไข
             </p>
-
-            <div className="promoCard">
-              <div className="promoIcon">🔮</div>
-              <div>
-                <h3>โปร Cookie Fortune</h3>
-                <p>
-                  สมาชิกซื้อคุกกี้ครบ 150 บาท สุ่มไพ่ฟรี 1 ใบ
-                  พร้อมข้อความในการ์ดพิเศษจาก CookieCloudyDay
-                </p>
-              </div>
-            </div>
           </div>
 
-          <div className="memberGrid">
-            <div className="shopPanel">
-              <h3>สมัครสมาชิก</h3>
+          <div className="promoSlider">
+            <div className="promoTrack">
+              {[
+                {
+                  icon: "🔮",
+                  title: "ซื้อครบ 150 บาท",
+                  desc: "รับสิทธิ์สุ่มไพ่ Cookie Fortune ฟรี 1 ใบ พร้อมข้อความน่ารักจากร้าน",
+                },
+                {
+                  icon: "🎉",
+                  title: "สมาชิกใหม่ลด 10%",
+                  desc: "สมัคร Cookie Club ครั้งแรก รับส่วนลดสำหรับออเดอร์แรกของคุณ",
+                },
+                {
+                  icon: "🎂",
+                  title: "โปรวันเกิด",
+                  desc: "สมาชิกที่มีวันเกิดในเดือนนั้น รับส่วนลดพิเศษหรือของแถมจากร้าน",
+                },
+                {
+                  icon: "🍪",
+                  title: "ซื้อครบ 5 ชิ้น แถม 1",
+                  desc: "เหมาะสำหรับซื้อฝากเพื่อนหรือเก็บไว้กินหลายรสชาติ",
+                },
+                {
+                  icon: "💜",
+                  title: "Demi Pick",
+                  desc: "ให้ Demi ช่วยแนะนำเมนูที่เหมาะกับรสชาติที่คุณชอบ",
+                },
+              ].map((promo, index) => (
+                <div className="promoSlideCard" key={`${promo.title}-${index}`}>
+                  <div className="promoSlideIcon">{promo.icon}</div>
+                  <h3>{promo.title}</h3>
+                  <p>{promo.desc}</p>
+                  <span>สำหรับสมาชิกเท่านั้น</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="member" className="section memberSection">
+        <div className="memberShell memberRegisterShell">
+          <div className="memberHero">
+            <span className="miniBadge">Cookie Club Member</span>
+            <h2>สมัครสมาชิก Cookie Club</h2>
+            <p>
+              สมัครสมาชิกก่อนสั่งซื้อ เพื่อใช้สิทธิ์โปรโมชัน สะสมข้อมูลออเดอร์
+              และรับสิทธิ์สุ่มไพ่ Cookie Fortune เมื่อซื้อครบ 150 บาท
+            </p>
+          </div>
+
+          <div className="registerCard">
+            <div className="registerInfo">
+              <h3>สิทธิ์ของสมาชิก</h3>
+              <ul>
+                <li>สมัครใหม่รับส่วนลด 10%</li>
+                <li>ซื้อครบ 150 บาท สุ่มไพ่ Cookie Fortune ฟรี</li>
+                <li>วันเกิดรับส่วนลดหรือของแถมพิเศษ</li>
+                <li>ซื้อครบ 5 ชิ้น แถม 1 ชิ้น</li>
+              </ul>
+            </div>
+
+            <div className="shopPanel registerPanel">
+              <h3>ฟอร์มสมัครสมาชิก</h3>
 
               <div className="formGrid">
                 <input
@@ -561,9 +610,35 @@ function getDemiReply(message: string) {
                 สมัคร Cookie Club
               </button>
             </div>
+          </div>
 
-            <div className="shopPanel">
-              <h3>สั่งซื้อสำหรับสมาชิก</h3>
+          {shopMessage && <div className="shopMessage">{shopMessage}</div>}
+        </div>
+      </section>
+
+      <section id="order" className="section orderSection">
+        <div className="orderShell">
+          <div className="orderHeader">
+            <span className="miniBadge">Order for Members</span>
+            <h2>สั่งซื้อสำหรับสมาชิก</h2>
+            <p>
+              กรอกเบอร์โทร อีเมล หรือรหัสสมาชิกก่อนสั่งซื้อ
+              หากยังไม่ได้สมัคร ระบบจะแจ้งให้สมัคร Cookie Club ก่อน
+            </p>
+          </div>
+
+          <div className="orderLayout">
+            <div className="orderPromoCard">
+              <div className="orderPromoIcon">🔮</div>
+              <h3>Cookie Fortune</h3>
+              <p>
+                ยอดครบ 150 บาท รับสิทธิ์สุ่มไพ่ฟรี 1 ใบ
+                พร้อมข้อความในการ์ดพิเศษจาก CookieCloudyDay
+              </p>
+            </div>
+
+            <div className="shopPanel orderPanel">
+              <h3>ฟอร์มสั่งซื้อ</h3>
 
               <div className="formGrid">
                 <input
@@ -612,13 +687,26 @@ function getDemiReply(message: string) {
                 </small>
               </div>
 
-              <button type="button" className="shopButton" onClick={submitOrder}>
+              <button
+                type="button"
+                className="shopButton"
+                onClick={() => {
+                  if (!orderForm.memberKey.trim()) {
+                    setShopMessage("กรุณาสมัครสมาชิกหรือกรอกเบอร์โทร/อีเมลสมาชิกก่อนสั่งซื้อค่ะ");
+                    document.getElementById("member")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                    return;
+                  }
+
+                  submitOrder();
+                }}
+              >
                 บันทึกออเดอร์
               </button>
             </div>
           </div>
-
-          {shopMessage && <div className="shopMessage">{shopMessage}</div>}
 
           {orderResult && (
             <div className="fortuneResult">
@@ -636,6 +724,7 @@ function getDemiReply(message: string) {
           )}
         </div>
       </section>
+
 
       <section id="reviews" className="section">
         <div className="sectionHeader">
