@@ -119,57 +119,8 @@ function getDemiReply(message: string) {
 }
 
 function DemiBotIcon() {
-  useEffect(() => {
-    const reviewVerticalAutoScroll = document.querySelector<HTMLElement>(
-      "#reviews .reviewList"
-    );
 
-    if (!reviewVerticalAutoScroll) return;
 
-    let paused = false;
-
-    const pause = () => {
-      paused = true;
-    };
-
-    const resume = () => {
-      paused = false;
-    };
-
-    const timer = window.setInterval(() => {
-      if (paused) return;
-
-      const maxScroll =
-        reviewVerticalAutoScroll.scrollHeight - reviewVerticalAutoScroll.clientHeight;
-
-      if (maxScroll <= 0) return;
-
-      if (reviewVerticalAutoScroll.scrollTop >= maxScroll - 2) {
-        reviewVerticalAutoScroll.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      } else {
-        reviewVerticalAutoScroll.scrollBy({
-          top: 1,
-          behavior: "smooth",
-        });
-      }
-    }, 55);
-
-    reviewVerticalAutoScroll.addEventListener("mouseenter", pause);
-    reviewVerticalAutoScroll.addEventListener("mouseleave", resume);
-    reviewVerticalAutoScroll.addEventListener("touchstart", pause);
-    reviewVerticalAutoScroll.addEventListener("touchend", resume);
-
-    return () => {
-      window.clearInterval(timer);
-      reviewVerticalAutoScroll.removeEventListener("mouseenter", pause);
-      reviewVerticalAutoScroll.removeEventListener("mouseleave", resume);
-      reviewVerticalAutoScroll.removeEventListener("touchstart", pause);
-      reviewVerticalAutoScroll.removeEventListener("touchend", resume);
-    };
-  }, [reviews]);
 
 
   return (
@@ -202,6 +153,60 @@ export default function HomePage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    const reviewVerticalAutoScroll = document.querySelector<HTMLElement>(
+      "#reviews .reviewList"
+    );
+
+    if (!reviewVerticalAutoScroll) return;
+
+    let paused = false;
+
+    const pause = () => {
+      paused = true;
+    };
+
+    const resume = () => {
+      paused = false;
+    };
+
+    const timer = window.setInterval(() => {
+      if (paused) return;
+
+      const maxScroll =
+        reviewVerticalAutoScroll.scrollHeight -
+        reviewVerticalAutoScroll.clientHeight;
+
+      if (maxScroll <= 0) return;
+
+      if (reviewVerticalAutoScroll.scrollTop >= maxScroll - 2) {
+        reviewVerticalAutoScroll.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } else {
+        reviewVerticalAutoScroll.scrollBy({
+          top: 1,
+          behavior: "smooth",
+        });
+      }
+    }, 55);
+
+    reviewVerticalAutoScroll.addEventListener("mouseenter", pause);
+    reviewVerticalAutoScroll.addEventListener("mouseleave", resume);
+    reviewVerticalAutoScroll.addEventListener("touchstart", pause);
+    reviewVerticalAutoScroll.addEventListener("touchend", resume);
+
+    return () => {
+      window.clearInterval(timer);
+      reviewVerticalAutoScroll.removeEventListener("mouseenter", pause);
+      reviewVerticalAutoScroll.removeEventListener("mouseleave", resume);
+      reviewVerticalAutoScroll.removeEventListener("touchstart", pause);
+      reviewVerticalAutoScroll.removeEventListener("touchend", resume);
+    };
+  }, [reviews]);
+
 
   
   
