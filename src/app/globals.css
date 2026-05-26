@@ -4357,3 +4357,176 @@ main,
   }
 }
 
+
+/* ===== HARD FIX: Demi chat text overflow / vertical broken bubble ===== */
+
+/* ลดช่องว่างก่อน Demi */
+#demi,
+.demiSection {
+  margin-top: 32px !important;
+  padding-top: 24px !important;
+}
+
+/* กล่องแชทขวา */
+.demiChatCard {
+  min-height: 620px !important;
+  overflow: hidden !important;
+}
+
+/* พื้นที่ข้อความ */
+.demiMessages {
+  flex: 1 !important;
+  width: 100% !important;
+  padding: 18px 20px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+/* แถวข้อความ */
+.demiMessage,
+.demiMessageRow {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* bot ชิดซ้าย */
+.demiMessage.bot,
+.demiMessageRow.bot {
+  justify-content: flex-start !important;
+}
+
+/* user ชิดขวา */
+.demiMessage.user,
+.demiMessageRow.user {
+  justify-content: flex-end !important;
+}
+
+/* ไอคอนบอทไม่บีบข้อความ */
+.demiMessageIcon,
+.demiBubbleAvatar {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  flex: 0 0 38px !important;
+}
+
+/* ตัวครอบ bubble ต้องไม่หดเหลือแคบ ๆ */
+.demiBubbleWrap {
+  display: flex !important;
+  flex-direction: column !important;
+  width: auto !important;
+  min-width: 220px !important;
+  max-width: min(78%, 520px) !important;
+  flex: 0 1 auto !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* ฝั่ง user */
+.demiMessage.user .demiBubbleWrap,
+.demiMessageRow.user .demiBubbleWrap {
+  align-items: flex-end !important;
+  min-width: 160px !important;
+  max-width: min(78%, 520px) !important;
+}
+
+/* bubble หลัก ห้ามแตกเป็นตัว ๆ */
+.demiBubble,
+.botBubble,
+.userBubble,
+.demiMessage.bot .demiBubble,
+.demiMessage.user .demiBubble {
+  display: block !important;
+  width: auto !important;
+  min-width: 220px !important;
+  max-width: 100% !important;
+
+  writing-mode: horizontal-tb !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+
+  line-height: 1.75 !important;
+  padding: 14px 18px !important;
+  border-radius: 20px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+/* p ข้างใน bubble */
+.demiBubble p,
+.demiMessage p,
+.demiMessageRow p {
+  margin: 0 !important;
+  display: block !important;
+  width: auto !important;
+
+  writing-mode: horizontal-tb !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+
+  line-height: 1.75 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+/* bubble bot */
+.demiMessage.bot .demiBubble,
+.demiMessageRow.bot .demiBubble,
+.botBubble {
+  background: #ffffff !important;
+  color: #55312d !important;
+  border: 1px solid #eadfff !important;
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.06) !important;
+  border-bottom-left-radius: 8px !important;
+}
+
+/* bubble user */
+.demiMessage.user .demiBubble,
+.demiMessageRow.user .demiBubble,
+.userBubble {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important;
+  color: #ffffff !important;
+  border-bottom-right-radius: 8px !important;
+}
+
+/* เวลาใต้ข้อความ */
+.demiBubbleWrap small {
+  margin-top: 5px !important;
+  color: #a18eab !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+}
+
+/* ช่องพิมพ์ */
+.demiInput,
+.demiInputBar input,
+.demiComposer input {
+  writing-mode: horizontal-tb !important;
+  white-space: normal !important;
+}
+
+/* มือถือ */
+@media (max-width: 768px) {
+  .demiBubbleWrap,
+  .demiMessage.user .demiBubbleWrap,
+  .demiMessageRow.user .demiBubbleWrap {
+    max-width: 88% !important;
+    min-width: 180px !important;
+  }
+
+  .demiBubble,
+  .botBubble,
+  .userBubble {
+    min-width: 180px !important;
+  }
+}
+
