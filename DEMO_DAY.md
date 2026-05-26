@@ -1,8 +1,7 @@
 # CookieCloudyDay Demo Day
 
 Deploy URL:
-ใส่ลิงก์เว็บ Vercel/โดเมนจริงตรงนี้
-
+https://www.cookiecloudyday.me
 Features:
 - หน้าเว็บร้านคุกกี้ CookieCloudyDay
 - ระบบสมาชิก
