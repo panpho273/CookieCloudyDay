@@ -119,6 +119,59 @@ function getDemiReply(message: string) {
 }
 
 function DemiBotIcon() {
+  useEffect(() => {
+    const reviewVerticalAutoScroll = document.querySelector<HTMLElement>(
+      "#reviews .reviewList"
+    );
+
+    if (!reviewVerticalAutoScroll) return;
+
+    let paused = false;
+
+    const pause = () => {
+      paused = true;
+    };
+
+    const resume = () => {
+      paused = false;
+    };
+
+    const timer = window.setInterval(() => {
+      if (paused) return;
+
+      const maxScroll =
+        reviewVerticalAutoScroll.scrollHeight - reviewVerticalAutoScroll.clientHeight;
+
+      if (maxScroll <= 0) return;
+
+      if (reviewVerticalAutoScroll.scrollTop >= maxScroll - 2) {
+        reviewVerticalAutoScroll.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } else {
+        reviewVerticalAutoScroll.scrollBy({
+          top: 1,
+          behavior: "smooth",
+        });
+      }
+    }, 55);
+
+    reviewVerticalAutoScroll.addEventListener("mouseenter", pause);
+    reviewVerticalAutoScroll.addEventListener("mouseleave", resume);
+    reviewVerticalAutoScroll.addEventListener("touchstart", pause);
+    reviewVerticalAutoScroll.addEventListener("touchend", resume);
+
+    return () => {
+      window.clearInterval(timer);
+      reviewVerticalAutoScroll.removeEventListener("mouseenter", pause);
+      reviewVerticalAutoScroll.removeEventListener("mouseleave", resume);
+      reviewVerticalAutoScroll.removeEventListener("touchstart", pause);
+      reviewVerticalAutoScroll.removeEventListener("touchend", resume);
+    };
+  }, [reviews]);
+
+
   return (
     <svg
       viewBox="0 0 64 64"
@@ -325,7 +378,7 @@ function getDemiReply(message: string) {
 
   useEffect(() => {
     const sliders = document.querySelectorAll<HTMLElement>(
-      ".promoSlider, .reviewList"
+      ".promoSlider"
     );
 
     const cleanups: Array<() => void> = [];
@@ -782,13 +835,14 @@ ${data.card.meaning}
       </section>
 
 
-      <section id="reviews" className="section">
-        <div className="sectionHeader">
-          <h2>รีวิวจากลูกค้า</h2>
-          <p>คะแนนเฉลี่ย {avgRating} / 5 จาก {reviews.length} รีวิว</p>
-        </div>
-
+            <section id="reviews" className="section">
         <div className="reviewBox">
+          <div className="reviewBoxHeader">
+            <span className="miniBadge">Customer Reviews</span>
+            <h2>รีวิวจากลูกค้า</h2>
+            <p>คะแนนเฉลี่ย {avgRating} / 5 จาก {reviews.length} รีวิว</p>
+          </div>
+
           <div className="panel">
             <h3>ให้คะแนนร้าน ⭐</h3>
 
