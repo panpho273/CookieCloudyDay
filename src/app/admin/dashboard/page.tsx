@@ -1,205 +1,182 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type Review = {
-  rating: number;
-  comment: string;
-  createdAt: string;
+type AgeGroup = {
+  group: string;
+  count: number;
+  percent: number;
 };
 
-type DashboardData = {
-  totalOrders: number;
-  totalRevenue: number;
+type AdminStats = {
+  reviews: number;
+  orders: number;
+  members: number;
+  averageRating: string;
+  totalSales: number;
   topMenu: string;
-  recentOrders: Array<{ menu: string; quantity: number; total: number; date: string }>;
-  reviews: Review[];
+  bestAgeGroup: string;
+  ageGroups: AgeGroup[];
 };
 
 export default function AdminDashboardPage() {
   const router = useRouter();
 
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<AdminStats>({
+    reviews: 0,
+    orders: 0,
+    members: 0,
+    averageRating: "0.0",
+    totalSales: 0,
+    topMenu: "-",
+    bestAgeGroup: "-",
+    ageGroups: [],
+  });
 
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
+    async function checkAdminSession() {
+      const sessionRes = await fetch("/api/admin/session", {
+        cache: "no-store",
+      });
 
-    if (!token) {
-      router.push("/admin/login");
-      return;
+      if (!sessionRes.ok) {
+        router.push("/login");
+        return false;
+      }
+
+      return true;
     }
 
-    fetch("/api/admin/dashboard", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Unauthorized");
-        }
-        return res.json();
-      })
-      .then((dashboardData) => {
-        setData(dashboardData);
-        setReviews(dashboardData.reviews || []);
-      })
-      .catch((err) => {
-        console.error("Failed to load dashboard:", err);
-        setData(null);
-        setReviews([]);
-      })
-      .finally(() => {
-        setLoading(false);
+    async function loadDashboard() {
+      const allowed = await checkAdminSession();
+
+      if (!allowed) return;
+      const res = await fetch(`/api/admin/dashboard?t=${Date.now()}`, {
+        cache: "no-store",
       });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) return;
+
+      setStats({
+        reviews: data.reviews ?? 0,
+        orders: data.orders ?? 0,
+        members: data.members ?? 0,
+        averageRating: data.averageRating ?? "0.0",
+        totalSales: data.totalSales ?? 0,
+        topMenu: data.topMenu ?? "-",
+        bestAgeGroup: data.bestAgeGroup ?? "-",
+        ageGroups: data.ageGroups ?? [],
+      });
+    }
+
+    loadDashboard();
   }, [router]);
 
-  const average = useMemo(() => {
-    if (!reviews.length) return "0.0";
-    const avg = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
-    return avg.toFixed(1);
-  }, [reviews]);
-
-  const totalOrders = data?.totalOrders ?? 0;
-  const totalRevenue = data?.totalRevenue ?? 0;
-  const topMenu = data?.topMenu ?? "-";
-  const recentOrders = data?.recentOrders ?? [];
-
-  function logout() {
-    localStorage.removeItem("adminToken");
-    router.push("/admin/login");
+  async function handleLogout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    router.push("/login");
   }
 
   return (
-    <main className="page">
-      <div className="dashboard">
-        <div className="sectionHeader">
-          <h1>Admin Dashboard</h1>
-          <p>สรุปข้อมูลรีวิวและระบบ CookieCloudyDay</p>
-        </div>
-
-        <div className="heroActions" style={{ marginBottom: 24 }}>
-          <a className="btn secondary" href="/">
-            กลับหน้าเว็บ
-          </a>
-
-          <button className="btn primary" onClick={logout}>
-            ออกจากระบบ
-          </button>
-        </div>
-
-        <div className="statGrid">
-          <div className="panel stat">
-            <h3>จำนวนออเดอร์</h3>
-            <h2>{totalOrders}</h2>
+    <main className="adminPage">
+      <section className="adminDashboardCard">
+        <div className="adminTopBar">
+          <div>
+            <span className="miniBadge">CookieCloudyDay Admin</span>
+            <h1>แดชบอร์ดหลังบ้าน</h1>
+            <p>
+              ดึงข้อมูลจาก 3 ชีท: ชีต1, reviews และ members เพื่อดูภาพรวมร้าน
+            </p>
           </div>
 
-          <div className="panel stat">
-            <h3>ยอดขายรวม</h3>
-            <h2>฿{totalRevenue.toLocaleString()}</h2>
-          </div>
+          <div className="adminActions">
+            <Link href="/" className="adminGhostBtn">
+              กลับหน้าเว็บ
+            </Link>
 
-          <div className="panel stat">
-            <h3>เมนูยอดนิยม</h3>
-            <h2>{topMenu}</h2>
-          </div>
-
-          <div className="panel stat">
-            <h3>คะแนนเฉลี่ย</h3>
-            <h2>{average}</h2>
-          </div>
-
-          <div className="panel stat">
-            <h3>จำนวนรีวิว</h3>
-            <h2>{reviews.length}</h2>
-          </div>
-
-          <div className="panel stat">
-            <h3>สถานะ</h3>
-            <h2>Ready</h2>
+            <button type="button" className="adminLogoutBtn" onClick={handleLogout}>
+              ออกจากระบบ
+            </button>
           </div>
         </div>
 
-        <div className="panel">
-          <h2>ออเดอร์ล่าสุด</h2>
+        <div className="adminStatsGrid">
+          <div className="adminStatCard">
+            <span>⭐</span>
+            <p>คะแนนเฉลี่ย</p>
+            <strong>{stats.averageRating}</strong>
+          </div>
 
-          {loading ? (
-            <p>กำลังโหลดข้อมูล...</p>
-          ) : (
-            <div className="tableWrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>เมนู</th>
-                    <th>จำนวน</th>
-                    <th>ยอดรวม</th>
-                    <th>วันที่</th>
-                  </tr>
-                </thead>
+          <div className="adminStatCard">
+            <span>💬</span>
+            <p>รีวิวจากลูกค้า</p>
+            <strong>{stats.reviews}</strong>
+          </div>
 
-                <tbody>
-                  {recentOrders.map((order, index) => (
-                    <tr key={`${order.date}-${index}`}>
-                      <td>{order.menu}</td>
-                      <td>{order.quantity}</td>
-                      <td>฿{order.total}</td>
-                      <td>{order.date}</td>
-                    </tr>
-                  ))}
+          <div className="adminStatCard">
+            <span>🛒</span>
+            <p>ออเดอร์</p>
+            <strong>{stats.orders}</strong>
+          </div>
 
-                  {!recentOrders.length && (
-                    <tr>
-                      <td colSpan={4}>ยังไม่มีออเดอร์</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+          <div className="adminStatCard">
+            <span>👥</span>
+            <p>สมาชิก</p>
+            <strong>{stats.members}</strong>
+          </div>
+        </div>
+
+        <div className="adminStatsGrid adminStatsGridSecond">
+          <div className="adminStatCard">
+            <span>💰</span>
+            <p>ยอดขายรวม</p>
+            <strong>{stats.totalSales.toLocaleString()} บาท</strong>
+          </div>
+
+          <div className="adminStatCard">
+            <span>🍪</span>
+            <p>เมนูขายดี</p>
+            <strong>{stats.topMenu}</strong>
+          </div>
+
+          <div className="adminStatCard">
+            <span>🎯</span>
+            <p>ช่วงอายุลูกค้าหลัก</p>
+            <strong>{stats.bestAgeGroup}</strong>
+          </div>
+        </div>
+
+        <div className="adminNotice">
+          <h2>วิเคราะห์อายุสมาชิก</h2>
+
+          {stats.ageGroups.length > 0 ? (
+            <div className="ageInsightList">
+              {stats.ageGroups.map((item) => (
+                <div className="ageInsightItem" key={item.group}>
+                  <div>
+                    <strong>{item.group}</strong>
+                    <span>{item.count} คน</span>
+                  </div>
+
+                  <div className="ageInsightBar">
+                    <span style={{ width: `${item.percent}%` }} />
+                  </div>
+
+                  <b>{item.percent}%</b>
+                </div>
+              ))}
             </div>
+          ) : (
+            <p>
+              ยังไม่มีข้อมูลอายุในชีท members หรือยังไม่พบ column อายุ/วันเกิด
+            </p>
           )}
         </div>
-
-        <div className="panel">
-          <h2>รีวิวล่าสุด</h2>
-
-          {loading ? (
-            <p>กำลังโหลดข้อมูล...</p>
-          ) : (
-            <div className="tableWrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>คะแนน</th>
-                    <th>ความคิดเห็น</th>
-                    <th>วันที่</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {reviews.map((review, index) => (
-                    <tr key={`${review.createdAt}-${index}`}>
-                      <td>
-                        {"★".repeat(review.rating)}
-                        {"☆".repeat(5 - review.rating)}
-                      </td>
-                      <td>{review.comment}</td>
-                      <td>{review.createdAt}</td>
-                    </tr>
-                  ))}
-
-                  {!reviews.length && (
-                    <tr>
-                      <td colSpan={3}>ยังไม่มีข้อมูลรีวิว</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </div>
+      </section>
     </main>
   );
 }
