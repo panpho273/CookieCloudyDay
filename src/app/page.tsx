@@ -155,6 +155,91 @@ export default function HomePage() {
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
+    const cookieClubPromoAutoScroll = document.querySelector<HTMLElement>(
+      ".cookieClubPromoGrid"
+    );
+
+    if (!cookieClubPromoAutoScroll) return;
+
+    let paused = false;
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    const pause = () => {
+      paused = true;
+    };
+
+    const resume = () => {
+      paused = false;
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      isDown = true;
+      paused = true;
+      cookieClubPromoAutoScroll.classList.add("isDragging");
+      startX = e.pageX - cookieClubPromoAutoScroll.offsetLeft;
+      scrollLeft = cookieClubPromoAutoScroll.scrollLeft;
+    };
+
+    const onMouseLeave = () => {
+      isDown = false;
+      paused = false;
+      cookieClubPromoAutoScroll.classList.remove("isDragging");
+    };
+
+    const onMouseUp = () => {
+      isDown = false;
+      paused = false;
+      cookieClubPromoAutoScroll.classList.remove("isDragging");
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+
+      const x = e.pageX - cookieClubPromoAutoScroll.offsetLeft;
+      const walk = (x - startX) * 1.4;
+      cookieClubPromoAutoScroll.scrollLeft = scrollLeft - walk;
+    };
+
+    const timer = window.setInterval(() => {
+      if (paused) return;
+
+      const maxScroll =
+        cookieClubPromoAutoScroll.scrollWidth -
+        cookieClubPromoAutoScroll.clientWidth;
+
+      if (maxScroll <= 0) return;
+
+      if (cookieClubPromoAutoScroll.scrollLeft >= maxScroll - 3) {
+        cookieClubPromoAutoScroll.scrollTo({
+          left: 0,
+          behavior: "smooth",
+        });
+      } else {
+        cookieClubPromoAutoScroll.scrollLeft += 1;
+      }
+    }, 35);
+
+    cookieClubPromoAutoScroll.addEventListener("mouseenter", pause);
+    cookieClubPromoAutoScroll.addEventListener("mouseleave", resume);
+    cookieClubPromoAutoScroll.addEventListener("mousedown", onMouseDown);
+    cookieClubPromoAutoScroll.addEventListener("mouseup", onMouseUp);
+    cookieClubPromoAutoScroll.addEventListener("mousemove", onMouseMove);
+
+    return () => {
+      window.clearInterval(timer);
+      cookieClubPromoAutoScroll.removeEventListener("mouseenter", pause);
+      cookieClubPromoAutoScroll.removeEventListener("mouseleave", resume);
+      cookieClubPromoAutoScroll.removeEventListener("mousedown", onMouseDown);
+      cookieClubPromoAutoScroll.removeEventListener("mouseup", onMouseUp);
+      cookieClubPromoAutoScroll.removeEventListener("mousemove", onMouseMove);
+    };
+  }, []);
+
+
+  useEffect(() => {
     const reviewVerticalAutoScroll = document.querySelector<HTMLElement>(
       "#reviews .reviewList"
     );

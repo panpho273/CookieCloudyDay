@@ -5052,3 +5052,187 @@ main {
   }
 }
 
+
+/* ===== FINAL ALIGNMENT: equal section spacing + promo scroll + user bubble ===== */
+
+/* ทุกบล็อกให้เว้นเท่ากัน */
+.section,
+#reviews,
+#demi,
+.cookieClubSection,
+.demiSection {
+  margin-top: 34px !important;
+  margin-bottom: 0 !important;
+}
+
+/* ลดช่องว่างระหว่างรีวิวกับ Demi ให้เท่า block อื่น */
+#reviews + #demi,
+#reviews + .demiSection,
+.section + .demiSection,
+.reviewBox + .demiSection {
+  margin-top: 34px !important;
+}
+
+/* กล่องใหญ่ให้ขนาด padding เท่ากัน */
+.cookieClubShell,
+#reviews .reviewBox,
+.demiShell,
+.demiLayout {
+  padding: 28px !important;
+  border-radius: 34px !important;
+}
+
+/* ===== Cookie Club promo: horizontal auto scroll again ===== */
+.cookieClubPromoGrid {
+  display: flex !important;
+  grid-template-columns: none !important;
+  gap: 14px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  cursor: grab !important;
+  padding: 4px 6px 12px 4px !important;
+  margin-top: 18px !important;
+}
+
+.cookieClubPromoGrid::-webkit-scrollbar {
+  display: none !important;
+}
+
+.cookieClubPromoGrid.isDragging {
+  cursor: grabbing !important;
+}
+
+.cookieClubPromoCard {
+  flex: 0 0 285px !important;
+  width: 285px !important;
+  min-width: 285px !important;
+}
+
+/* ฟอร์มยังอยู่เป็น 2 ช่องเหมือนเดิม */
+.cookieClubFormGrid {
+  margin-top: 18px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 18px !important;
+}
+
+/* ===== Demi spacing inside section ===== */
+.demiSection,
+#demi {
+  padding-top: 0 !important;
+}
+
+.demiShell,
+.demiLayout {
+  gap: 24px !important;
+}
+
+/* ===== Demi customer chat bubble: ไม่กลืน ไม่เป็นก้อนใหญ่ ===== */
+
+/* ฝั่งลูกค้า wrapper ต้องไม่บังคับกว้าง */
+.demiMessage.user .demiBubbleWrap,
+.demiMessageRow.user .demiBubbleWrap {
+  min-width: 0 !important;
+  width: fit-content !important;
+  max-width: 68% !important;
+  align-items: flex-end !important;
+}
+
+/* bubble ฝั่งลูกค้า สีคาราเมล/คุกกี้ แยกจากหัวม่วง */
+.demiMessage.user .demiBubble,
+.demiMessageRow.user .demiBubble,
+.demiMessageBubble.user,
+.userBubble {
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding: 13px 16px !important;
+
+  background: linear-gradient(135deg, #fff1c7 0%, #ffc86b 48%, #f59e0b 100%) !important;
+  color: #4b2e2b !important;
+  border: 1px solid rgba(217, 119, 6, 0.18) !important;
+  border-bottom-right-radius: 8px !important;
+  box-shadow: 0 12px 26px rgba(245, 158, 11, 0.18) !important;
+}
+
+/* ตัวหนังสือฝั่งลูกค้า */
+.demiMessage.user .demiBubble p,
+.demiMessageRow.user .demiBubble p,
+.demiMessageBubble.user p,
+.userBubble p {
+  color: #4b2e2b !important;
+  font-weight: 700 !important;
+}
+
+/* เวลาใน bubble ฝั่งลูกค้า */
+.demiMessage.user .demiBubbleWrap small,
+.demiMessageRow.user .demiBubbleWrap small,
+.demiMessageBubble.user .demiMessageTime {
+  color: rgba(75, 46, 43, 0.68) !important;
+  text-align: right !important;
+}
+
+/* ฝั่งบอทให้กว้างพอดี ไม่บีบแนวตั้ง */
+.demiMessage.bot .demiBubbleWrap,
+.demiMessageRow.bot .demiBubbleWrap {
+  min-width: 0 !important;
+  width: fit-content !important;
+  max-width: 76% !important;
+}
+
+/* bubble ทั้งหมดไม่ให้ล้น */
+.demiBubble,
+.demiMessageBubble,
+.botBubble,
+.userBubble {
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* ปรับความสูงกล่องแชทให้บาลานซ์ */
+.demiChatCard {
+  min-height: 610px !important;
+}
+
+/* มือถือ */
+@media (max-width: 980px) {
+  .cookieClubFormGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cookieClubPromoCard {
+    flex-basis: 260px !important;
+    width: 260px !important;
+    min-width: 260px !important;
+  }
+
+  .demiMessage.user .demiBubbleWrap,
+  .demiMessageRow.user .demiBubbleWrap,
+  .demiMessage.bot .demiBubbleWrap,
+  .demiMessageRow.bot .demiBubbleWrap {
+    max-width: 86% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .section,
+  #reviews,
+  #demi,
+  .cookieClubSection,
+  .demiSection {
+    margin-top: 24px !important;
+  }
+
+  .cookieClubShell,
+  #reviews .reviewBox,
+  .demiShell,
+  .demiLayout {
+    padding: 20px !important;
+  }
+}
+
