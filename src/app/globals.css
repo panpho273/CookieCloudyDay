@@ -4777,3 +4777,144 @@ main,
   }
 }
 
+
+/* ===== HARD FIX: remove large empty gaps between shop sections ===== */
+
+/* บังคับ section หลักให้ไม่ทิ้งช่องว่าง */
+.promoSection,
+.memberSection,
+.orderSection,
+.clubSection,
+#member,
+#order,
+#promotions,
+#reviews,
+.section {
+  margin-top: 24px !important;
+  margin-bottom: 0 !important;
+}
+
+/* ถ้า order อยู่ต่อจาก member ให้ดึงขึ้น */
+.memberSection + .orderSection,
+#member + #order,
+.clubSection + #reviews,
+.orderSection + #reviews,
+#order + #reviews {
+  margin-top: 18px !important;
+}
+
+/* บังคับกล่องพื้นหลังไม่สูงเกินเนื้อหา */
+.memberShell,
+.memberRegisterShell,
+.orderShell,
+.clubShell,
+.promoShell,
+#reviews .reviewBox {
+  min-height: 0 !important;
+  height: auto !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 24px !important;
+  padding-bottom: 24px !important;
+}
+
+/* ลดช่องว่างด้านในหัวข้อ */
+.memberHero,
+.orderHeader,
+.clubHeader,
+.promoHeader,
+#reviews .reviewBoxHeader {
+  margin-top: 0 !important;
+  margin-bottom: 14px !important;
+  padding: 0 !important;
+}
+
+.memberHero h2,
+.orderHeader h2,
+.clubHeader h2,
+.promoHeader h2,
+#reviews .reviewBoxHeader h2 {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+.memberHero p,
+.orderHeader p,
+.clubHeader p,
+.promoHeader p,
+#reviews .reviewBoxHeader p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* ลดช่องว่างก่อนกล่องฟอร์ม */
+.registerCard,
+.orderLayout,
+.memberGrid,
+.clubMainGrid,
+.clubPromoRow,
+.promoSlider {
+  margin-top: 16px !important;
+  margin-bottom: 0 !important;
+}
+
+/* กล่องย่อยยังคงสวย แต่ไม่กินพื้นที่ว่าง */
+.shopPanel,
+.registerPanel,
+.orderPanel,
+.registerInfo,
+.orderPromoCard,
+.clubPanel,
+.clubPromoCard,
+.promoCard {
+  min-height: 0 !important;
+  height: auto !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+/* ถ้ายังมี section เก่าที่ถูกซ่อนแล้วเหลือช่องว่าง ให้หายไปจริง */
+#promotions:empty,
+#order:empty,
+#member:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* ดึงรีวิวขึ้นอีก */
+#reviews {
+  margin-top: 20px !important;
+}
+
+/* ลด padding รวมของ main ถ้ามี */
+main {
+  gap: 0 !important;
+  row-gap: 0 !important;
+}
+
+/* มือถือ */
+@media (max-width: 768px) {
+  .promoSection,
+  .memberSection,
+  .orderSection,
+  .clubSection,
+  #member,
+  #order,
+  #promotions,
+  #reviews,
+  .section {
+    margin-top: 18px !important;
+  }
+
+  .memberShell,
+  .memberRegisterShell,
+  .orderShell,
+  .clubShell,
+  .promoShell,
+  #reviews .reviewBox {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+}
+
