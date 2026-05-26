@@ -322,6 +322,62 @@ function getDemiReply(message: string) {
     return avg.toFixed(1);
   }, [reviews]);
 
+
+  useEffect(() => {
+    const sliders = document.querySelectorAll<HTMLElement>(
+      ".promoSlider, .reviewList"
+    );
+
+    const cleanups: Array<() => void> = [];
+
+    sliders.forEach((slider) => {
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      const onMouseDown = (e: MouseEvent) => {
+        isDown = true;
+        slider.classList.add("isDragging");
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      };
+
+      const onMouseLeave = () => {
+        isDown = false;
+        slider.classList.remove("isDragging");
+      };
+
+      const onMouseUp = () => {
+        isDown = false;
+        slider.classList.remove("isDragging");
+      };
+
+      const onMouseMove = (e: MouseEvent) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1.4;
+        slider.scrollLeft = scrollLeft - walk;
+      };
+
+      slider.addEventListener("mousedown", onMouseDown);
+      slider.addEventListener("mouseleave", onMouseLeave);
+      slider.addEventListener("mouseup", onMouseUp);
+      slider.addEventListener("mousemove", onMouseMove);
+
+      cleanups.push(() => {
+        slider.removeEventListener("mousedown", onMouseDown);
+        slider.removeEventListener("mouseleave", onMouseLeave);
+        slider.removeEventListener("mouseup", onMouseUp);
+        slider.removeEventListener("mousemove", onMouseMove);
+      });
+    });
+
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
+    };
+  }, [reviews]);
+
   useEffect(() => {
     async function loadReviews() {
       try {

@@ -3782,3 +3782,131 @@ nav a[href="#demi"],
     font-size: 36px;
   }
 }
+
+/* ===== Smooth Auto Scroll Promo + Review ===== */
+
+/* โปรโมชัน: ลดช่องว่าง ทำให้เลื่อนแนวนอนและลากได้ */
+.promoSlider {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  cursor: grab !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.promoSlider::-webkit-scrollbar {
+  display: none !important;
+}
+
+.promoSlider.isDragging {
+  cursor: grabbing !important;
+}
+
+.promoTrack {
+  display: flex !important;
+  gap: 14px !important;
+  width: max-content !important;
+  padding: 4px 10px 12px 4px !important;
+  animation: promoAutoScrollSmooth 18s linear infinite !important;
+}
+
+.promoSlider:hover .promoTrack,
+.promoSlider.isDragging .promoTrack {
+  animation-play-state: paused !important;
+}
+
+.promoSlideCard {
+  width: 280px !important;
+  min-width: 280px !important;
+  flex: 0 0 280px !important;
+}
+
+/* ทำให้วนสั้นลง ไม่ทิ้งช่องว่างยาวเกิน */
+@keyframes promoAutoScrollSmooth {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-42%);
+  }
+}
+
+/* รีวิว: เปลี่ยนเป็นแถบเลื่อนแนวนอนแบบอัตโนมัติ */
+.reviewList {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 16px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  cursor: grab !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  padding: 4px 6px 14px !important;
+  animation: reviewAutoScrollSmooth 24s linear infinite !important;
+}
+
+.reviewList::-webkit-scrollbar {
+  display: none !important;
+}
+
+.reviewList:hover,
+.reviewList.isDragging {
+  animation-play-state: paused !important;
+}
+
+.reviewList.isDragging {
+  cursor: grabbing !important;
+}
+
+.reviewItem {
+  min-width: 310px !important;
+  max-width: 310px !important;
+  flex: 0 0 310px !important;
+  border-radius: 24px !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+  border: 1px solid rgba(139, 92, 246, 0.14) !important;
+  box-shadow: 0 14px 34px rgba(124, 58, 237, 0.06) !important;
+}
+
+@keyframes reviewAutoScrollSmooth {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-38%);
+  }
+}
+
+/* กัน section review บีบจนดูแปลก */
+.reviewBox {
+  overflow: hidden !important;
+}
+
+.reviewBox .reviewList {
+  max-width: 100% !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .promoSlideCard {
+    width: 245px !important;
+    min-width: 245px !important;
+    flex-basis: 245px !important;
+  }
+
+  .reviewItem {
+    min-width: 260px !important;
+    max-width: 260px !important;
+    flex-basis: 260px !important;
+  }
+
+  .promoTrack {
+    animation-duration: 16s !important;
+  }
+
+  .reviewList {
+    animation-duration: 20s !important;
+  }
+}
