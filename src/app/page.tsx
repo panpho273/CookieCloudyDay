@@ -119,6 +119,43 @@ function getDemiReply(message: string) {
 }
 
 function DemiBotIcon() {
+  async function drawFortuneCard() {
+    try {
+      const res = await fetch("/api/fortune", {
+        cache: "no-store",
+      });
+
+      const data = await res.json();
+
+      if (!data.ok || !data.card) {
+        throw new Error("สุ่มไพ่ไม่สำเร็จ");
+      }
+
+      const cardText = `${data.card.emoji} คุณได้ไพ่ ${data.card.name}
+${data.card.meaning}
+เมนูที่เหมาะกับคุณ: ${data.card.recommend}`;
+
+      setDemiMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: cardText,
+          time: getThaiTime(),
+        },
+      ]);
+    } catch {
+      setDemiMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: "Demi สุ่มไพ่ไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ",
+          time: getThaiTime(),
+        },
+      ]);
+    }
+  }
+
+
   return (
     <svg
       viewBox="0 0 64 64"
