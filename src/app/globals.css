@@ -4257,3 +4257,103 @@ main,
   }
 }
 
+
+/* ===== Fix Cookie Club background spacing only ===== */
+
+/* ลดช่องว่างพื้นหลังของกล่อง Cookie Club โดยไม่ทำลายบล็อกย่อย */
+.memberShell,
+.memberRegisterShell,
+.orderShell,
+.clubShell {
+  padding-top: 28px !important;
+  padding-bottom: 28px !important;
+}
+
+/* ถ้า section สมัครกับสั่งซื้อยังแยกกันอยู่ ให้ดึงเข้าหากัน */
+.memberSection {
+  margin-bottom: 0 !important;
+}
+
+.orderSection {
+  margin-top: 18px !important;
+}
+
+/* ลดพื้นที่ว่างบนล่างของพื้นหลัง section สั่งซื้อ */
+.orderShell {
+  padding-top: 26px !important;
+  padding-bottom: 26px !important;
+}
+
+/* ลดช่องว่างระหว่างหัวข้อกับฟอร์ม */
+.memberHero,
+.orderHeader {
+  margin-bottom: 14px !important;
+}
+
+.registerCard,
+.orderLayout,
+.memberGrid {
+  margin-top: 16px !important;
+}
+
+/* ถ้าใช้บล็อก Cookie Club เดียว */
+.clubMainGrid {
+  margin-top: 16px !important;
+}
+
+.clubPromoRow {
+  margin-top: 16px !important;
+  margin-bottom: 14px !important;
+}
+
+/* ลดความสูงว่างในบล็อกย่อย แต่ยังคงดีไซน์เดิม */
+.registerInfo,
+.orderPromoCard,
+.shopPanel,
+.registerPanel,
+.orderPanel,
+.clubPanel {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+/* ดึงรีวิวขึ้นมาอีกนิด ไม่ให้เว้นพื้นหลังยาว */
+#reviews {
+  margin-top: 24px !important;
+}
+
+/* ลดช่องว่างระหว่าง section หลักแบบรวม */
+.promoSection,
+.memberSection,
+.orderSection,
+.clubSection {
+  margin-top: 30px !important;
+}
+
+/* กันไม่ให้พื้นหลังยาวเกินจาก min-height เดิม */
+.orderShell,
+.memberShell,
+.memberRegisterShell,
+.clubShell {
+  min-height: auto !important;
+}
+
+/* มือถือให้ยังอ่านง่าย */
+@media (max-width: 768px) {
+  .memberShell,
+  .memberRegisterShell,
+  .orderShell,
+  .clubShell {
+    padding-top: 22px !important;
+    padding-bottom: 22px !important;
+  }
+
+  .orderSection {
+    margin-top: 14px !important;
+  }
+
+  #reviews {
+    margin-top: 20px !important;
+  }
+}
+
