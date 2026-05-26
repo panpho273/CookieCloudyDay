@@ -311,6 +311,10 @@ export default function HomePage() {
     promoEligible?: boolean;
     cardName?: string;
     cardMessage?: string;
+    cardRecommend?: string;
+    cardKeyword?: string;
+    cardFreebieText?: string;
+    cardEmoji?: string;
   } | null>(null);
 
   const selectedCookie =
