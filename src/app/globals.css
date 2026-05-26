@@ -3910,3 +3910,113 @@ nav a[href="#demi"],
     animation-duration: 20s !important;
   }
 }
+
+/* ===== FIX Review Section: vertical scroll only ===== */
+
+/* กล่องรีวิวหลักกลับมาเป็น 2 คอลัมน์ปกติ */
+#reviews .reviewBox {
+  display: grid !important;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(420px, 1.35fr) !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+  overflow: visible !important;
+}
+
+/* ฟอร์มให้คะแนนด้านซ้าย ไม่ให้โดนบีบ */
+#reviews .reviewForm {
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 28px !important;
+  border-radius: 28px !important;
+}
+
+/* ดาวกลับมาเรียงแนวนอน */
+#reviews .starRow,
+#reviews .stars,
+#reviews .ratingStars {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+/* ปุ่มดาวไม่ให้บีบเป็นแนวตั้ง */
+#reviews .starButton,
+#reviews .starBtn,
+#reviews button[aria-label*="star"] {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  border-radius: 14px !important;
+}
+
+/* textarea กลับมาปกติ */
+#reviews textarea {
+  width: 100% !important;
+  min-height: 120px !important;
+  resize: vertical !important;
+  writing-mode: horizontal-tb !important;
+  white-space: normal !important;
+}
+
+/* ปุ่มส่งรีวิวกลับมาปกติ */
+#reviews .reviewForm button[type="submit"],
+#reviews .submitReviewBtn {
+  width: 100% !important;
+  min-height: 52px !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* รายการรีวิวด้านขวา: เลื่อนขึ้นลง ไม่เลื่อนข้าง */
+#reviews .reviewList {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+
+  max-height: 430px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  cursor: default !important;
+  animation: none !important;
+  transform: none !important;
+  padding: 4px 10px 4px 4px !important;
+  scroll-behavior: smooth !important;
+}
+
+/* การ์ดรีวิวไม่ล็อกความกว้างแนวนอน */
+#reviews .reviewItem {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+}
+
+/* scrollbar แนวตั้งให้ดูนุ่ม */
+#reviews .reviewList::-webkit-scrollbar {
+  width: 8px !important;
+  display: block !important;
+}
+
+#reviews .reviewList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.65) !important;
+  border-radius: 999px !important;
+}
+
+#reviews .reviewList::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d8c2ff, #8b5cf6) !important;
+  border-radius: 999px !important;
+}
+
+/* มือถือให้ซ้อนลงล่าง */
+@media (max-width: 900px) {
+  #reviews .reviewBox {
+    grid-template-columns: 1fr !important;
+  }
+
+  #reviews .reviewList {
+    max-height: 420px !important;
+  }
+}
+
