@@ -11,11 +11,23 @@ export async function POST(req: NextRequest) {
       process.env.GOOGLE_SHOP_WEBHOOK_URL ||
       process.env.GOOGLE_REVIEW_WEBHOOK_URL;
 
+    /*
+      LOCAL FALLBACK:
+      ถ้าไม่มี webhook ใน local ให้สมัครสำเร็จแบบจำลอง
+    */
     if (!webhookUrl) {
-      return NextResponse.json(
-        { ok: false, message: "Missing Google webhook URL" },
-        { status: 500 }
-      );
+      return NextResponse.json({
+        ok: true,
+        localOnly: true,
+        alreadyMember: false,
+        member: {
+          memberCode: `LOCAL-${Date.now()}`,
+          name: body.name,
+          phone: body.phone,
+          email: body.email,
+        },
+        message: "Local member registered for preview only",
+      });
     }
 
     const googleRes = await fetch(webhookUrl, {

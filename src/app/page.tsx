@@ -1,5 +1,8 @@
 "use client";
 
+import { demiQuickActions, generateDemiReply } from "@/lib/demi-response";
+import { cookieMenus } from "@/lib/cookie-menu";
+
 import { useEffect, useMemo, useState } from "react";
 
 const menus = [
@@ -58,6 +61,7 @@ function getThaiTime() {
   return new Date().toLocaleTimeString("th-TH", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Bangkok",
   });
 }
 
@@ -155,6 +159,73 @@ export default function HomePage() {
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
+    const cookieClubPromoAutoScroll = document.querySelector<HTMLElement>(
+      ".cookieClubPromoGrid"
+    );
+
+    if (!cookieClubPromoAutoScroll) return;
+
+    let frameId = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    const autoScroll = () => {
+      const maxScroll =
+        cookieClubPromoAutoScroll.scrollWidth -
+        cookieClubPromoAutoScroll.clientWidth;
+
+      if (!isDragging && maxScroll > 0) {
+        if (cookieClubPromoAutoScroll.scrollLeft >= maxScroll - 2) {
+          cookieClubPromoAutoScroll.scrollLeft = 0;
+        } else {
+          cookieClubPromoAutoScroll.scrollLeft += 0.45;
+        }
+      }
+
+      frameId = window.requestAnimationFrame(autoScroll);
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      isDragging = true;
+      cookieClubPromoAutoScroll.classList.add("isDragging");
+      startX = e.pageX;
+      startScrollLeft = cookieClubPromoAutoScroll.scrollLeft;
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      e.preventDefault();
+
+      const distance = e.pageX - startX;
+      cookieClubPromoAutoScroll.scrollLeft = startScrollLeft - distance;
+    };
+
+    const stopDragging = () => {
+      isDragging = false;
+      cookieClubPromoAutoScroll.classList.remove("isDragging");
+    };
+
+    cookieClubPromoAutoScroll.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", stopDragging);
+
+    frameId = window.requestAnimationFrame(autoScroll);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      cookieClubPromoAutoScroll.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", stopDragging);
+    };
+  }, []);
+
+
+
+
+
+
+  useEffect(() => {
     const reviewVerticalAutoScroll = document.querySelector<HTMLElement>(
       "#reviews .reviewList"
     );
@@ -205,89 +276,8 @@ export default function HomePage() {
   }, [reviews]);
 
 
-  useEffect(() => {
-    const cookieClubPromoAutoScroll = document.querySelector<HTMLElement>(
-      ".cookieClubPromoGrid"
-    );
 
-    if (!cookieClubPromoAutoScroll) return;
 
-    let paused = false;
-    let isDown = false;
-    let startX = 0;
-    let scrollLeft = 0;
-
-    const pause = () => {
-      paused = true;
-    };
-
-    const resume = () => {
-      paused = false;
-    };
-
-    const onMouseDown = (e: MouseEvent) => {
-      isDown = true;
-      paused = true;
-      cookieClubPromoAutoScroll.classList.add("isDragging");
-      startX = e.pageX - cookieClubPromoAutoScroll.offsetLeft;
-      scrollLeft = cookieClubPromoAutoScroll.scrollLeft;
-    };
-
-    const onMouseLeave = () => {
-      isDown = false;
-      paused = false;
-      cookieClubPromoAutoScroll.classList.remove("isDragging");
-    };
-
-    const onMouseUp = () => {
-      isDown = false;
-      paused = false;
-      cookieClubPromoAutoScroll.classList.remove("isDragging");
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDown) return;
-      e.preventDefault();
-
-      const x = e.pageX - cookieClubPromoAutoScroll.offsetLeft;
-      const walk = (x - startX) * 1.4;
-      cookieClubPromoAutoScroll.scrollLeft = scrollLeft - walk;
-    };
-
-    const timer = window.setInterval(() => {
-      if (paused) return;
-
-      const maxScroll =
-        cookieClubPromoAutoScroll.scrollWidth -
-        cookieClubPromoAutoScroll.clientWidth;
-
-      if (maxScroll <= 0) return;
-
-      if (cookieClubPromoAutoScroll.scrollLeft >= maxScroll - 3) {
-        cookieClubPromoAutoScroll.scrollTo({
-          left: 0,
-          behavior: "smooth",
-        });
-      } else {
-        cookieClubPromoAutoScroll.scrollLeft += 1;
-      }
-    }, 35);
-
-    cookieClubPromoAutoScroll.addEventListener("mouseenter", pause);
-    cookieClubPromoAutoScroll.addEventListener("mouseleave", resume);
-    cookieClubPromoAutoScroll.addEventListener("mousedown", onMouseDown);
-    cookieClubPromoAutoScroll.addEventListener("mouseup", onMouseUp);
-    cookieClubPromoAutoScroll.addEventListener("mousemove", onMouseMove);
-
-    return () => {
-      window.clearInterval(timer);
-      cookieClubPromoAutoScroll.removeEventListener("mouseenter", pause);
-      cookieClubPromoAutoScroll.removeEventListener("mouseleave", resume);
-      cookieClubPromoAutoScroll.removeEventListener("mousedown", onMouseDown);
-      cookieClubPromoAutoScroll.removeEventListener("mouseup", onMouseUp);
-      cookieClubPromoAutoScroll.removeEventListener("mousemove", onMouseMove);
-    };
-  }, []);
 
 
 
@@ -301,18 +291,10 @@ export default function HomePage() {
   
   
   
-  const cookieMenus = [
-    { name: "คุกกี้เรดเวลเวท", price: 59 },
-    { name: "คุกกี้ดับเบิ้ลช็อกโกแลต", price: 69 },
-    { name: "คุกกี้นูเทลล่า", price: 69 },
-    { name: "คุกกี้เนยสด", price: 55 },
-    { name: "คุกกี้ช็อกโกแลตชิพ", price: 59 },
-  ];
-
   const [memberForm, setMemberForm] = useState({
     name: "",
     phone: "",
-    email: "",
+    username: "",
     birthday: "",
     favoriteCookie: "",
   });
@@ -362,7 +344,7 @@ export default function HomePage() {
 
       setOrderForm((prev) => ({
         ...prev,
-        memberKey: memberForm.phone || memberForm.email,
+        memberKey: memberForm.phone || memberForm.username,
       }));
     } catch (error) {
       setShopMessage(
@@ -409,35 +391,11 @@ const [isDemiOpen, setIsDemiOpen] = useState(true);
     {
       role: "bot",
       text: "สวัสดีค่ะ! ยินดีให้บริการ มีอะไรให้ช่วยไหมคะ? 😊",
-      time: getThaiTime(),
+      time: "ตอนนี้",
     },
   ]);
 
-  function sendDemiMessage(preset?: string) {
-    const finalText = (preset ?? demiInput).trim();
-
-    if (!finalText) return;
-
-    const userMessage: DemiMessage = {
-      role: "user",
-      text: finalText,
-      time: getThaiTime(),
-    };
-
-    setDemiMessages((prev) => [...prev, userMessage]);
-    setDemiInput("");
-
-    setTimeout(() => {
-      const botMessage: DemiMessage = {
-        role: "bot",
-        text: getDemiReply(finalText),
-        time: getThaiTime(),
-      };
-
-      setDemiMessages((prev) => [...prev, botMessage]);
-    }, 350);
-  }
-function getDemiReply(message: string) {
+  function getDemiReply(message: string) {
     const msg = message.toLowerCase();
 
     if (msg.includes("เมนู") || msg.includes("แนะนำ") || msg.includes("คุกกี้")) {
@@ -529,7 +487,7 @@ function getDemiReply(message: string) {
   useEffect(() => {
     async function loadReviews() {
       try {
-        const res = await fetch(`/api/reviews?t=${Date.now()}`, {
+        const res = await fetch(`${window.location.hostname === "localhost" ? "https://www.cookiecloudyday.me" : ""}/api/reviews?t=${Date.now()}`, {
           cache: "no-store",
           headers: {
             "Cache-Control": "no-cache",
@@ -559,7 +517,7 @@ function getDemiReply(message: string) {
     setError("");
 
     try {
-      const res = await fetch(`/api/reviews?t=${Date.now()}`, {
+      const res = await fetch(`${window.location.hostname === "localhost" ? "https://www.cookiecloudyday.me" : ""}/api/reviews?t=${Date.now()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -592,6 +550,30 @@ function getDemiReply(message: string) {
     } finally {
       setSending(false);
     }
+  }
+
+
+  function sendDemiMessage(preset?: string) {
+    const cleanInput = (preset ?? demiInput).trim();
+
+    if (!cleanInput) return;
+
+    const userMessage: DemiMessage = {
+      role: "user",
+      text: cleanInput,
+      time: getThaiTime(),
+    };
+
+    const reply = generateDemiReply(cleanInput);
+
+    const botMessage: DemiMessage = {
+      role: "bot",
+      text: reply.text,
+      time: getThaiTime(),
+    };
+
+    setDemiMessages((prev) => [...prev, userMessage, botMessage]);
+    setDemiInput("");
   }
 
   async function drawFortuneCard() {
@@ -641,19 +623,18 @@ ${data.card.meaning}
 
         <div className="navLinks">
           <a href="#menu">เมนู</a>
-          <a href="#reviews">รีวิว</a>
+          <a href="#reviews">รีวิวจากลูกค้า</a>
           <a href="#demi">Demi</a>
-          <a href="/admin/login" className="adminPill">Admin</a>
+          <a href="/login" className="adminPill" aria-label="เข้าสู่ระบบ" title="เข้าสู่ระบบ">👤</a>
         </div>
       </nav>
 
       <section className="hero">
         <div>
-          <div className="badge">Fresh Homemade Cookies</div>
+          <div className="badge"></div>
           <h1>CookieCloudyDay</h1>
           <p>
-            ถามเมนู เวลาเปิดร้าน ราคา หรือให้ Demi ช่วยแนะนำคุกกี้ที่เหมาะกับคุณได้เลย
-            พร้อมระบบรีวิว 1–5 ดาว และหน้า Admin สำหรับดูข้อมูลหลังบ้าน
+            
           </p>
 
           <div className="heroActions">
@@ -670,7 +651,7 @@ ${data.card.meaning}
       <section id="menu" className="section">
         <div className="sectionHeader">
           <h2>เมนูแนะนำ</h2>
-          <p>ตัวอย่างเมนูฮิตของร้าน CookieCloudyDay</p>
+          <p>เมนูฮิตของร้าน CookieCloudyDay</p>
         </div>
 
         <div className="grid">
@@ -720,6 +701,26 @@ ${data.card.meaning}
                 title: "ซื้อครบ 5 ชิ้น แถม 1",
                 desc: "เหมาะสำหรับซื้อฝากหรือกินหลายรสชาติ",
               },
+              {
+                icon: "🎁",
+                title: "เซ็ตของฝาก",
+                desc: "จัดเซ็ตคุกกี้เป็นของฝากให้ดูน่ารักขึ้น",
+              },
+              {
+                icon: "💜",
+                title: "Demi Pick",
+                desc: "ให้ Demi ช่วยเลือกคุกกี้ตามรสชาติที่ชอบ",
+              },
+              {
+                icon: "🌟",
+                title: "รีวิวรับสิทธิ์พิเศษ",
+                desc: "สมาชิกที่รีวิวร้านมีโอกาสรับโปรในรอบถัดไป",
+              },
+              {
+                icon: "☁️",
+                title: "Cookie Cloud Set",
+                desc: "รวมเมนูน่ารักของร้านสำหรับวันพิเศษ",
+              },
             ].map((promo, index) => (
               <div className="cookieClubPromoCard" key={`${promo.title}-${index}`}>
                 <div className="cookieClubPromoIcon">{promo.icon}</div>
@@ -756,11 +757,11 @@ ${data.card.meaning}
                 />
 
                 <input
-                  value={memberForm.email}
+                  value={memberForm.username}
                   onChange={(e) =>
-                    setMemberForm({ ...memberForm, email: e.target.value })
+                    setMemberForm({ ...memberForm, username: e.target.value })
                   }
-                  placeholder="อีเมล"
+                  placeholder="ชื่อผู้ใช้"
                 />
 
                 <input
@@ -792,7 +793,7 @@ ${data.card.meaning}
             <div className="shopPanel cookieClubPanel">
               <h3>สั่งซื้อสำหรับสมาชิก</h3>
               <p className="cookieClubPanelDesc">
-                กรอกเบอร์โทร อีเมล หรือรหัสสมาชิกก่อนสั่งซื้อ
+                กรอกเบอร์โทร ชื่อผู้ใช้ หรือรหัสสมาชิกก่อนสั่งซื้อ
               </p>
 
               <div className="formGrid">
@@ -802,7 +803,7 @@ ${data.card.meaning}
                   onChange={(e) =>
                     setOrderForm({ ...orderForm, memberKey: e.target.value })
                   }
-                  placeholder="กรอกเบอร์โทร / อีเมล / รหัสสมาชิก"
+                  placeholder="กรอกชื่อผู้ใช้ / เบอร์โทร / รหัสสมาชิก"
                 />
 
                 <select
@@ -813,7 +814,7 @@ ${data.card.meaning}
                 >
                   {cookieMenus.map((item) => (
                     <option key={item.name} value={item.name}>
-                      {item.name} - {item.price} บาท
+                      {item.name}
                     </option>
                   ))}
                 </select>
@@ -847,7 +848,7 @@ ${data.card.meaning}
                 className="shopButton"
                 onClick={() => {
                   if (!orderForm.memberKey.trim()) {
-                    setShopMessage("กรุณาสมัครสมาชิกหรือกรอกเบอร์โทร/อีเมลสมาชิกก่อนสั่งซื้อค่ะ");
+                    setShopMessage("กรุณาสมัครสมาชิกหรือกรอกเบอร์โทร/ชื่อผู้ใช้สมาชิกก่อนสั่งซื้อค่ะ");
                     return;
                   }
 
@@ -861,18 +862,59 @@ ${data.card.meaning}
 
           {shopMessage && <div className="shopMessage">{shopMessage}</div>}
 
-          {orderResult && (
-            <div className="fortuneResult">
-              <span>เลขออเดอร์: {orderResult.orderId}</span>
+                    {orderResult && (
+            <div className="fortuneModalBackdrop">
+              <div className="fortuneModalCard">
+                <button
+                  type="button"
+                  className="fortuneCloseBtn"
+                  onClick={() => setOrderResult(null)}
+                  aria-label="ปิดผลสุ่มไพ่"
+                >
+                  ×
+                </button>
 
-              {orderResult.promoEligible ? (
-                <>
-                  <h3>คุณได้รับไพ่ {orderResult.cardName}</h3>
-                  <p>{orderResult.cardMessage}</p>
-                </>
-              ) : (
-                <p>ออเดอร์นี้ยังไม่ถึงโปรสุ่มไพ่ ซื้อครบ 150 บาทครั้งหน้ารับสิทธิ์ได้เลยค่ะ</p>
-              )}
+                <div className="fortuneModalTitle">🔮 Lucky Cookie Tarot</div>
+
+                {orderResult.promoEligible ? (
+                  <>
+                    <div className="fortuneCookieCard">
+                      <div className="fortuneCookieIcon">{orderResult.cardEmoji || "🍪"}</div>
+                      <h3>{orderResult.cardName}</h3>
+                      <span>Cookie Fortune Card</span>
+                      {orderResult.cardRecommend && (
+                        <div className="fortuneFreeCookie">
+                          แถม: {orderResult.cardRecommend}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="fortuneContent">
+                      <h4>คำทำนายของคุณ</h4>
+                      <p>{orderResult.cardMessage}</p>
+
+                      <div className="fortuneMeaningBox">
+                        ความหมายของไพ่: {orderResult.cardKeyword || "วันนี้เหมาะกับการเติมพลังใจ เลือกคุกกี้ที่ชอบ แล้วให้ช่วงเวลาดี ๆ เป็นของคุณ"}
+                      </div>
+
+                      <div className="fortunePromoBox">
+                        {orderResult.cardFreebieText ||
+                          `โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป รับฟรี ${orderResult.cardRecommend || "คุกกี้ Cookie Fortune"} 1 ชิ้น ตามไพ่ที่สุ่มได้`}
+                      </div>
+
+                      <small>เลขออเดอร์: {orderResult.orderId}</small>
+                    </div>
+                  </>
+                ) : (
+                  <div className="fortuneContent fortuneNoPromo">
+                    <h4>ยังไม่ถึงโปรสุ่มไพ่</h4>
+                    <p>
+                      ออเดอร์นี้ยังไม่ถึงโปรสุ่มไพ่ ซื้อครบ 150 บาทครั้งหน้ารับสิทธิ์ได้เลยค่ะ
+                    </p>
+                    <small>เลขออเดอร์: {orderResult.orderId}</small>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -1035,7 +1077,7 @@ ${data.card.meaning}
 
                       <div className="demiBubbleWrap">
                         <div className="demiBubble">{msg.text}</div>
-                        <small>{msg.time}</small>
+                        <small suppressHydrationWarning>{msg.time}</small>
                       </div>
                     </div>
                   ))}

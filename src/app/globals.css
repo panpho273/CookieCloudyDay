@@ -5490,3 +5490,808 @@ main {
   }
 }
 
+
+/* ===== FIX Cookie Club promo smooth horizontal auto-scroll ===== */
+
+/* ตัวครอบแถบโปร */
+.cookieClubPromoGrid {
+  display: flex !important;
+  grid-template-columns: none !important;
+  gap: 16px !important;
+
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+
+  padding: 4px 4px 14px !important;
+  margin-top: 18px !important;
+
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+
+  cursor: grab !important;
+  scroll-snap-type: x proximity !important;
+}
+
+.cookieClubPromoGrid::-webkit-scrollbar {
+  display: none !important;
+}
+
+.cookieClubPromoGrid.isDragging {
+  cursor: grabbing !important;
+}
+
+/* การ์ดโปรต้องกว้างพอให้ล้นจอ ถึงจะเลื่อนได้จริง */
+.cookieClubPromoCard {
+  flex: 0 0 310px !important;
+  width: 310px !important;
+  min-width: 310px !important;
+  scroll-snap-align: start !important;
+}
+
+/* ลดอาการกระตุกจาก animation เก่า ถ้ามีค้าง */
+.promoTrack,
+.reviewList,
+.cookieClubPromoGrid {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* ให้การ์ดดูแน่นขึ้น ไม่สูงแปลก */
+.cookieClubPromoCard {
+  min-height: 112px !important;
+  align-items: center !important;
+}
+
+/* มือถือ */
+@media (max-width: 768px) {
+  .cookieClubPromoCard {
+    flex-basis: 260px !important;
+    width: 260px !important;
+    min-width: 260px !important;
+  }
+}
+
+
+/* ===== HARD FIX Cookie Club promo must scroll ===== */
+
+.cookieClubPromoGrid {
+  display: flex !important;
+  grid-template-columns: none !important;
+  flex-wrap: nowrap !important;
+  gap: 16px !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+
+  padding: 4px 4px 14px !important;
+  margin-top: 18px !important;
+
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  scroll-behavior: auto !important;
+  cursor: grab !important;
+
+  animation: none !important;
+  transform: none !important;
+}
+
+.cookieClubPromoGrid::-webkit-scrollbar {
+  display: none !important;
+}
+
+.cookieClubPromoGrid.isDragging {
+  cursor: grabbing !important;
+}
+
+.cookieClubPromoCard {
+  flex: 0 0 310px !important;
+  width: 310px !important;
+  min-width: 310px !important;
+  max-width: 310px !important;
+}
+
+.cookieClubShell {
+  overflow: hidden !important;
+}
+
+@media (max-width: 768px) {
+  .cookieClubPromoCard {
+    flex-basis: 260px !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+  }
+}
+
+
+/* ===== FINAL FIX: Fortune popup + promo auto marquee ===== */
+
+/* Popup ผลสุ่มไพ่ */
+.fortuneResult {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+
+  margin: 0 !important;
+  padding: 24px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  background: rgba(44, 25, 49, 0.35) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #4b2e2b !important;
+}
+
+.fortuneResult > span,
+.fortuneResult > h3,
+.fortuneResult > p {
+  width: min(520px, 92vw) !important;
+  background: #fffaf7 !important;
+  border-left: 1px solid rgba(139, 92, 246, 0.18) !important;
+  border-right: 1px solid rgba(139, 92, 246, 0.18) !important;
+  padding-left: 28px !important;
+  padding-right: 28px !important;
+}
+
+.fortuneResult > span {
+  padding-top: 30px !important;
+  padding-bottom: 8px !important;
+  border-top: 1px solid rgba(139, 92, 246, 0.18) !important;
+  border-radius: 32px 32px 0 0 !important;
+  color: #8a6a60 !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+}
+
+.fortuneResult > h3 {
+  margin: 0 !important;
+  padding-top: 8px !important;
+  padding-bottom: 10px !important;
+  color: #4b2e2b !important;
+  font-size: clamp(30px, 4vw, 46px) !important;
+  line-height: 1.05 !important;
+  text-align: center !important;
+}
+
+.fortuneResult > p {
+  margin: 0 !important;
+  padding-top: 8px !important;
+  padding-bottom: 32px !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.18) !important;
+  border-radius: 0 0 32px 32px !important;
+  color: #7a5b53 !important;
+  line-height: 1.8 !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  box-shadow: 0 28px 80px rgba(55, 32, 64, 0.18) !important;
+}
+
+.fortuneResult::before {
+  content: "🔮 Cookie Fortune";
+  width: min(520px, 92vw);
+  padding: 22px 28px 0;
+  background: #fffaf7;
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  border-bottom: 0;
+  border-radius: 32px 32px 0 0;
+  color: #8b5cf6;
+  font-weight: 900;
+  font-size: 18px;
+  text-align: center;
+}
+
+.fortuneCloseBtn {
+  position: fixed !important;
+  top: 22px !important;
+  right: 22px !important;
+  width: 46px !important;
+  height: 46px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #7c3aed !important;
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  box-shadow: 0 16px 38px rgba(44, 25, 49, 0.16) !important;
+}
+
+/* โปรให้เลื่อนเองแบบ marquee */
+.cookieClubShell {
+  overflow: hidden !important;
+}
+
+.cookieClubPromoGrid {
+  display: flex !important;
+  grid-template-columns: none !important;
+  flex-wrap: nowrap !important;
+  gap: 16px !important;
+
+  width: max-content !important;
+  max-width: none !important;
+
+  overflow: visible !important;
+  padding: 4px 0 14px !important;
+  margin-top: 18px !important;
+
+  animation: cookiePromoMarquee 24s linear infinite !important;
+  will-change: transform !important;
+}
+
+.cookieClubPromoGrid:hover {
+  animation-play-state: paused !important;
+}
+
+.cookieClubPromoCard {
+  flex: 0 0 300px !important;
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+}
+
+@keyframes cookiePromoMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-45%);
+  }
+}
+
+@media (max-width: 768px) {
+  .cookieClubPromoCard {
+    flex-basis: 260px !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+  }
+
+  .cookieClubPromoGrid {
+    animation-duration: 18s !important;
+  }
+}
+
+
+/* ===== Demi-style Lucky Cookie Tarot Modal ===== */
+
+.fortuneModalBackdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background: rgba(39, 34, 49, 0.58) !important;
+  backdrop-filter: blur(7px) !important;
+}
+
+.fortuneModalCard {
+  position: relative !important;
+  width: min(520px, 94vw) !important;
+  max-height: 92vh !important;
+  overflow-y: auto !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(circle at 80% 18%, rgba(255, 240, 230, 0.8), transparent 28%),
+    linear-gradient(180deg, #fffdfd 0%, #fff8fb 100%) !important;
+  border: 1px solid rgba(139, 92, 246, 0.16) !important;
+  box-shadow: 0 30px 90px rgba(35, 22, 48, 0.28) !important;
+  padding: 34px 34px 32px !important;
+  color: #4b2e2b !important;
+}
+
+.fortuneCloseBtn {
+  position: absolute !important;
+  top: 22px !important;
+  right: 22px !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(139, 92, 246, 0.22) !important;
+  background: #ffffff !important;
+  color: #8b5cf6 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+
+.fortuneModalTitle {
+  text-align: center !important;
+  color: #4b2e2b !important;
+  font-weight: 900 !important;
+  font-size: 18px !important;
+  margin: 8px 0 26px !important;
+}
+
+.fortuneCookieCard {
+  width: 220px !important;
+  min-height: 280px !important;
+  margin: 0 auto 30px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(180deg, #ffe4d8 0%, #ffd6c8 100%) !important;
+  border: 1px solid rgba(210, 127, 98, 0.25) !important;
+  box-shadow: 0 20px 55px rgba(126, 70, 44, 0.14) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 24px !important;
+}
+
+.fortuneCookieIcon {
+  font-size: 42px !important;
+  margin-bottom: 30px !important;
+}
+
+.fortuneCookieCard h3 {
+  margin: 0 0 12px !important;
+  color: #4b2e2b !important;
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+}
+
+.fortuneCookieCard span {
+  color: #8a6a60 !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+.fortuneContent h4 {
+  margin: 0 0 14px !important;
+  color: #4b2e2b !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+}
+
+.fortuneContent p {
+  margin: 0 0 18px !important;
+  color: #4b2e2b !important;
+  font-size: 16px !important;
+  line-height: 1.85 !important;
+  font-weight: 600 !important;
+}
+
+.fortuneMeaningBox,
+.fortunePromoBox {
+  border-radius: 10px !important;
+  padding: 18px 20px !important;
+  margin-top: 16px !important;
+  line-height: 1.8 !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+}
+
+.fortuneMeaningBox {
+  background: #dceeff !important;
+  color: #3c4a5c !important;
+}
+
+.fortunePromoBox {
+  background: #d9f7e4 !important;
+  color: #28553a !important;
+}
+
+.fortuneContent small {
+  display: block !important;
+  margin-top: 18px !important;
+  color: #9a7d73 !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+}
+
+.fortuneNoPromo {
+  text-align: center !important;
+  padding-top: 12px !important;
+}
+
+@media (max-width: 640px) {
+  .fortuneModalCard {
+    padding: 28px 22px !important;
+  }
+
+  .fortuneCookieCard {
+    width: 190px !important;
+    min-height: 245px !important;
+  }
+
+  .fortuneCookieCard h3 {
+    font-size: 24px !important;
+  }
+}
+
+
+/* ===== Fortune free cookie label ===== */
+.fortuneFreeCookie {
+  margin-top: 14px !important;
+  padding: 9px 13px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  border: 1px solid rgba(139, 92, 246, 0.16) !important;
+  color: #7c3aed !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  line-height: 1.35 !important;
+}
+
+
+/* ===== Clean Customer/Admin Shared Login Page ===== */
+
+.loginPage {
+  min-height: 100vh !important;
+  width: 100% !important;
+  padding: clamp(20px, 5vw, 56px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 226, 190, 0.52), transparent 28%),
+    radial-gradient(circle at 86% 80%, rgba(203, 184, 255, 0.58), transparent 34%),
+    linear-gradient(135deg, #fff7fb 0%, #f8efff 48%, #eef7ff 100%) !important;
+  color: #4b2e2b !important;
+}
+
+.loginCard {
+  width: min(460px, 100%) !important;
+  padding: clamp(28px, 5vw, 44px) !important;
+  border-radius: 34px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(139, 92, 246, 0.16) !important;
+  box-shadow: 0 28px 90px rgba(68, 45, 74, 0.14) !important;
+  text-align: center !important;
+}
+
+.loginBrandIcon {
+  width: 76px !important;
+  height: 76px !important;
+  margin: 0 auto 16px !important;
+  border-radius: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 34px !important;
+  background: linear-gradient(135deg, #fff1c7, #e5d4ff) !important;
+  box-shadow: 0 14px 34px rgba(139, 92, 246, 0.14) !important;
+}
+
+.loginCard h1 {
+  margin: 14px 0 10px !important;
+  font-size: clamp(38px, 6vw, 56px) !important;
+  line-height: 1 !important;
+  color: #4b2e2b !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.loginCard p {
+  margin: 0 auto !important;
+  max-width: 340px !important;
+  color: #8a6a60 !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  font-weight: 500 !important;
+}
+
+.loginForm {
+  margin-top: 26px !important;
+  display: grid !important;
+  gap: 14px !important;
+  text-align: left !important;
+}
+
+.loginForm label {
+  display: grid !important;
+  gap: 8px !important;
+  color: #5b3a35 !important;
+  font-weight: 700 !important;
+}
+
+.loginForm input {
+  width: 100% !important;
+  height: 56px !important;
+  border-radius: 18px !important;
+  border: 1.5px solid #e5d7ff !important;
+  background: #fffdfd !important;
+  padding: 0 16px !important;
+  outline: none !important;
+  color: #4b2e2b !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+.loginForm input:focus {
+  border-color: #9b75ff !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12) !important;
+}
+
+.loginPrimaryBtn,
+.loginSecondaryBtn {
+  min-height: 54px !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  padding: 0 22px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.loginPrimaryBtn {
+  background: linear-gradient(135deg, #9b6dff, #7c3aed) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.22) !important;
+}
+
+.loginSecondaryBtn {
+  color: #4b2e2b !important;
+  background: #ffffff !important;
+  border: 1.5px solid #eadfff !important;
+}
+
+.loginError {
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+}
+
+.loginHint {
+  display: block !important;
+  margin-top: 18px !important;
+  color: #a48b83 !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+}
+
+@media (max-width: 480px) {
+  .loginPage {
+    padding: 16px !important;
+  }
+
+  .loginCard {
+    padding: 26px 20px !important;
+    border-radius: 28px !important;
+  }
+
+  .loginCard h1 {
+    font-size: 36px !important;
+  }
+}
+
+
+/* ===== Clean Customer/Admin Shared Login Page ===== */
+
+.loginPage {
+  min-height: 100vh !important;
+  width: 100% !important;
+  padding: clamp(20px, 5vw, 56px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 226, 190, 0.52), transparent 28%),
+    radial-gradient(circle at 86% 80%, rgba(203, 184, 255, 0.58), transparent 34%),
+    linear-gradient(135deg, #fff7fb 0%, #f8efff 48%, #eef7ff 100%) !important;
+  color: #4b2e2b !important;
+}
+
+.loginCard {
+  width: min(460px, 100%) !important;
+  padding: clamp(28px, 5vw, 44px) !important;
+  border-radius: 34px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(139, 92, 246, 0.16) !important;
+  box-shadow: 0 28px 90px rgba(68, 45, 74, 0.14) !important;
+  text-align: center !important;
+}
+
+.loginBrandIcon {
+  width: 76px !important;
+  height: 76px !important;
+  margin: 0 auto 16px !important;
+  border-radius: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 34px !important;
+  background: linear-gradient(135deg, #fff1c7, #e5d4ff) !important;
+  box-shadow: 0 14px 34px rgba(139, 92, 246, 0.14) !important;
+}
+
+.loginCard h1 {
+  margin: 14px 0 10px !important;
+  font-size: clamp(38px, 6vw, 56px) !important;
+  line-height: 1 !important;
+  color: #4b2e2b !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.loginCard p {
+  margin: 0 auto !important;
+  max-width: 340px !important;
+  color: #8a6a60 !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  font-weight: 500 !important;
+}
+
+.loginForm {
+  margin-top: 26px !important;
+  display: grid !important;
+  gap: 14px !important;
+  text-align: left !important;
+}
+
+.loginForm label {
+  display: grid !important;
+  gap: 8px !important;
+  color: #5b3a35 !important;
+  font-weight: 700 !important;
+}
+
+.loginForm input {
+  width: 100% !important;
+  height: 56px !important;
+  border-radius: 18px !important;
+  border: 1.5px solid #e5d7ff !important;
+  background: #fffdfd !important;
+  padding: 0 16px !important;
+  outline: none !important;
+  color: #4b2e2b !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+.loginForm input:focus {
+  border-color: #9b75ff !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12) !important;
+}
+
+.loginPrimaryBtn,
+.loginSecondaryBtn {
+  min-height: 54px !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  padding: 0 22px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.loginPrimaryBtn {
+  background: linear-gradient(135deg, #9b6dff, #7c3aed) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.22) !important;
+}
+
+.loginSecondaryBtn {
+  color: #4b2e2b !important;
+  background: #ffffff !important;
+  border: 1.5px solid #eadfff !important;
+}
+
+.loginError {
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+}
+
+.loginHint {
+  display: block !important;
+  margin-top: 18px !important;
+  color: #a48b83 !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+}
+
+@media (max-width: 480px) {
+  .loginPage {
+    padding: 16px !important;
+  }
+
+  .loginCard {
+    padding: 26px 20px !important;
+    border-radius: 28px !important;
+  }
+
+  .loginCard h1 {
+    font-size: 36px !important;
+  }
+}
+
+
+/* ===== Admin age insight ===== */
+
+.adminStatsGridSecond {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.ageInsightList {
+  display: grid !important;
+  gap: 14px !important;
+  margin-top: 16px !important;
+}
+
+.ageInsightItem {
+  display: grid !important;
+  grid-template-columns: 150px 1fr 70px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  padding: 14px !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(139, 92, 246, 0.12) !important;
+}
+
+.ageInsightItem div:first-child {
+  display: grid !important;
+  gap: 3px !important;
+}
+
+.ageInsightItem strong {
+  color: #4b2e2b !important;
+  font-weight: 800 !important;
+}
+
+.ageInsightItem span {
+  color: #8a6a60 !important;
+  font-size: 13px !important;
+}
+
+.ageInsightBar {
+  height: 12px !important;
+  border-radius: 999px !important;
+  background: #f1e7ff !important;
+  overflow: hidden !important;
+}
+
+.ageInsightBar span {
+  display: block !important;
+  height: 100% !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #a78bfa, #7c3aed) !important;
+}
+
+.ageInsightItem b {
+  text-align: right !important;
+  color: #7c3aed !important;
+}
+
+@media (max-width: 760px) {
+  .adminStatsGridSecond {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ageInsightItem {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ageInsightItem b {
+    text-align: left !important;
+  }
+}
+

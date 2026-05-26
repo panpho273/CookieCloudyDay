@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AdminLoginRedirectPage() {
+export default function AdminRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
