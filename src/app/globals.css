@@ -5243,3 +5243,250 @@ main {
   overscroll-behavior: contain !important;
 }
 
+
+/* ===== FINAL HARD FIX: Demi user bubble white container + soft purple small bubble ===== */
+
+/* ไม่ให้ทั้ง section Demi ยืดตามจำนวนข้อความ */
+#demi,
+.demiSection {
+  margin-top: 28px !important;
+  padding-top: 0 !important;
+}
+
+/* layout ซ้ายขวาให้สูงเท่ากันแต่ไม่ยืดยาวเกิน */
+.demiLayout,
+.demiShell {
+  align-items: stretch !important;
+  gap: 24px !important;
+}
+
+/* กล่องแชทขวา: fix ความสูง แล้วให้ข้อความเลื่อนข้างใน */
+.demiChatCard {
+  height: 620px !important;
+  max-height: 620px !important;
+  min-height: 620px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border-radius: 28px !important;
+  background: #ffffff !important;
+}
+
+/* header ไม่ยืด */
+.demiChatHeader {
+  flex: 0 0 auto !important;
+}
+
+/* แถบปุ่มด้านบนไม่ยืด */
+.demiTopSuggestions,
+.demiQuickButtons {
+  flex: 0 0 auto !important;
+}
+
+/* พื้นที่ข้อความต้อง scroll ข้างใน ไม่ดันกล่องยาวลง */
+.demiMessages {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+
+  padding: 18px 20px !important;
+  background: #ffffff !important;
+  scroll-behavior: smooth !important;
+}
+
+/* input ล่างไม่โดนดัน */
+.demiInputBar,
+.demiInputArea,
+.demiComposer {
+  flex: 0 0 auto !important;
+}
+
+/* แถวข้อความ user/bot ต้องโปร่งใส ห้ามมีพื้นหลังม่วงยาว */
+.demiMessage,
+.demiMessageRow,
+.demiMessage.user,
+.demiMessageRow.user,
+.demiMessage.bot,
+.demiMessageRow.bot {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* user ชิดขวา */
+.demiMessage.user,
+.demiMessageRow.user {
+  justify-content: flex-end !important;
+}
+
+/* bot ชิดซ้าย */
+.demiMessage.bot,
+.demiMessageRow.bot {
+  justify-content: flex-start !important;
+}
+
+/* ตัวครอบ bubble ห้ามมีสี / ห้ามขยายเต็ม */
+.demiBubbleWrap,
+.demiMessage.user .demiBubbleWrap,
+.demiMessageRow.user .demiBubbleWrap,
+.demiMessage.bot .demiBubbleWrap,
+.demiMessageRow.bot .demiBubbleWrap {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: 72% !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* bubble ทั่วไป */
+.demiBubble,
+.demiMessageBubble,
+.botBubble,
+.userBubble {
+  display: block !important;
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  padding: 13px 16px !important;
+  border-radius: 20px !important;
+
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  writing-mode: horizontal-tb !important;
+
+  line-height: 1.7 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+/* ข้อความใน bubble */
+.demiBubble p,
+.demiMessageBubble p,
+.botBubble p,
+.userBubble p,
+.demiMessage p,
+.demiMessageRow p {
+  margin: 0 !important;
+
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  writing-mode: horizontal-tb !important;
+
+  line-height: 1.7 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+
+/* bot bubble สีขาวอ่านง่าย */
+.demiMessage.bot .demiBubble,
+.demiMessageRow.bot .demiBubble,
+.demiMessageBubble.bot,
+.botBubble {
+  background: #ffffff !important;
+  color: #55312d !important;
+  border: 1px solid #eadfff !important;
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.06) !important;
+  border-bottom-left-radius: 8px !important;
+}
+
+/* user bubble: ม่วงอ่อนเฉพาะกล่องเล็ก ไม่ใช่พื้นหลังใหญ่ */
+.demiMessage.user .demiBubble,
+.demiMessageRow.user .demiBubble,
+.demiMessageBubble.user,
+.userBubble {
+  background: linear-gradient(135deg, #f4edff 0%, #e8d9ff 48%, #d9c2ff 100%) !important;
+  color: #4b2e2b !important;
+  border: 1px solid rgba(139, 92, 246, 0.18) !important;
+  box-shadow: 0 10px 22px rgba(139, 92, 246, 0.12) !important;
+  border-bottom-right-radius: 8px !important;
+}
+
+/* ข้อความฝั่งลูกค้า */
+.demiMessage.user .demiBubble p,
+.demiMessageRow.user .demiBubble p,
+.demiMessageBubble.user p,
+.userBubble p {
+  color: #4b2e2b !important;
+  font-weight: 700 !important;
+}
+
+/* เวลา */
+.demiBubbleWrap small,
+.demiMessageTime {
+  display: block !important;
+  margin-top: 4px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #a18eab !important;
+  white-space: nowrap !important;
+}
+
+.demiMessage.user .demiBubbleWrap small,
+.demiMessageRow.user .demiBubbleWrap small,
+.demiMessageBubble.user .demiMessageTime {
+  color: #8b6f9e !important;
+  text-align: right !important;
+}
+
+/* ซ่อนสีม่วงเดิมที่อาจติดกับ inner div แปลก ๆ */
+.demiMessage.user > div,
+.demiMessageRow.user > div {
+  background-color: transparent !important;
+}
+
+/* แต่ให้ bubble จริงยังมีสี */
+.demiMessage.user .demiBubble,
+.demiMessageRow.user .demiBubble,
+.demiMessage.user .userBubble,
+.demiMessageRow.user .userBubble {
+  background: linear-gradient(135deg, #f4edff 0%, #e8d9ff 48%, #d9c2ff 100%) !important;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .demiChatCard {
+    height: 560px !important;
+    max-height: 560px !important;
+    min-height: 560px !important;
+  }
+
+  .demiBubbleWrap,
+  .demiMessage.user .demiBubbleWrap,
+  .demiMessageRow.user .demiBubbleWrap,
+  .demiMessage.bot .demiBubbleWrap,
+  .demiMessageRow.bot .demiBubbleWrap {
+    max-width: 86% !important;
+  }
+
+  .demiBubble,
+  .demiMessageBubble,
+  .botBubble,
+  .userBubble {
+    padding: 12px 14px !important;
+  }
+}
+
