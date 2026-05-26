@@ -180,18 +180,17 @@ export default function HomePage() {
 
       if (maxScroll <= 0) return;
 
-      if (reviewVerticalAutoScroll.scrollTop >= maxScroll - 2) {
+      const nearBottom = reviewVerticalAutoScroll.scrollTop >= maxScroll - 4;
+
+      if (nearBottom) {
         reviewVerticalAutoScroll.scrollTo({
           top: 0,
-          behavior: "smooth",
+          behavior: "auto",
         });
       } else {
-        reviewVerticalAutoScroll.scrollBy({
-          top: 1,
-          behavior: "smooth",
-        });
+        reviewVerticalAutoScroll.scrollTop += 1;
       }
-    }, 55);
+    }, 45);
 
     reviewVerticalAutoScroll.addEventListener("mouseenter", pause);
     reviewVerticalAutoScroll.addEventListener("mouseleave", resume);
@@ -206,6 +205,10 @@ export default function HomePage() {
       reviewVerticalAutoScroll.removeEventListener("touchend", resume);
     };
   }, [reviews]);
+
+
+
+
 
 
   
