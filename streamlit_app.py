@@ -2,90 +2,37 @@ import streamlit as st
 import os
 from datetime import datetime
 from dotenv import load_dotenv
-from google import genai
 
 load_dotenv()
 
-# Configuration
+# Configuration - MUST be first
 st.set_page_config(
-    page_title="Demi - CookieCloudyDay AI Assistant",
+    page_title="Demi - CookieCloudyDay",
     page_icon="🍪",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="centered"
 )
 
-# Custom CSS
+# CSS - Keep it minimal
 st.markdown("""
 <style>
-    .chat-message {
-        padding: 12px 16px;
-        border-radius: 12px;
-        margin-bottom: 8px;
-        max-width: 80%;
-    }
-    .user-message {
-        background-color: #e3f2fd;
-        margin-left: auto;
-        text-align: right;
-    }
-    .assistant-message {
-        background-color: #f5f5f5;
-    }
-    .bill-container {
-        background-color: #fffacd;
-        border: 2px solid #ffd700;
-        border-radius: 12px;
-        padding: 16px;
-        margin: 12px 0;
-    }
-    .bill-title {
-        font-weight: bold;
-        font-size: 18px;
-        margin-bottom: 12px;
-        color: #333;
-    }
-    .bill-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #ddd;
-    }
-    .bill-total {
-        display: flex;
-        justify-content: space-between;
-        padding: 12px 0;
-        font-weight: bold;
-        font-size: 16px;
-        color: #d32f2f;
-    }
-    .promo-info {
-        background-color: #fff3e0;
-        border-left: 4px solid #ff9800;
-        padding: 12px;
-        margin: 12px 0;
-        border-radius: 4px;
-    }
-    .promotion-condition {
-        font-weight: 500;
-        color: #e65100;
-        margin: 8px 0;
-    }
+    .user-msg { text-align: right; color: #0066cc; margin: 8px 0; }
+    .bot-msg { color: #333; margin: 8px 0; }
 </style>
 """, unsafe_allow_html=True)
 
 # Initialize session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
-
 if "orders" not in st.session_state:
     st.session_state.orders = []
 
-if "client" not in st.session_state:
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if api_key:
-        st.session_state.client = genai.Client(api_key=api_key)
-    else:
-        st.error("ไม่พบ GOOGLE_API_KEY ในไฟล์ .env")
+# Try to load Google API (optional)
+try:
+    from google import genai
+    API_KEY = os.getenv("GOOGLE_API_KEY")
+    GEMINI_CLIENT = genai.Client(api_key=API_KEY) if API_KEY else None
+except:
+    GEMINI_CLIENT = None
 
 # Menu data
 MENUS = {
@@ -114,21 +61,9 @@ PROMOTIONS = {
 }
 
 # Header
-st.markdown("""
-<div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin-bottom: 20px;">
-    <h1 style="color: white; margin: 0;">☁️ Demi - ผู้ช่วย AI ของ CookieCloudyDay</h1>
-    <p style="color: #e0e0e0; margin: 5px 0;">สำหรับการถาม-ตอบเรื่องเมนู ราคา โปรโมชั่น และการสั่งซื้อคุกกี้</p>
-</div>
-""", unsafe_allow_html=True)
-
-# Store info
-st.markdown("""
-<div style="background-color: #f0f8ff; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
-    <strong>⏰ เวลาเปิดร้าน:</strong> 10:00 - 20:00 น. <br>
-    <strong>📍 ที่อยู่:</strong> CookieCloudyDay Homemade Cookies <br>
-    <strong>💬 สอบถาม:</strong> เราพร้อมช่วยเหลือตั้งแต่เวลาเปิดร้าน
-</div>
-""", unsafe_allow_html=True)
+st.title("☁️ Demi - CookieCloudyDay")
+st.markdown("**ผู้ช่วย AI ของร้านคุกกี้โฮมเมด** ⏰ 10:00-20:00")
+st.divider()
 
 # System instruction for AI
 SYSTEM_INSTRUCTION = """
@@ -145,21 +80,20 @@ SYSTEM_INSTRUCTION = """
 """
 
 def get_demi_response(user_message):
-    """Get response from Demi AI using Google Gemini"""
-    if not hasattr(st.session_state, 'client') or st.session_state.client is None:
-        return "ขออภัย! ไม่สามารถเชื่อมต่อกับ AI ได้ในตอนนี้"
+    """Get response from Google Gemini"""
+    if GEMINI_CLIENT is None:
+        return "❌ API Key ไม่พบ - ตั้งค่า GOOGLE_API_KEY ใน environment"
     
     try:
-        response = st.session_state.client.models.generate_content(
+        response = GEMINI_CLIENT.models.generate_content(
             model="gemini-2.5-flash",
             contents=user_message,
             system_instruction=SYSTEM_INSTRUCTION,
-            config={"temperature": 0.7, "max_output_tokens": 500},
+            config={"temperature": 0.7, "max_output_tokens": 300}
         )
         return response.text
     except Exception as e:
-        st.error(f"❌ เกิดข้อผิดพลาด: {str(e)}")
-        return "ขออภัย! เกิดข้อผิดพลาดในการประมวลผล"
+        return f"⚠️ Error: {str(e)[:80]}"
 
 def parse_order_from_message(message: str) -> dict:
     """Extract menu and quantity from user message"""
@@ -186,136 +120,86 @@ def parse_order_from_message(message: str) -> dict:
     return order
 
 def display_bill():
-    """Display order bill with consolidation"""
+    """Display order bill"""
     if not st.session_state.orders:
         return
     
-    st.markdown('<div class="bill-container">', unsafe_allow_html=True)
-    st.markdown('<div class="bill-title">🧾 บิลสั่งซื้อ</div>', unsafe_allow_html=True)
+    st.subheader("🧾 บิลออเดอร์")
     
-    total_amount = 0
-    
-    # Display each order item
+    total = 0
     for i, order in enumerate(st.session_state.orders, 1):
         item_total = order["price"] * order["quantity"]
-        total_amount += item_total
-        
-        st.markdown(f"""
-        <div class="bill-item">
-            <span>{i}. {order['menu']} × {order['quantity']} ชิ้น</span>
-            <span>{item_total} บ.</span>
-        </div>
-        """, unsafe_allow_html=True)
+        total += item_total
+        st.write(f"{i}. {order['menu']} × {order['quantity']} = **{item_total}** ฿")
     
-    # Display total
-    st.markdown(f"""
-    <div class="bill-total">
-        <span>ยอดรวมทั้งสิ้น</span>
-        <span>{total_amount} บาท</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.write("---")
+    st.write(f"**ยอดรวม: {total} ฿**")
     
-    # Show promotion conditions
-    if total_amount >= 150:
-        st.markdown('<div class="promo-info">', unsafe_allow_html=True)
-        st.markdown('<div class="promotion-condition">🎯 เงื่อนไขโปรโมชั่น</div>', unsafe_allow_html=True)
-        
-        if total_amount >= 500:
-            st.markdown("✨ **ซื้อครบ 500 บาท**")
-            st.markdown("- ได้รับส่วนลด 15%")
-            st.markdown("- Cookie Fortune 3 ใบ")
-            st.markdown("- ของขวัญพิเศษ")
-        elif total_amount >= 300:
-            st.markdown("⭐ **ซื้อครบ 300 บาท**")
-            st.markdown("- ได้รับส่วนลด 10%")
-            st.markdown("- Cookie Fortune 2 ใบ")
-        else:
-            st.markdown("🎁 **ซื้อครบ 150 บาท**")
-            st.markdown("- ได้รับ Cookie Fortune ฟรี 1 ใบ")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Show promo
+    if total >= 500:
+        st.success("💎 ซื้อครบ 500 ฿ → ลด 15% + Fortune 3 + ของขวัญ")
+    elif total >= 300:
+        st.success("⭐ ซื้อครบ 300 ฿ → ลด 10% + Fortune 2")
+    elif total >= 150:
+        st.success("🎁 ซื้อครบ 150 ฿ → Fortune 1")
 
 def clear_input():
-    """Clear the input field"""
+    """Clear input"""
     st.session_state.user_input = ""
 
-# Chat history display
-st.markdown("### 💬 การสนทนากับ Demi")
+# Chat display
+st.subheader("💬 สนทนากับ Demi")
 
-chat_container = st.container()
-with chat_container:
-    for message in st.session_state.messages:
-        if message["role"] == "user":
-            st.markdown(f'<div class="chat-message user-message">{message["content"]}</div>', unsafe_allow_html=True)
+if not st.session_state.messages:
+    st.info("👋 สวัสดี! สอบถามเมนู ราคา หรือสั่งซื้อได้เลย")
+else:
+    for msg in st.session_state.messages:
+        if msg["role"] == "user":
+            st.markdown(f'<p class="user-msg">👤 {msg["content"]}</p>', unsafe_allow_html=True)
         else:
-            st.markdown(f'<div class="chat-message assistant-message">{message["content"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<p class="bot-msg">🤖 {msg["content"]}</p>', unsafe_allow_html=True)
 
-# Display current bill if there are orders
+# Show bill if there are orders
 if st.session_state.orders:
     st.divider()
     display_bill()
-    
-    # Button to clear orders
-    if st.button("🗑️ ลบออเดอร์ทั้งหมด", key="clear_orders"):
+    if st.button("🗑️ ล้างออเดอร์"):
         st.session_state.orders = []
         st.rerun()
 
 st.divider()
 
-# Input section with proper clearing
-col1, col2 = st.columns([4, 1])
+# Input
+st.subheader("💬 พูดกับ Demi")
+col1, col2 = st.columns([5, 1])
 
 with col1:
     user_input = st.text_input(
-        "พูดอะไรกับ Demi สิ...",
-        key="user_input",
-        placeholder="เช่น: เมนูแนะนำ?, คุกกี้เนยสด ราคาเท่าไหร่?, เอา 2 ชิ้น"
+        "พูดเรื่องอะไร",
+        placeholder="เช่น: เมนูแนะนำ, ราคา, เอา 2 ชิ้น",
+        key="txt_input"
     )
 
 with col2:
-    send_button = st.button("📤 ส่ง", key="send_button")
+    send = st.button("📤", key="send_btn")
 
-# Process user input
-if send_button and user_input:
-    # Add user message to history
-    st.session_state.messages.append({
-        "role": "user",
-        "content": user_input
-    })
+# Process input
+if send and user_input:
+    # Add user msg
+    st.session_state.messages.append({"role": "user", "content": user_input})
     
-    # Check for order in message
+    # Check for order
     order = parse_order_from_message(user_input)
     if order:
         st.session_state.orders.append(order)
-        order_confirmation = f"✅ บันทึกออเดอร์: {order['menu']} × {order['quantity']} ชิ้น ราคา {order['price'] * order['quantity']} บาท"
+        ai_msg = f"✅ บันทึก: {order['menu']} × {order['quantity']} ชิ้น = {order['price']*order['quantity']} ฿\n\n"
+        ai_msg += get_demi_response(user_input)
     else:
-        order_confirmation = ""
+        ai_msg = get_demi_response(user_input)
     
-    # Get AI response
-    with st.spinner("🤔 Demi กำลังคิด..."):
-        ai_response = get_demi_response(user_input)
-    
-    # Combine responses
-    full_response = order_confirmation + "\n\n" + ai_response if order_confirmation else ai_response
-    
-    # Add AI response to history
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": full_response
-    })
-    
-    # Clear input by resetting session state
-    st.session_state.user_input = ""
-    
-    # Rerun to show updated chat and clear input
+    # Add bot msg
+    st.session_state.messages.append({"role": "assistant", "content": ai_msg})
     st.rerun()
 
-# Footer
-st.markdown("""
----
-<div style="text-align: center; padding: 12px; color: #666;">
-    <small>Demi AI Assistant for CookieCloudyDay | Powered by Google Gemini</small>
-</div>
-""", unsafe_allow_html=True)
+st.divider()
+st.caption("🤖 Powered by Google Gemini | CookieCloudyDay 2026")
