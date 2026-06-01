@@ -99,7 +99,8 @@ def render_lucky_cookie_tarot():
     if "lucky_tarot_card" not in st.session_state:
         st.session_state["lucky_tarot_card"] = draw_random_card()
 
-    @st.dialog("🔮 Lucky Cookie Tarot")
+ตอนนี้ Demi ยังไม่พบข้อมูลโปรโมชั่นล่าสุดของร้าน CookieCloudyDay ในระบบค่ะ ☁️🍪
+กรุณาตรวจสอบโปรโมชั่นล่าสุดกับทางร้านอีกครั้งนะคะ
     def lucky_tarot_dialog():
         card = st.session_state["lucky_tarot_card"]
 

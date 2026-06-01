@@ -50,7 +50,8 @@ class RAGEngine:
                 score += 2
             if "ราคา" in query and "ราคา" in chunk:
                 score += 2
-            if "โปร" in query and ("โปร" in chunk or "Lucky Cookie Tarot" in chunk):
+ตอนนี้ Demi ยังไม่พบข้อมูลโปรโมชั่นล่าสุดของร้าน CookieCloudyDay ในระบบค่ะ ☁️🍪
+กรุณาตรวจสอบโปรโมชั่นล่าสุดกับทางร้านอีกครั้งนะคะ
                 score += 4
             if "ไพ่" in query and ("ไพ่" in chunk or "Tarot" in chunk):
                 score += 4
