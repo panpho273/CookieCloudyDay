@@ -1470,62 +1470,78 @@ render_chat_history()
 # ===== CCD REVIEW FORM START =====
 st.markdown("""
 <style>
-.cookie-review-box {
+/* แต่งเฉพาะฟอร์มรีวิวเท่านั้น ไม่ยุ่งกับ chat input */
+.ccd-review-wrap {
     background: rgba(255, 255, 255, 0.72);
-    border: 1.5px solid rgba(167, 119, 255, 0.28);
+    border: 1.5px solid rgba(125, 94, 219, 0.18);
     border-radius: 28px;
     padding: 22px 24px;
     margin: 18px 0 22px 0;
-    box-shadow: 0 12px 32px rgba(145, 103, 255, 0.10);
+    box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10);
 }
 
-.cookie-review-title {
+.ccd-review-title {
     font-size: 24px;
     font-weight: 800;
-    color: #4b2a1f;
+    color: #4a2e2a;
     margin-bottom: 6px;
 }
 
-.cookie-review-subtitle {
-    color: #8a6f68;
+.ccd-review-subtitle {
+    color: rgba(74, 46, 42, 0.62);
     font-size: 15px;
     margin-bottom: 14px;
 }
 
-div[data-testid="stRadio"] label {
-    background: #ffffff;
-    border: 1.5px solid #e8dcff;
-    border-radius: 18px;
-    padding: 8px 12px;
-    margin-right: 6px;
-    box-shadow: 0 6px 14px rgba(141, 92, 246, 0.08);
-}
-
-div[data-testid="stRadio"] label:hover {
-    border-color: #9b6df3;
-    box-shadow: 0 8px 18px rgba(141, 92, 246, 0.16);
-}
-
-textarea {
-    border: 1.5px solid #c7adff !important;
+/* จำกัดสีเฉพาะ radio ในฟอร์มรีวิว */
+.ccd-review-scope div[data-testid="stRadio"] label {
+    background: #ffffff !important;
+    border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
     border-radius: 18px !important;
-    background: #fffaff !important;
-    color: #4b2a1f !important;
+    padding: 8px 12px !important;
+    box-shadow: 0 8px 18px rgba(86, 60, 140, 0.08) !important;
 }
 
-div[data-testid="stFormSubmitButton"] button {
-    background: linear-gradient(135deg, #9b6df3, #7f56d9) !important;
+/* กล่องรีวิวเฉพาะ form นี้ */
+.ccd-review-scope textarea {
+    background: #ffffff !important;
+    color: #4a2e2a !important;
+    border: 1.5px solid rgba(125, 94, 219, 0.24) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 10px 24px rgba(86, 60, 140, 0.08) !important;
+    outline: none !important;
+}
+
+.ccd-review-scope textarea:focus {
+    border-color: rgba(125, 94, 219, 0.70) !important;
+    box-shadow: 0 0 0 5px rgba(125, 94, 219, 0.12) !important;
+}
+
+/* ปุ่มส่งรีวิวเฉพาะฟอร์มรีวิว */
+.ccd-review-scope div[data-testid="stFormSubmitButton"] button {
+    background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
     color: white !important;
     border: none !important;
     border-radius: 999px !important;
     padding: 10px 24px !important;
     font-weight: 700 !important;
-    box-shadow: 0 10px 22px rgba(127, 86, 217, 0.28) !important;
+    box-shadow: 0 12px 26px rgba(108, 72, 200, 0.24) !important;
 }
 
-div[data-testid="stFormSubmitButton"] button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 14px 26px rgba(127, 86, 217, 0.35) !important;
+/* คืนค่า chat input ให้กลับไปตาม styles.css */
+[data-testid="stChatInput"] textarea {
+    background: #ffffff !important;
+    color: #4a2e2a !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+[data-testid="stChatInput"] > div {
+    background: #ffffff !important;
+    border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -1555,9 +1571,9 @@ def _ccd_save_review_to_sheet(rating, review_text):
 
 
 if st.session_state.get("show_review_form", False):
-    st.markdown('<div class="cookie-review-box">', unsafe_allow_html=True)
-    st.markdown('<div class="cookie-review-title">ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪</div>', unsafe_allow_html=True)
-    st.markdown('<div class="cookie-review-subtitle">เลือกดาวแล้วฝากรีวิวสั้น ๆ ให้ร้านได้เลยค่ะ</div>', unsafe_allow_html=True)
+    st.markdown('<div class="ccd-review-wrap ccd-review-scope">', unsafe_allow_html=True)
+    st.markdown('<div class="ccd-review-title">ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪</div>', unsafe_allow_html=True)
+    st.markdown('<div class="ccd-review-subtitle">เลือกดาวแล้วฝากรีวิวสั้น ๆ ให้ร้านได้เลยค่ะ</div>', unsafe_allow_html=True)
 
     with st.form("cookiecloudyday_review_form"):
         rating = st.radio(
