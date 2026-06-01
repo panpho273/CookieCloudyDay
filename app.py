@@ -953,13 +953,11 @@ def render_menu_order_popup():
             })
 
             st.session_state.show_menu_order_popup = False
-            st.rerun()
-
+    
     with col2:
         if st.button("ยกเลิก", use_container_width=True):
             st.session_state.show_menu_order_popup = False
-            st.rerun()
-
+    
     st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -1028,8 +1026,7 @@ if prompt:
                 "content": answer,
             })
 
-            st.rerun()
-
+    
         promo_keywords = ["โปร", "โปรโมชั่น", "แถม", "รับโปร", "ไพ่", "ทาโร่"]
         if any(keyword in normalized_prompt for keyword in promo_keywords):
             st.session_state["show_lucky_tarot"] = False
