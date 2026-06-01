@@ -85,7 +85,10 @@ def draw_random_card():
 
 
 def render_lucky_cookie_tarot():
-    if not st.session_state.get("show_lucky_tarot"):
+    if (
+        not st.session_state.get("show_lucky_tarot")
+        or not st.session_state.get("lucky_cookie_promo")
+    ):
         return
 
     # ถ้าเคยค้างเป็น default เก่า ให้สุ่มใหม่จากไฟล์จริง
@@ -105,6 +108,11 @@ def render_lucky_cookie_tarot():
             <style>
             div[role="dialog"] {
                 border-radius: 28px !important;
+            }
+
+            div[role="dialog"] button[aria-label="Close"],
+            div[role="dialog"] button[title="Close"] {
+                display: none !important;
             }
 
             .tarot-card-box {
@@ -191,23 +199,35 @@ def render_lucky_cookie_tarot():
         if keyword:
             st.info(f"ความหมายหลักของไพ่: {keyword}")
 
+        promo = st.session_state.get("lucky_cookie_promo", {})
+        freebie_cookie = promo.get("freebie_cookie", "คุกกี้ช็อกโกแลตชิพ")
+        
         st.success(
-            "โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป "
-            "รับฟรีคุกกี้ช็อกโกแลตชิพ 1 ชิ้น ตามไพ่ที่สุ่มได้"
+            f"🎁 โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป\n"
+            f"รับฟรี **{freebie_cookie}** 1 ชิ้น ตามไพ่ที่ดึงได้"
         )
 
         col1, col2 = st.columns(2)
 
         with col1:
             if st.button("สุ่มไพ่ใหม่", use_container_width=True):
-                st.session_state["lucky_tarot_card"] = draw_random_card()
+                new_card = draw_random_card()
+                st.session_state["lucky_tarot_card"] = new_card
+                
+                promo = st.session_state.get("lucky_cookie_promo", {})
+                promo["card_name"] = new_card.get("name")
+                promo["freebie_cookie"] = new_card.get("cookie")
+                promo["freebie_text"] = new_card.get("freebie_text")
+                st.session_state["lucky_cookie_promo"] = promo
+                
                 st.rerun()
 
         with col2:
-            if st.button("เริ่มแชทใหม่", use_container_width=True):
+            if st.button("ไม่รับโปร / เริ่มแชทใหม่", use_container_width=True):
                 st.session_state["show_lucky_tarot"] = False
                 st.session_state.pop("lucky_tarot_card", None)
                 st.session_state.pop("lucky_cookie_promo", None)
+                st.session_state["messages"] = []
                 st.rerun()
 
     lucky_tarot_dialog()

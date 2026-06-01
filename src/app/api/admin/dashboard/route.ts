@@ -69,8 +69,8 @@ function analyzeMembersByAge(rows: unknown[][]) {
 
   const headers = rows[0];
 
-  let ageIndex = findColumn(headers, ["age", "อายุ"]);
-  let birthIndex = findColumn(headers, [
+  const ageIndex = findColumn(headers, ["age", "อายุ"]);
+  const birthIndex = findColumn(headers, [
     "birthday",
     "birth",
     "birthdate",

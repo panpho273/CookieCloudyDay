@@ -122,6 +122,17 @@ def normalize_thai_numbers(text: str) -> str:
     return text.translate(THAI_NUMBERS)
 
 
+def normalize_user_prompt(text: str) -> str:
+    if text is None:
+        return ""
+
+    cleaned = str(text).replace("\r\n", "\n").strip()
+    cleaned = re.sub(r"\n{2,}", "\n", cleaned)
+    cleaned = re.sub(r"\s*\n\s*", " ", cleaned)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned)
+    return cleaned.strip()
+
+
 def parse_order_from_message(message: str):
     menu_prices = {}
 
@@ -705,19 +716,18 @@ def direct_customer_answer(message: str):
     if cl.is_hot_menu_question(q):
         return build_hot_menu_reply()
 
+    if any(keyword in q for keyword in ["โปร", "โปรโมชั่น", "แถม", "รับโปร", "ไพ่", "ทาโร่"]):
+        st.session_state["show_lucky_tarot"] = False
+        st.session_state.pop("lucky_tarot_card", None)
+        st.session_state.pop("lucky_cookie_promo", None)
+        return PROMO_REPLY
+
     flavor_preference = cl.detect_flavor_preference(q)
     if flavor_preference:
         return cl.build_flavor_reply(flavor_preference)
 
     if cl.has_order_intent(q):
-        return (
-            "ได้เลยค่าา รับคุกกี้อะไรดีคะ 🍪\n\n"
-            "ถ้าลูกค้ายังเลือกไม่ถูก พิมพ์ว่า “เมนูขายดี” ได้เลยน้า "
-            "เดี๋ยว Demi แนะนำตัวฮิตให้ค่ะ\n\n"
-            "หรือพิมพ์ชื่อเมนูพร้อมจำนวนได้เลย เช่น "
-            "“เอาคุกกี้คอร์นเฟลกคาราเมล 2 ชิ้น”"
-        )
-
+        return None
     return None
 def load_popup_menu_items():
     base_dir = Path(__file__).resolve().parent
@@ -965,112 +975,145 @@ if "show_menu_order_popup" not in st.session_state:
 if "show_lucky_tarot" not in st.session_state:
     st.session_state["show_lucky_tarot"] = False
 
+if st.session_state.get("show_lucky_tarot") and not st.session_state.get("lucky_cookie_promo"):
+    st.session_state["show_lucky_tarot"] = False
+
+
+def render_chat_history():
+    for message in st.session_state.get("messages", []):
+        role = message.get("role")
+        content = message.get("content", "")
+        if role == "user":
+            with st.chat_message("user", avatar="🙂"):
+                st.write(content)
+        else:
+            with st.chat_message("assistant", avatar="🤖"):
+                st.write(content)
+
 # กัน st.dialog ซ้อนกัน: ถ้าโปรไพ่กำลังจะขึ้น ต้องปิด popup เมนูก่อน
 if st.session_state.get("show_lucky_tarot"):
     st.session_state["show_menu_order_popup"] = False
 elif st.session_state.get("show_menu_order_popup"):
     render_menu_order_popup()
 
+render_chat_history()
+
 prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")
 
 
 
 if prompt:
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    prompt = normalize_user_prompt(prompt)
+    if prompt:
+        st.session_state.messages.append({"role": "user", "content": prompt})
 
-    with st.chat_message("user", avatar="🙂"):
-        st.write(prompt)
+        with st.chat_message("user", avatar="🙂"):
+            st.write(prompt)
 
-    normalized_prompt = normalize_menu_number_order(prompt)
+        normalized_prompt = normalize_menu_number_order(prompt)
 
-    if is_menu_popup_request(normalized_prompt):
-        st.session_state.show_menu_order_popup = True
+        if is_menu_popup_request(normalized_prompt):
+            st.session_state.show_menu_order_popup = True
 
-        answer = (
-            "ได้เลยค่ะ เปิดเมนูทั้งหมดให้เลือกแล้วนะคะ 🍪\n\n"
-            "ลูกค้าสามารถเลือกเมนูและจำนวนจากหน้าต่าง popup ได้เลยค่ะ"
-        )
-
-        with st.chat_message("assistant", avatar="🤖"):
-            st.markdown(answer)
-
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": answer,
-        })
-
-        st.rerun()
-
-    order_data = parse_order_from_message(normalized_prompt)
-    direct_answer = direct_customer_answer(prompt)
-
-    if order_data:
-        try:
-            menu_name = (
-                order_data.get("menu_name")
-                or order_data.get("menu")
-                or order_data.get("name")
+            answer = (
+                "ได้เลยค่ะ เปิดเมนูทั้งหมดให้เลือกแล้วนะคะ 🍪\n\n"
+                "ลูกค้าสามารถเลือกเมนูและจำนวนจากหน้าต่าง popup ได้เลยค่ะ"
             )
-            quantity = int(order_data.get("quantity", 1))
-            price = int(order_data.get("price") or MENU_ITEMS.get(menu_name, 0))
 
-            if not menu_name or quantity <= 0 or price <= 0:
-                answer = "ขออภัยค่ะ Demi ยังอ่านออเดอร์ไม่ครบ รบกวนพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ เช่น “เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"
-            else:
-                save_result = save_order(menu_name, quantity, price)
-                saved_total = int(save_result["total"])
+            with st.chat_message("assistant", avatar="🤖"):
+                st.markdown(answer)
 
-                # Lucky Cookie Tarot promo: ยอดรวม 150 บาทขึ้นไป
-                try:
-                    _promo_quantity = int(quantity)
-                except Exception:
-                    _promo_quantity = 0
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": answer,
+            })
 
-                try:
-                    _promo_total = int(saved_total)
-                except Exception:
-                    _promo_total = 0
+            st.rerun()
 
-                if _promo_total >= 150:
-                    st.session_state["lucky_cookie_promo"] = {
-                        "menu": menu_name,
-                        "quantity": _promo_quantity,
-                        "total": _promo_total,
-                    }
-                    st.session_state["show_lucky_tarot"] = True
-                    st.session_state.pop("lucky_tarot_card", None)
-                else:
-                    st.session_state.pop("lucky_cookie_promo", None)
-                    st.session_state["show_lucky_tarot"] = False
-                    st.session_state.pop("lucky_tarot_card", None)
-
-                answer = build_order_success_reply(menu_name, quantity, saved_total)
-
-                if _promo_total >= 150:
-                    answer += "\n\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ เดี๋ยว Demi เปิดไพ่ให้เลยนะคะ"
-
-        except Exception:
-            answer = "ขออภัยค่ะ ตอนนี้ Demi รับออเดอร์ไม่สำเร็จ ลองพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ"
-
-    elif direct_answer:
-        answer = direct_answer
-
+        promo_keywords = ["โปร", "โปรโมชั่น", "แถม", "รับโปร", "ไพ่", "ทาโร่"]
+        if any(keyword in normalized_prompt for keyword in promo_keywords):
+            st.session_state["show_lucky_tarot"] = False
+            st.session_state.pop("lucky_tarot_card", None)
+            st.session_state.pop("lucky_cookie_promo", None)
+            answer = PROMO_REPLY
     else:
-        context_chunks = rag.search(prompt, top_k=5)
-        context = "\n\n".join(context_chunks)
-        full_prompt = build_prompt(prompt, context)
+        order_data = parse_order_from_message(normalized_prompt)
+        direct_answer = direct_customer_answer(prompt)
 
-        if not client:
-            answer = fallback_answer(prompt)
-        else:
+        if order_data:
             try:
-                response = client.models.generate_content(
-                    model=MODEL,
-                    contents=full_prompt,
+                menu_name = (
+                    order_data.get("menu_name")
+                    or order_data.get("menu")
+                    or order_data.get("name")
                 )
-                answer = response.text.strip() if response.text else fallback_answer(prompt)
+                quantity = int(order_data.get("quantity", 1))
+                price = int(order_data.get("price") or MENU_ITEMS.get(menu_name, 0))
+
+                if not menu_name or quantity <= 0 or price <= 0:
+                    answer = "ขออภัยค่ะ Demi ยังอ่านออเดอร์ไม่ครบ รบกวนพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ เช่น “เอาคุกกี้ช็อกโกแลตชิพ 2 ชิ้น”"
+                else:
+                    save_result = save_order(menu_name, quantity, price)
+                    saved_total = int(save_result["total"])
+
+                    # Lucky Cookie Tarot promo: ยอดรวม 150 บาทขึ้นไป
+                    try:
+                        _promo_quantity = int(quantity)
+                    except Exception:
+                        _promo_quantity = 0
+
+                    try:
+                        _promo_total = int(saved_total)
+                    except Exception:
+                        _promo_total = 0
+
+                    if _promo_total >= 150:
+                        from tarot import draw_random_card
+                        card = draw_random_card()
+                        st.session_state["lucky_cookie_promo"] = {
+                            "ordered_menu": menu_name,
+                            "quantity": _promo_quantity,
+                            "total": _promo_total,
+                            "card_name": card.get("name"),
+                            "freebie_cookie": card.get("cookie"),
+                            "freebie_text": card.get("freebie_text"),
+                        }
+                        st.session_state["show_lucky_tarot"] = True
+                        st.session_state["lucky_tarot_card"] = card
+                    else:
+                        st.session_state.pop("lucky_cookie_promo", None)
+                        st.session_state["show_lucky_tarot"] = False
+                        st.session_state.pop("lucky_tarot_card", None)
+
+                    answer = build_order_success_reply(menu_name, quantity, saved_total)
+
+                    if _promo_total >= 150:
+                        promo = st.session_state.get("lucky_cookie_promo", {})
+                        freebie_cookie = promo.get("freebie_cookie", "คุกกี้")
+                        answer += f"\n\n🎁 ออเดอร์นี้เข้าโปร Lucky Cookie Tarot แล้วค่ะ จะได้ **{freebie_cookie}** ฟรี 1 ชิ้น ตามไพ่ที่สุ่มได้ค่ะ"
+
             except Exception:
+                answer = "ขออภัยค่ะ ตอนนี้ Demi รับออเดอร์ไม่สำเร็จ ลองพิมพ์ชื่อเมนูและจำนวนอีกครั้งนะคะ"
+
+        elif direct_answer:
+            answer = direct_answer
+
+        else:
+            context_chunks = rag.search(prompt, top_k=5)
+            context = "\n\n".join(context_chunks)
+            full_prompt = build_prompt(prompt, context)
+
+            if not client:
                 answer = fallback_answer(prompt)
+            else:
+                try:
+                    response = client.models.generate_content(
+                        model=MODEL,
+                        contents=full_prompt,
+                    )
+                    answer = response.text.strip() if response.text else fallback_answer(prompt)
+                except Exception:
+                    answer = fallback_answer(prompt)
 
     answer = clean_answer(answer)
 

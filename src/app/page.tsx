@@ -4,6 +4,7 @@ import { demiQuickActions, generateDemiReply } from "@/lib/demi-response";
 import { cookieMenus } from "@/lib/cookie-menu";
 
 import { useEffect, useMemo, useState } from "react";
+import type { ClipboardEvent } from "react";
 
 const menus = [
   {
@@ -157,6 +158,25 @@ export default function HomePage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
+
+  const handlePaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+
+    const text = e.clipboardData
+      .getData("text")
+      .replace(/\u00A0/g, " ")
+      .replace(/[ \t]+/g, " ")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+
+    const target = e.currentTarget as HTMLTextAreaElement;
+    const start = target.selectionStart;
+    const end = target.selectionEnd;
+
+    const newValue = comment.slice(0, start) + text + comment.slice(end);
+
+    setComment(newValue);
+  };
 
   useEffect(() => {
     const cookieClubPromoAutoScroll = document.querySelector<HTMLElement>(
@@ -382,11 +402,47 @@ export default function HomePage() {
 
       setOrderResult(data.order);
       setShopMessage("บันทึกออเดอร์สำเร็จค่ะ");
+      try {
+        const payload = {
+          orderId: data.order?.orderId,
+          menu: data.order?.menu || orderForm.menu,
+          quantity: data.order?.quantity || orderForm.quantity,
+          total: data.order?.total ?? orderTotal,
+          promoEligible: data.order?.promoEligible,
+          cardName: data.order?.cardName,
+          cardEmoji: data.order?.cardEmoji,
+          cardRecommend: data.order?.cardRecommend,
+          cardFreebieText: data.order?.cardFreebieText,
+          cardMessage: data.order?.cardMessage,
+        };
+
+        sendDemiMessage(`ORDER_SUMMARY:${JSON.stringify(payload)}`);
+      } catch {
+        // non-blocking
+      }
     } catch (error) {
       setShopMessage(
         error instanceof Error ? error.message : "สั่งซื้อไม่สำเร็จ"
       );
     }
+  }
+
+  function closeFortuneModal() {
+    if (orderResult) {
+      const payload = {
+        orderId: orderResult.orderId,
+        promoEligible: orderResult.promoEligible,
+        cardName: orderResult.cardName,
+        cardEmoji: orderResult.cardEmoji,
+        cardRecommend: orderResult.cardRecommend,
+        cardFreebieText: orderResult.cardFreebieText,
+        cardMessage: orderResult.cardMessage,
+      };
+
+      sendDemiMessage(`ORDER_SUMMARY:${JSON.stringify(payload)}`);
+    }
+
+    setOrderResult(null);
   }
 
 const [isDemiOpen, setIsDemiOpen] = useState(true);
@@ -872,7 +928,7 @@ ${data.card.meaning}
                 <button
                   type="button"
                   className="fortuneCloseBtn"
-                  onClick={() => setOrderResult(null)}
+                  onClick={closeFortuneModal}
                   aria-label="ปิดผลสุ่มไพ่"
                 >
                   ×
@@ -955,7 +1011,14 @@ ${data.card.meaning}
               <textarea
                 className="textarea"
                 value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                onChange={(e) => {
+                  const cleaned = e.target.value
+                    .replace(/\u00A0/g, " ")
+                    .replace(/[ \t]+/g, " ");
+
+                  setComment(cleaned);
+                }}
+                onPaste={handlePaste}
                 placeholder="บอกความรู้สึกหลังใช้บริการ หรือแนะนำร้านเพิ่มเติม..."
               />
 

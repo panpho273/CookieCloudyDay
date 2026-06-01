@@ -37,7 +37,38 @@ const orderText = `ถ้าต้องการสั่งซื้อ ให
 จากนั้นกรอกเบอร์โทรหรืออีเมลในช่องสั่งซื้อ แล้วเลือกเมนูและจำนวนได้เลยค่ะ`;
 
 export function generateDemiReply(input: string): DemiReply {
-  const message = input.trim().toLowerCase();
+  const raw = input.trim();
+  const message = raw.toLowerCase();
+
+  // Special: order summary payloads prefixed with ORDER_SUMMARY:
+  if (raw.startsWith("ORDER_SUMMARY:")) {
+    try {
+      const payload = JSON.parse(raw.replace(/^ORDER_SUMMARY:\s*/i, ""));
+      const parts: string[] = [];
+
+      parts.push(`สรุปออเดอร์: เลขออเดอร์ ${payload.orderId || "-"}`);
+
+      if (payload.menu) {
+        parts.push(`${payload.menu} x${payload.quantity ?? 1}`);
+      }
+
+      parts.push(`รวม ${payload.total ?? "-"} บาท`);
+
+      if (payload.promoEligible) {
+        const cardName = payload.cardName || payload.cardRecommend || "Cookie Fortune";
+        const emoji = payload.cardEmoji ? ` ${payload.cardEmoji}` : "";
+        parts.push(`ยินดีด้วยค่ะ คุณได้รับสิทธิ์สุ่มไพ่: ${cardName}${emoji}`);
+        if (payload.cardFreebieText) parts.push(payload.cardFreebieText);
+        if (payload.cardMessage) parts.push(`ข้อความบนการ์ด: ${payload.cardMessage}`);
+      } else {
+        parts.push("ขณะนี้ยังไม่ถึงโปรสุ่มไพ่");
+      }
+
+      return { intent: "order", text: parts.join(" \n") };
+    } catch (e) {
+      return { intent: "order", text: "สรุปออเดอร์: (ข้อมูลไม่ครบหรือส่งผิดรูปแบบ)" };
+    }
+  }
 
   if (
     message.includes("เมนู") ||
