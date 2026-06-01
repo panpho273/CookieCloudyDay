@@ -1481,6 +1481,9 @@ render_chat_history()
 
 
 
+
+
+
 def _ccd_get_review_worksheet():
     sheet_id = get_sheet_id()
     if not sheet_id:
@@ -1807,6 +1810,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
