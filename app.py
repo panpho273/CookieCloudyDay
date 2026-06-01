@@ -478,6 +478,69 @@ def _ccd_get_short_cute_reply(message):
 # ===== Cute Short Chat Reply END =====
 
 
+
+# ===== CCD CUTE CUSTOMER CHAT START =====
+def _ccd_is_cute_customer_chat(message):
+    message = clean_user_message(message).lower().strip()
+
+    keywords = [
+        "แพงจัง", "แพงอะ", "แพงอ่ะ", "แพงไหม", "แพงมั้ย",
+        "น่ารัก", "ดีจัง", "บริการดี", "บริการดีจัง",
+        "ชอบ", "ชอบมาก", "ประทับใจ",
+        "อร่อยไหม", "อร่อยมั้ย", "น่ากิน", "หิว",
+        "ขอบคุณ", "ขอบใจ", "โอเค", "เหรอ", "หรอ", "จริงดิ",
+        "เลือกไม่ถูก", "กินไรดี", "สั่งไรดี"
+    ]
+
+    return any(word in message for word in keywords)
+
+
+def _ccd_should_show_review_form(message):
+    message = clean_user_message(message).lower().strip()
+
+    review_keywords = [
+        "บริการดี",
+        "บริการดีจัง",
+        "ดีจัง",
+        "น่ารัก",
+        "ชอบ",
+        "ชอบมาก",
+        "ประทับใจ",
+        "ขอบคุณ",
+        "ร้านดี",
+    ]
+
+    return any(word in message for word in review_keywords)
+
+
+def _ccd_get_cute_customer_reply(message):
+    message = clean_user_message(message).lower().strip()
+
+    if "แพง" in message:
+        return "ไม่แพงมากค่า เมื่อเทียบกับคุกกี้โฮมเมดทำสด ๆ และวัตถุดิบดี ๆ ☁️🍪 ถ้าบอกงบมา Demi ช่วยเลือกเมนูคุ้ม ๆ ให้ได้นะคะ 🤎"
+
+    if "บริการดี" in message or "ดีจัง" in message or "ประทับใจ" in message:
+        return "ขอบคุณมากเลยค่า ดีใจที่ชอบบริการของร้านนะคะ ☁️🍪 ถ้าสะดวก Demi ขอชวนให้คะแนนร้านนิดนึงนะคะ 🤎"
+
+    if "น่ารัก" in message or "ชอบ" in message:
+        return "แง ขอบคุณมากค่า ดีใจสุด ๆ เลย ☁️🍪 ถ้าชอบร้านเรา ฝากให้คะแนนเล็ก ๆ น้อย ๆ ได้นะคะ 🤎"
+
+    if "อร่อย" in message or "น่ากิน" in message or "หิว" in message:
+        return "น่ากินจริงค่า 🍪🤎 ถ้าชอบแนวช็อกโกแลต คาราเมล หรือหวานน้อย บอก Demi ได้เลยนะคะ เดี๋ยวช่วยเลือกให้ค่ะ"
+
+    if "เลือกไม่ถูก" in message or "กินไรดี" in message or "สั่งไรดี" in message:
+        return "งั้นเริ่มจากเมนูขายดีของร้านดีไหมคะ ☁️🍪 พิมพ์ว่า “เมนูแนะนำ” ได้เลย เดี๋ยว Demi สรุปให้ค่ะ"
+
+    if "ขอบคุณ" in message or "ขอบใจ" in message:
+        return "ยินดีมากค่า ☁️🍪 ถ้ามีอะไรให้ Demi ช่วยอีก พิมพ์มาได้เลยนะคะ 🤎"
+
+    if "เหรอ" in message or "หรอ" in message or "จริงดิ" in message:
+        return "ใช่ค่า ☁️🍪 Demi ช่วยเรื่องเมนู ราคา โปร หรือช่วยเลือกคุกกี้ให้ได้นะคะ"
+
+    return "ได้เลยค่า ☁️🍪 Demi ช่วยแนะนำเมนู ราคา โปร หรือช่วยเลือกคุกกี้ให้น่ารัก ๆ ได้นะคะ"
+# ===== CCD CUTE CUSTOMER CHAT END =====
+
+
 st.set_page_config(
     page_title="Demi - CookieCloudyDay",
     page_icon="☁️",
@@ -1397,11 +1460,76 @@ elif st.session_state.get("show_menu_order_popup"):
 
 render_chat_history()
 
+
+
+
+
+# ===== CCD REVIEW FORM START =====
+def _ccd_save_review_to_sheet(rating, review_text):
+    worksheet = get_worksheet()
+
+    now = datetime.now(ZoneInfo("Asia/Bangkok"))
+    date_text = now.strftime("%Y-%m-%d")
+    time_text = now.strftime("%H:%M:%S")
+
+    review_text = str(review_text).strip()
+    if not review_text:
+        review_text = "ลูกค้าให้คะแนน แต่ไม่ได้พิมพ์ข้อความรีวิว"
+
+    worksheet.append_row(
+        [
+            date_text,
+            time_text,
+            int(rating),
+            review_text,
+            "CookieCloudyDay Website",
+        ],
+        value_input_option="USER_ENTERED",
+    )
+
+
+if st.session_state.get("show_review_form", False):
+    with st.form("cookiecloudyday_review_form"):
+        st.markdown("### ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪")
+        rating = st.slider("ให้คะแนนความประทับใจ", 1, 5, 5)
+        review_text = st.text_area(
+            "รีวิวสั้น ๆ ให้ร้านได้เลยค่ะ",
+            placeholder="เช่น บริการน่ารัก คุกกี้อร่อยมาก"
+        )
+        submitted_review = st.form_submit_button("ส่งรีวิว")
+
+        if submitted_review:
+            try:
+                _ccd_save_review_to_sheet(rating, review_text)
+                st.session_state.show_review_form = False
+                st.success(f"ขอบคุณสำหรับ {rating} ดาวนะคะ 🤎 รีวิวถูกบันทึกเข้าชีทแล้วค่ะ")
+                st.rerun()
+            except Exception as e:
+                st.error(f"บันทึกรีวิวลงชีทไม่สำเร็จค่ะ: {e}")
+# ===== CCD REVIEW FORM END =====
+
+
 prompt = st.chat_input("ถามอะไรเกี่ยวกับร้านได้เลย...")
 
 
 
 if prompt:
+    # CCD_CUTE_CHAT_DIRECT_START
+    if _ccd_is_cute_customer_chat(prompt):
+        answer = _ccd_get_cute_customer_reply(prompt)
+
+        if _ccd_should_show_review_form(prompt):
+            st.session_state.show_review_form = True
+
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
+
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.messages.append({"role": "assistant", "content": answer})
+        st.rerun()
+    # CCD_CUTE_CHAT_DIRECT_END
+
+
     # CCD_SHORT_CUTE_DIRECT_START
     if _ccd_is_short_casual_question(prompt):
         answer = _ccd_get_short_cute_reply(prompt)
@@ -1615,6 +1743,8 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
+
 
 
 
