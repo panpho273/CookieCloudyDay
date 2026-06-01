@@ -1172,7 +1172,6 @@ if prompt:
             )
 
             with st.chat_message("assistant", avatar="🤖"):
-                st.markdown(answer)
 
             st.session_state.messages.append({
                 "role": "assistant",
@@ -1304,7 +1303,6 @@ if prompt:
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
     with st.chat_message("assistant", avatar="🤖"):
-        st.write(answer)
 
 # แสดง Lucky Tarot dialog ถ้าลูกค้าเข้าเงื่อนไขโปร
 # ต้องอยู่นอก if prompt เพราะ popup จะ st.rerun() แล้วไม่มี prompt ใหม่
