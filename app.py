@@ -192,12 +192,41 @@ def is_price_question(message):
 
 def get_price_friendly_reply():
     return """
-ไม่แพงเกินไปค่ะ ถ้าเทียบกับคุกกี้โฮมเมดของร้านที่ทำสดและใช้วัตถุดิบดี ๆ ☁️🍪
+ไม่แพงเลยค่า ถ้าเทียบกับคุกกี้โฮมเมดที่ทำสด ๆ และใช้วัตถุดิบดี ๆ ☁️🍪
 
-ถ้าอยากเริ่มแบบคุ้ม ๆ Demi แนะนำให้ดูเมนูยอดนิยมก่อน หรือสมัคร Cookie Club ไว้ใช้สิทธิ์โปรโมชันของร้านได้ค่ะ
+ถ้าอยากเริ่มแบบคุ้ม ๆ Demi แนะนำดูเมนูยอดนิยม หรือใช้โปรของร้านก่อนก็ได้นะคะ
 
-ถ้าบอกงบมาได้เลย เช่น “มีงบ 100 บาท” Demi ช่วยจัดเมนูที่คุ้มสุดให้ได้นะคะ 🤎
+บอกงบมาได้เลย เช่น “มีงบ 100 บาท” เดี๋ยว Demi ช่วยจัดเมนูให้น่ารัก ๆ ค่า 🤎
 """
+
+def is_casual_chat(message):
+    message = clean_user_message(message).lower()
+
+    casual_keywords = [
+        "น่ารัก",
+        "น่ากิน",
+        "หิว",
+        "อยากกิน",
+        "เลือกไม่ถูก",
+        "แนะนำหน่อย",
+        "กินไรดี",
+        "อร่อยไหม",
+        "อร่อยมั้ย",
+        "ดีไหม",
+        "ดีมั้ย",
+    ]
+
+    return any(word in message for word in casual_keywords)
+
+
+def get_casual_friendly_reply():
+    return """
+ได้เลยค่า Demi ช่วยแนะนำให้นะคะ ☁️🍪
+
+ถ้าอยากกินแบบเพลิน ๆ แนะนำเมนูยอดนิยมของร้านก่อนเลยค่ะ  
+หรือถ้าบอกแนวที่ชอบมา เช่น หวานน้อย ช็อกโกแลต นุ่ม ๆ กรุบ ๆ Demi จะช่วยเลือกให้เหมาะกับคุณลูกค้าเลยค่า 🤎
+"""
+
 # ===== End CookieCloudyDay Chat Helpers =====
 
 
@@ -1248,6 +1277,28 @@ if prompt:
     except NameError:
         answer = fallback_answer(prompt)
 
+    if is_price_question(prompt):
+
+        answer = get_price_friendly_reply()
+
+    elif is_promotion_question(prompt):
+
+        answer = get_promotion_reply()
+
+    elif is_casual_chat(prompt):
+
+        answer = get_casual_friendly_reply()
+
+
+    try:
+
+        answer
+
+    except NameError:
+
+        answer = fallback_answer(prompt)
+
+
     answer = clean_answer(answer)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
@@ -1269,3 +1320,4 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
