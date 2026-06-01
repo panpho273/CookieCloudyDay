@@ -1467,68 +1467,62 @@ render_chat_history()
 
 
 
+
+
+
 # ===== CCD REVIEW FORM START =====
 st.markdown("""
 <style>
-/* แต่งเฉพาะฟอร์มรีวิวเท่านั้น ไม่ยุ่งกับ chat input */
-.ccd-review-wrap {
-    background: rgba(255, 255, 255, 0.72);
-    border: 1.5px solid rgba(125, 94, 219, 0.18);
-    border-radius: 28px;
-    padding: 22px 24px;
-    margin: 18px 0 22px 0;
-    box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10);
+/* ===== Review section only: ห้ามกระทบ chat input ===== */
+
+div[data-testid="stForm"] {
+    background: rgba(255, 255, 255, 0.78) !important;
+    border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
+    border-radius: 28px !important;
+    padding: 22px 24px !important;
+    box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10) !important;
 }
 
-.ccd-review-title {
-    font-size: 24px;
-    font-weight: 800;
-    color: #4a2e2a;
-    margin-bottom: 6px;
-}
-
-.ccd-review-subtitle {
-    color: rgba(74, 46, 42, 0.62);
-    font-size: 15px;
-    margin-bottom: 14px;
-}
-
-/* จำกัดสีเฉพาะ radio ในฟอร์มรีวิว */
-.ccd-review-scope div[data-testid="stRadio"] label {
+/* radio ดาว เฉพาะใน form */
+div[data-testid="stForm"] div[data-testid="stRadio"] label {
     background: #ffffff !important;
     border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
     border-radius: 18px !important;
     padding: 8px 12px !important;
     box-shadow: 0 8px 18px rgba(86, 60, 140, 0.08) !important;
+    color: #4a2e2a !important;
 }
 
-/* กล่องรีวิวเฉพาะ form นี้ */
-.ccd-review-scope textarea {
+/* ช่องรีวิว เฉพาะใน form เท่านั้น */
+div[data-testid="stForm"] textarea {
     background: #ffffff !important;
     color: #4a2e2a !important;
-    border: 1.5px solid rgba(125, 94, 219, 0.24) !important;
+    border: 1.5px solid rgba(125, 94, 219, 0.28) !important;
     border-radius: 18px !important;
     box-shadow: 0 10px 24px rgba(86, 60, 140, 0.08) !important;
     outline: none !important;
 }
 
-.ccd-review-scope textarea:focus {
-    border-color: rgba(125, 94, 219, 0.70) !important;
-    box-shadow: 0 0 0 5px rgba(125, 94, 219, 0.12) !important;
+div[data-testid="stForm"] textarea:focus {
+    border-color: rgba(125, 94, 219, 0.72) !important;
+    box-shadow:
+        0 0 0 5px rgba(125, 94, 219, 0.12),
+        0 10px 24px rgba(86, 60, 140, 0.10) !important;
 }
 
-/* ปุ่มส่งรีวิวเฉพาะฟอร์มรีวิว */
-.ccd-review-scope div[data-testid="stFormSubmitButton"] button {
+/* ปุ่มส่งรีวิว เฉพาะใน form */
+div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] button {
     background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
-    color: white !important;
+    color: #ffffff !important;
     border: none !important;
     border-radius: 999px !important;
+    min-height: 48px !important;
     padding: 10px 24px !important;
     font-weight: 700 !important;
     box-shadow: 0 12px 26px rgba(108, 72, 200, 0.24) !important;
 }
 
-/* คืนค่า chat input ให้กลับไปตาม styles.css */
+/* บังคับคืนค่า chat input เดิม */
 [data-testid="stChatInput"] textarea {
     background: #ffffff !important;
     color: #4a2e2a !important;
@@ -1571,9 +1565,8 @@ def _ccd_save_review_to_sheet(rating, review_text):
 
 
 if st.session_state.get("show_review_form", False):
-    st.markdown('<div class="ccd-review-wrap ccd-review-scope">', unsafe_allow_html=True)
-    st.markdown('<div class="ccd-review-title">ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪</div>', unsafe_allow_html=True)
-    st.markdown('<div class="ccd-review-subtitle">เลือกดาวแล้วฝากรีวิวสั้น ๆ ให้ร้านได้เลยค่ะ</div>', unsafe_allow_html=True)
+    st.markdown("### ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪")
+    st.markdown("เลือกดาวแล้วฝากรีวิวสั้น ๆ ให้ร้านได้เลยค่ะ")
 
     with st.form("cookiecloudyday_review_form"):
         rating = st.radio(
@@ -1599,8 +1592,6 @@ if st.session_state.get("show_review_form", False):
                 st.rerun()
             except Exception as e:
                 st.error(f"บันทึกรีวิวลงชีทไม่สำเร็จค่ะ: {e}")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 # ===== CCD REVIEW FORM END =====
 
 
@@ -1838,6 +1829,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
