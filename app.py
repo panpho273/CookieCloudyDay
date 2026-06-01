@@ -1470,47 +1470,82 @@ render_chat_history()
 
 
 
+
+
+
 # ===== CCD REVIEW FORM START =====
 st.markdown("""
 <style>
-/* ===== Review section only: ห้ามกระทบ chat input ===== */
+/* ===== CookieCloudyDay REVIEW FORM ONLY ===== */
 
+/* กล่องฟอร์มรีวิว */
 div[data-testid="stForm"] {
     background: rgba(255, 255, 255, 0.78) !important;
     border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
     border-radius: 28px !important;
     padding: 22px 24px !important;
     box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10) !important;
+    color-scheme: light !important;
 }
 
-/* radio ดาว เฉพาะใน form */
+/* label ในฟอร์ม */
+div[data-testid="stForm"] label,
+div[data-testid="stForm"] p,
+div[data-testid="stForm"] span {
+    color: #4a2e2a !important;
+    font-family: 'Mitr', sans-serif !important;
+}
+
+/* ดาว */
 div[data-testid="stForm"] div[data-testid="stRadio"] label {
     background: #ffffff !important;
     border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
     border-radius: 18px !important;
     padding: 8px 12px !important;
     box-shadow: 0 8px 18px rgba(86, 60, 140, 0.08) !important;
-    color: #4a2e2a !important;
 }
 
-/* ช่องรีวิว เฉพาะใน form เท่านั้น */
+/* บังคับกล่อง textarea ทั้งชั้นนอกและชั้นในให้เป็นสีขาว */
+div[data-testid="stForm"] div[data-testid="stTextArea"],
+div[data-testid="stForm"] div[data-testid="stTextArea"] > div,
+div[data-testid="stForm"] div[data-baseweb="textarea"],
+div[data-testid="stForm"] div[data-baseweb="textarea"] > div {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-radius: 18px !important;
+    border-color: rgba(125, 94, 219, 0.28) !important;
+    box-shadow: none !important;
+    color-scheme: light !important;
+}
+
+/* ช่องพิมพ์รีวิวจริง */
 div[data-testid="stForm"] textarea {
     background: #ffffff !important;
+    background-color: #ffffff !important;
     color: #4a2e2a !important;
     border: 1.5px solid rgba(125, 94, 219, 0.28) !important;
     border-radius: 18px !important;
     box-shadow: 0 10px 24px rgba(86, 60, 140, 0.08) !important;
     outline: none !important;
+    caret-color: #7d5edb !important;
 }
 
-div[data-testid="stForm"] textarea:focus {
+/* placeholder */
+div[data-testid="stForm"] textarea::placeholder {
+    color: rgba(74, 46, 42, 0.42) !important;
+}
+
+/* ตอนกดพิมพ์ */
+div[data-testid="stForm"] textarea:focus,
+div[data-testid="stForm"] div[data-baseweb="textarea"]:focus-within {
+    background: #ffffff !important;
     border-color: rgba(125, 94, 219, 0.72) !important;
     box-shadow:
         0 0 0 5px rgba(125, 94, 219, 0.12),
         0 10px 24px rgba(86, 60, 140, 0.10) !important;
 }
 
-/* ปุ่มส่งรีวิว เฉพาะใน form */
+/* ปุ่มส่งรีวิว */
 div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] button {
     background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
     color: #ffffff !important;
@@ -1522,20 +1557,12 @@ div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] button {
     box-shadow: 0 12px 26px rgba(108, 72, 200, 0.24) !important;
 }
 
-/* บังคับคืนค่า chat input เดิม */
-[data-testid="stChatInput"] textarea {
-    background: #ffffff !important;
-    color: #4a2e2a !important;
-    border: none !important;
-    box-shadow: none !important;
+/* กันขอบแดง/ดำจาก browser หรือ Streamlit */
+div[data-testid="stForm"] textarea:invalid,
+div[data-testid="stForm"] textarea:required,
+div[data-testid="stForm"] textarea:focus-visible {
+    border-color: rgba(125, 94, 219, 0.72) !important;
     outline: none !important;
-}
-
-[data-testid="stChatInput"] > div {
-    background: #ffffff !important;
-    border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
-    border-radius: 999px !important;
-    box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -1829,6 +1856,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
