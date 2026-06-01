@@ -358,7 +358,7 @@ def _ccd_get_bestseller_reply_v2():
         rows = worksheet.get_all_records()
 
         if not rows:
-            return "ตอนนี้ Demi ยังไม่มีข้อมูลยอดขายใน Google Sheet พอจะสรุปเมนูแนะนำค่ะ ☁️🍪"
+            return "ตอนนี้ Demi ยังไม่มีข้อมูลเมนูจาก Google Sheet ค่ะ ☁️🍪"
 
         menu_keys = [
             "menu_name", "menu", "product_name", "product",
@@ -393,40 +393,42 @@ def _ccd_get_bestseller_reply_v2():
 
             price = _ccd_pick_value(row, price_keys)
             if price not in [None, ""]:
-                latest_price[menu_name] = str(price).strip()
+                price_text = str(price).strip().replace("บาท", "").strip()
+                latest_price[menu_name] = price_text
 
             counter[menu_name] += qty
 
         if not counter:
-            headers = list(rows[0].keys()) if rows else []
-            return (
-                "Demi เชื่อม Google Sheet ได้แล้วค่ะ แต่ยังหาคอลัมน์ชื่อเมนูไม่เจอ ☁️🍪\n\n"
-                "หัวตารางที่เจอคือ:\n"
-                + ", ".join(headers)
-            )
+            return "Demi ยังสรุปเมนูแนะนำจากข้อมูลร้านไม่ได้ตอนนี้ค่ะ ☁️🍪"
 
         top_menus = counter.most_common(5)
 
-        reply = "ได้เลยค่ะ Demi แนะนำเมนูขายดีของ CookieCloudyDay จากข้อมูลล่าสุดให้นะคะ ☁️🍪\n\n"
+        reply_lines = []
+        reply_lines.append("ได้เลยค่ะ Demi แนะนำเมนูขายดีจากข้อมูลล่าสุดของร้านให้นะคะ ☁️🍪")
+        reply_lines.append("")
 
         for index, (menu, _) in enumerate(top_menus, start=1):
             price = latest_price.get(menu)
-
+            reply_lines.append(f"🍪 เมนูที่ {index}: {menu}")
             if price:
-                reply += f"เมนูที่ {index}: {menu} — ราคา {price} บาท\n"
+                reply_lines.append(f"   ราคา {price} บาท")
             else:
-                reply += f"เมนูที่ {index}: {menu}\n"
+                reply_lines.append("   ราคาเช็กกับร้านได้เลยค่ะ")
+            reply_lines.append("")
 
-        reply += "\nถ้าลูกค้าสนใจ สั่งได้เลยแบบนี้ค่ะ:\n"
-        reply += "เช่น “เมนูที่ 1 รับ 2 ชิ้น” หรือ “เอาเมนูที่ 2 จำนวน 1 ชิ้น” 🤎"
+        reply_lines.append("✨ โปรของร้าน")
+        reply_lines.append("ซื้อครบ 150 บาท รับสิทธิ์สุ่มไพ่ Cookie Fortune ฟรี 1 ใบ 🔮")
+        reply_lines.append("")
+        reply_lines.append("ถ้าลูกค้าสนใจ สั่งได้เลยแบบนี้ค่ะ")
+        reply_lines.append("เช่น “เมนูที่ 1 รับ 2 ชิ้น” หรือ “เอาเมนูที่ 2 จำนวน 1 ชิ้น” 🤎")
+        reply_lines.append("")
+        reply_lines.append("ถ้าอยากดูเมนูเพิ่มเติม พิมพ์ว่า “เมนูทั้งหมด” ได้เลยนะคะ")
 
-        return reply
+        return "\n".join(reply_lines)
 
     except Exception as e:
-        return (
-            "Demi ยังดึงเมนูขายดีจาก Google Sheet ไม่สำเร็จค่ะ ☁️🍪\n\n"
-            f"สาเหตุ: {e}"
-        )
+        return "Demi ยังดึงเมนูจาก Google Sheet ไม่สำเร็จค่ะ ☁️🍪\n\nสาเหตุ: " + str(e)
+
 # ===== CCD BEST SELLER V2 END =====
 
 
@@ -1554,6 +1556,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
