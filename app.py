@@ -1107,6 +1107,9 @@ if prompt:
                     answer = fallback_answer(prompt)
 
         answer = answer if "answer" in locals() else fallback_answer(prompt)
+    if is_promotion_question(prompt):
+        answer = get_promotion_reply()
+
     answer = clean_answer(answer)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
