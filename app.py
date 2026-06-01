@@ -237,6 +237,12 @@ def is_best_seller_question(message):
     message = clean_user_message(message).lower()
 
     keywords = [
+        "เมนู",
+        "ขอดูเมนู",
+        "ดูเมนู",
+        "มีเมนูอะไรบ้าง",
+        "มีอะไรขาย",
+        "ขายอะไร",
         "เมนูแนะนำ",
         "แนะนำเมนู",
         "แนะนำหน่อย",
@@ -249,6 +255,8 @@ def is_best_seller_question(message):
         "เมนูไหนดี",
         "อะไรอร่อย",
         "อร่อยสุด",
+        "รู้ทั้งหมด",
+        "บอกทั้งหมด",
     ]
 
     return any(word in message for word in keywords)
@@ -404,7 +412,7 @@ def _ccd_get_bestseller_reply_v2():
         top_menus = counter.most_common(5)
 
         reply_lines = []
-        reply_lines.append("ได้เลยค่ะ Demi แนะนำเมนูขายดีจากข้อมูลล่าสุดของร้านให้นะคะ ☁️🍪")
+        reply_lines.append("ได้เลยค่ะ Demi แนะนำเมนูขายดีของ CookieCloudyDay ให้นะคะ ☁️🍪")
         reply_lines.append("")
 
         for index, (menu, _) in enumerate(top_menus, start=1):
@@ -422,7 +430,7 @@ def _ccd_get_bestseller_reply_v2():
         reply_lines.append("ถ้าลูกค้าสนใจ สั่งได้เลยแบบนี้ค่ะ")
         reply_lines.append("เช่น “เมนูที่ 1 รับ 2 ชิ้น” หรือ “เอาเมนูที่ 2 จำนวน 1 ชิ้น” 🤎")
         reply_lines.append("")
-        reply_lines.append("ถ้าอยากดูเมนูเพิ่มเติม พิมพ์ว่า “เมนูทั้งหมด” ได้เลยนะคะ")
+        reply_lines.append("ถ้าอยากดูครบทุกเมนู พิมพ์ว่า “เมนูทั้งหมด” ได้เลยนะคะ")
 
         return "\n".join(reply_lines)
 
@@ -1810,6 +1818,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
