@@ -1115,9 +1115,7 @@ if prompt:
                 except Exception:
                     answer = fallback_answer(prompt)
 
-    if "answer" not in locals():
-    answer = fallback_answer(prompt)
-
+    answer = answer if "answer" in locals() else fallback_answer(prompt)
 answer = clean_answer(answer)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
