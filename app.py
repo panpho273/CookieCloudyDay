@@ -72,11 +72,13 @@ st.set_page_config(
     page_icon="☁️",
     layout="centered",
 
+)
+
+
 if st.sidebar.button("ล้างประวัติแชท"):
     st.session_state.messages = []
     st.rerun()
 
-)
 
 
 # =========================
