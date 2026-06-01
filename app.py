@@ -1170,10 +1170,6 @@ if prompt:
                 "ได้เลยค่ะ เปิดเมนูทั้งหมดให้เลือกแล้วนะคะ 🍪\n\n"
                 "ลูกค้าสามารถเลือกเมนูและจำนวนจากหน้าต่าง popup ได้เลยค่ะ"
             )
-
-            with st.chat_message("assistant", avatar="🤖"):
-
-                pass
             st.session_state.messages.append({
                 "role": "assistant",
                 "content": answer,
@@ -1299,13 +1295,24 @@ if prompt:
         answer = fallback_answer(prompt)
 
 
+    try:
+
+
+        answer
+
+
+    except NameError:
+
+
+        answer = fallback_answer(prompt)
+
+
+
     answer = clean_answer(answer)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
-    with st.chat_message("assistant", avatar="🤖"):
-
-        pass
+    st.rerun()
 # แสดง Lucky Tarot dialog ถ้าลูกค้าเข้าเงื่อนไขโปร
 # ต้องอยู่นอก if prompt เพราะ popup จะ st.rerun() แล้วไม่มี prompt ใหม่
 if st.session_state.get("show_lucky_tarot"):
