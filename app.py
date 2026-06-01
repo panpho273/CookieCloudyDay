@@ -1473,101 +1473,10 @@ render_chat_history()
 
 
 
+
+
+
 # ===== CCD REVIEW FORM START =====
-st.markdown("""
-<style>
-/* ===== CookieCloudyDay REVIEW FORM ONLY ===== */
-
-/* กล่องฟอร์มรีวิว */
-div[data-testid="stForm"] {
-    background: rgba(255, 255, 255, 0.78) !important;
-    border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
-    border-radius: 28px !important;
-    padding: 22px 24px !important;
-    box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10) !important;
-    color-scheme: light !important;
-}
-
-/* label ในฟอร์ม */
-div[data-testid="stForm"] label,
-div[data-testid="stForm"] p,
-div[data-testid="stForm"] span {
-    color: #4a2e2a !important;
-    font-family: 'Mitr', sans-serif !important;
-}
-
-/* ดาว */
-div[data-testid="stForm"] div[data-testid="stRadio"] label {
-    background: #ffffff !important;
-    border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
-    border-radius: 18px !important;
-    padding: 8px 12px !important;
-    box-shadow: 0 8px 18px rgba(86, 60, 140, 0.08) !important;
-}
-
-/* บังคับกล่อง textarea ทั้งชั้นนอกและชั้นในให้เป็นสีขาว */
-div[data-testid="stForm"] div[data-testid="stTextArea"],
-div[data-testid="stForm"] div[data-testid="stTextArea"] > div,
-div[data-testid="stForm"] div[data-baseweb="textarea"],
-div[data-testid="stForm"] div[data-baseweb="textarea"] > div {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    border-radius: 18px !important;
-    border-color: rgba(125, 94, 219, 0.28) !important;
-    box-shadow: none !important;
-    color-scheme: light !important;
-}
-
-/* ช่องพิมพ์รีวิวจริง */
-div[data-testid="stForm"] textarea {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    color: #4a2e2a !important;
-    border: 1.5px solid rgba(125, 94, 219, 0.28) !important;
-    border-radius: 18px !important;
-    box-shadow: 0 10px 24px rgba(86, 60, 140, 0.08) !important;
-    outline: none !important;
-    caret-color: #7d5edb !important;
-}
-
-/* placeholder */
-div[data-testid="stForm"] textarea::placeholder {
-    color: rgba(74, 46, 42, 0.42) !important;
-}
-
-/* ตอนกดพิมพ์ */
-div[data-testid="stForm"] textarea:focus,
-div[data-testid="stForm"] div[data-baseweb="textarea"]:focus-within {
-    background: #ffffff !important;
-    border-color: rgba(125, 94, 219, 0.72) !important;
-    box-shadow:
-        0 0 0 5px rgba(125, 94, 219, 0.12),
-        0 10px 24px rgba(86, 60, 140, 0.10) !important;
-}
-
-/* ปุ่มส่งรีวิว */
-div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] button {
-    background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 999px !important;
-    min-height: 48px !important;
-    padding: 10px 24px !important;
-    font-weight: 700 !important;
-    box-shadow: 0 12px 26px rgba(108, 72, 200, 0.24) !important;
-}
-
-/* กันขอบแดง/ดำจาก browser หรือ Streamlit */
-div[data-testid="stForm"] textarea:invalid,
-div[data-testid="stForm"] textarea:required,
-div[data-testid="stForm"] textarea:focus-visible {
-    border-color: rgba(125, 94, 219, 0.72) !important;
-    outline: none !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
-
 def _ccd_save_review_to_sheet(rating, review_text):
     worksheet = get_worksheet()
 
@@ -1592,21 +1501,29 @@ def _ccd_save_review_to_sheet(rating, review_text):
 
 
 if st.session_state.get("show_review_form", False):
-    st.markdown("### ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪")
-    st.markdown("เลือกดาวแล้วฝากรีวิวสั้น ๆ ให้ร้านได้เลยค่ะ")
+    st.markdown('<div class="review-title">ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪</div>', unsafe_allow_html=True)
+    st.markdown('<div class="review-subtitle">เลือกดาวแล้วฝากรีวิวสั้น ๆ ให้ร้านได้เลยค่ะ</div>', unsafe_allow_html=True)
 
     with st.form("cookiecloudyday_review_form"):
-        rating = st.radio(
+        rating_label = st.radio(
             "ความประทับใจของลูกค้า",
-            options=[1, 2, 3, 4, 5],
+            options=[
+                "⭐",
+                "⭐⭐",
+                "⭐⭐⭐",
+                "⭐⭐⭐⭐",
+                "⭐⭐⭐⭐⭐",
+            ],
             index=4,
             horizontal=True,
-            format_func=lambda x: "⭐" * x,
         )
+
+        rating = len(rating_label)
 
         review_text = st.text_area(
             "รีวิวสั้น ๆ ให้ร้านได้เลยค่ะ",
             placeholder="เช่น บริการน่ารัก คุกกี้อร่อยมาก",
+            key="ccd_review_textarea",
         )
 
         submitted_review = st.form_submit_button("ส่งรีวิว")
@@ -1615,7 +1532,12 @@ if st.session_state.get("show_review_form", False):
             try:
                 _ccd_save_review_to_sheet(rating, review_text)
                 st.session_state.show_review_form = False
-                st.success(f"ขอบคุณสำหรับ {rating} ดาวนะคะ 🤎 รีวิวถูกบันทึกเข้าชีทแล้วค่ะ")
+
+                st.session_state.messages.append({
+                    "role": "assistant",
+                    "content": f"ขอบคุณสำหรับ {rating} ดาวนะคะ 🤎 รีวิวของลูกค้าถูกบันทึกเรียบร้อยแล้วค่ะ ☁️🍪"
+                })
+
                 st.rerun()
             except Exception as e:
                 st.error(f"บันทึกรีวิวลงชีทไม่สำเร็จค่ะ: {e}")
@@ -1856,6 +1778,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 

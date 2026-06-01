@@ -1232,3 +1232,109 @@ html body [data-highlighted="true"] * {
 [data-testid="stChatMessage"] {
   gap: 12px !important;
 }
+/* ===== CookieCloudyDay Review Form Theme Only START ===== */
+
+.review-title {
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 1.55rem !important;
+  font-weight: 800 !important;
+  color: #4a2e2a !important;
+  margin: 1.2rem 0 0.35rem 0 !important;
+}
+
+.review-subtitle {
+  font-family: 'Mitr', sans-serif !important;
+  font-size: 0.98rem !important;
+  color: rgba(74, 46, 42, 0.62) !important;
+  margin-bottom: 0.9rem !important;
+}
+
+/* กล่องฟอร์มรีวิวเท่านั้น */
+div[data-testid="stForm"] {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.20) !important;
+  border-radius: 28px !important;
+  padding: 22px 24px !important;
+  box-shadow: 0 16px 42px rgba(86, 60, 140, 0.10) !important;
+  color-scheme: light !important;
+}
+
+/* label ในฟอร์ม */
+div[data-testid="stForm"] label,
+div[data-testid="stForm"] p,
+div[data-testid="stForm"] span {
+  color: #4a2e2a !important;
+  font-family: 'Mitr', sans-serif !important;
+}
+
+/* กล่องดาว */
+div[data-testid="stForm"] div[data-testid="stRadio"] label {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.18) !important;
+  border-radius: 18px !important;
+  padding: 9px 13px !important;
+  box-shadow: 0 8px 18px rgba(86, 60, 140, 0.08) !important;
+}
+
+/* ช่องเขียนรีวิวทั้งหมด */
+div[data-testid="stForm"] div[data-testid="stTextArea"],
+div[data-testid="stForm"] div[data-baseweb="textarea"],
+div[data-testid="stForm"] div[data-baseweb="textarea"] > div {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-radius: 18px !important;
+  color-scheme: light !important;
+}
+
+/* textarea จริง */
+div[data-testid="stForm"] textarea {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #4a2e2a !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.30) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 10px 24px rgba(86, 60, 140, 0.08) !important;
+  outline: none !important;
+  caret-color: #7d5edb !important;
+}
+
+div[data-testid="stForm"] textarea::placeholder {
+  color: rgba(74, 46, 42, 0.42) !important;
+}
+
+div[data-testid="stForm"] textarea:focus {
+  background: #ffffff !important;
+  border-color: rgba(125, 94, 219, 0.72) !important;
+  box-shadow:
+    0 0 0 5px rgba(125, 94, 219, 0.12),
+    0 10px 24px rgba(86, 60, 140, 0.10) !important;
+}
+
+/* ปุ่มส่งรีวิว */
+div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] button {
+  background: linear-gradient(135deg, #9c74f2, #6c48c8) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  min-height: 48px !important;
+  padding: 10px 24px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 12px 26px rgba(108, 72, 200, 0.24) !important;
+}
+
+/* ยืนยันว่า chat input ไม่โดน review form ทับ */
+[data-testid="stChatInput"] textarea {
+  background: #ffffff !important;
+  color: #4a2e2a !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+[data-testid="stChatInput"] > div {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(125, 94, 219, 0.26) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 16px 36px rgba(86, 60, 140, 0.13) !important;
+}
+
+/* ===== CookieCloudyDay Review Form Theme Only END ===== */
