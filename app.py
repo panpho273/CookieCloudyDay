@@ -1478,6 +1478,9 @@ render_chat_history()
 
 # ===== CCD REVIEW FORM START =====
 
+
+
+
 def _ccd_get_review_worksheet():
     sheet_id = get_sheet_id()
     if not sheet_id:
@@ -1486,10 +1489,21 @@ def _ccd_get_review_worksheet():
     client = get_sheet_client()
     spreadsheet = client.open_by_key(sheet_id)
 
+    review_gid = 2111030070
+
     try:
-        return spreadsheet.worksheet("รีวิว")
+        return spreadsheet.get_worksheet_by_id(review_gid)
     except Exception:
-        return spreadsheet.add_worksheet(title="รีวิว", rows=1000, cols=5)
+        pass
+
+    for worksheet in spreadsheet.worksheets():
+        try:
+            if int(worksheet.id) == review_gid:
+                return worksheet
+        except Exception:
+            continue
+
+    raise RuntimeError("ไม่พบ worksheet รีวิว gid=2111030070")
 
 
 def _ccd_save_review_to_sheet(rating, review_text):
@@ -1793,6 +1807,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
