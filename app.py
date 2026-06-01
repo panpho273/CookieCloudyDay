@@ -1464,7 +1464,73 @@ render_chat_history()
 
 
 
+
+
+
 # ===== CCD REVIEW FORM START =====
+st.markdown("""
+<style>
+.cookie-review-box {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1.5px solid rgba(167, 119, 255, 0.28);
+    border-radius: 28px;
+    padding: 22px 24px;
+    margin: 18px 0 22px 0;
+    box-shadow: 0 12px 32px rgba(145, 103, 255, 0.10);
+}
+
+.cookie-review-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #4b2a1f;
+    margin-bottom: 6px;
+}
+
+.cookie-review-subtitle {
+    color: #8a6f68;
+    font-size: 15px;
+    margin-bottom: 14px;
+}
+
+div[data-testid="stRadio"] label {
+    background: #ffffff;
+    border: 1.5px solid #e8dcff;
+    border-radius: 18px;
+    padding: 8px 12px;
+    margin-right: 6px;
+    box-shadow: 0 6px 14px rgba(141, 92, 246, 0.08);
+}
+
+div[data-testid="stRadio"] label:hover {
+    border-color: #9b6df3;
+    box-shadow: 0 8px 18px rgba(141, 92, 246, 0.16);
+}
+
+textarea {
+    border: 1.5px solid #c7adff !important;
+    border-radius: 18px !important;
+    background: #fffaff !important;
+    color: #4b2a1f !important;
+}
+
+div[data-testid="stFormSubmitButton"] button {
+    background: linear-gradient(135deg, #9b6df3, #7f56d9) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 10px 24px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 10px 22px rgba(127, 86, 217, 0.28) !important;
+}
+
+div[data-testid="stFormSubmitButton"] button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 26px rgba(127, 86, 217, 0.35) !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
 def _ccd_save_review_to_sheet(rating, review_text):
     worksheet = get_worksheet()
 
@@ -1489,13 +1555,24 @@ def _ccd_save_review_to_sheet(rating, review_text):
 
 
 if st.session_state.get("show_review_form", False):
+    st.markdown('<div class="cookie-review-box">', unsafe_allow_html=True)
+    st.markdown('<div class="cookie-review-title">ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪</div>', unsafe_allow_html=True)
+    st.markdown('<div class="cookie-review-subtitle">เลือกดาวแล้วฝากรีวิวสั้น ๆ ให้ร้านได้เลยค่ะ</div>', unsafe_allow_html=True)
+
     with st.form("cookiecloudyday_review_form"):
-        st.markdown("### ให้คะแนนร้าน CookieCloudyDay หน่อยนะคะ ☁️🍪")
-        rating = st.slider("ให้คะแนนความประทับใจ", 1, 5, 5)
+        rating = st.radio(
+            "ความประทับใจของลูกค้า",
+            options=[1, 2, 3, 4, 5],
+            index=4,
+            horizontal=True,
+            format_func=lambda x: "⭐" * x,
+        )
+
         review_text = st.text_area(
             "รีวิวสั้น ๆ ให้ร้านได้เลยค่ะ",
-            placeholder="เช่น บริการน่ารัก คุกกี้อร่อยมาก"
+            placeholder="เช่น บริการน่ารัก คุกกี้อร่อยมาก",
         )
+
         submitted_review = st.form_submit_button("ส่งรีวิว")
 
         if submitted_review:
@@ -1506,6 +1583,8 @@ if st.session_state.get("show_review_form", False):
                 st.rerun()
             except Exception as e:
                 st.error(f"บันทึกรีวิวลงชีทไม่สำเร็จค่ะ: {e}")
+
+    st.markdown("</div>", unsafe_allow_html=True)
 # ===== CCD REVIEW FORM END =====
 
 
@@ -1743,6 +1822,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
