@@ -1584,6 +1584,48 @@ render_chat_history()
 
 
 
+
+# ===== CCD HERO QUICK BUTTONS START =====
+st.markdown(
+    """
+    <div class="ccd-quick-actions-wrap">
+        <div class="ccd-quick-actions-title">เลือกทางลัดของร้านได้เลยค่ะ ☁️🍪</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+quick_col1, quick_col2, quick_col3 = st.columns(3)
+
+with quick_col1:
+    if st.button("🍪 เมนูทั้งหมด", key="quick_all_menu", use_container_width=True):
+        st.session_state.show_menu_order_popup = True
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": "ได้เลยค่ะ เปิดเมนูทั้งหมดให้เลือกแล้วนะคะ 🍪 ลูกค้าสามารถเลือกเมนูและจำนวนจากหน้าต่างเมนูได้เลยค่ะ"
+        })
+        st.rerun()
+
+with quick_col2:
+    if st.button("🔥 เมนูแนะนำ", key="quick_recommend_menu", use_container_width=True):
+        answer = _ccd_get_bestseller_reply_v2()
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": answer
+        })
+        st.rerun()
+
+with quick_col3:
+    if st.button("🎁 โปรโมชัน", key="quick_promotion", use_container_width=True):
+        answer = get_promotion_reply()
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": answer
+        })
+        st.rerun()
+# ===== CCD HERO QUICK BUTTONS END =====
+
+
 # ===== CCD REVIEW FORM START =====
 
 
@@ -1933,6 +1975,7 @@ DEMI_CUSTOMER_RULES = """
 - ห้ามพูดคำว่า Google Sheets, Telegram, backend, database, tool หรือระบบหลังบ้านกับลูกค้า
 - ถ้ารับออเดอร์แล้ว ให้ตอบว่า รับออเดอร์เรียบร้อยค่ะ พร้อมรายการ จำนวน และยอดรวม
 """
+
 
 
 
