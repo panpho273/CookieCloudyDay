@@ -198,6 +198,13 @@ def render_lucky_cookie_tarot():
     def lucky_tarot_dialog():
         card = st.session_state["lucky_tarot_card"]
 
+        # sync ของแถมให้ตรงกับไพ่ที่สุ่มได้เสมอ
+        promo = st.session_state.get("lucky_cookie_promo", {}) or {}
+        promo["card_name"] = card.get("name")
+        promo["freebie_cookie"] = card.get("cookie", "คุกกี้")
+        promo["freebie_text"] = card.get("freebie_text", "")
+        st.session_state["lucky_cookie_promo"] = promo
+
         st.markdown(
             """
             <style>
@@ -294,13 +301,16 @@ def render_lucky_cookie_tarot():
         if keyword:
             st.info(f"ความหมายหลักของไพ่: {keyword}")
 
-        promo = st.session_state.get("lucky_cookie_promo", {})
-        freebie_cookie = promo.get("freebie_cookie", "คุกกี้ช็อกโกแลตชิพ")
-        
-        st.success(
-            f"🎁 โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป\n"
-            f"รับฟรี **{freebie_cookie}** 1 ชิ้น ตามไพ่ที่ดึงได้"
-        )
+        freebie_cookie = card.get("cookie", "คุกกี้")
+        freebie_text = card.get("freebie_text", "")
+
+        if freebie_text:
+            st.success(f"🎁 {freebie_text}")
+        else:
+            st.success(
+                f"🎁 โปรเปิดร้าน: ออเดอร์ครบ 150 บาทขึ้นไป\n"
+                f"รับฟรี **{freebie_cookie}** 1 ชิ้น ตามไพ่ {card.get('name', '')}"
+            )
 
         col1, col2 = st.columns(2)
 
@@ -311,7 +321,7 @@ def render_lucky_cookie_tarot():
                 
                 promo = st.session_state.get("lucky_cookie_promo", {})
                 promo["card_name"] = new_card.get("name")
-                promo["freebie_cookie"] = new_card.get("cookie", "คุกกี้ช็อกโกแลตชิพ")
+                promo["freebie_cookie"] = new_card.get("cookie", "คุกกี้")
                 promo["freebie_text"] = new_card.get("freebie_text", "")
                 st.session_state["lucky_cookie_promo"] = promo
                 
@@ -328,5 +338,6 @@ def render_lucky_cookie_tarot():
                 st.rerun()
 
     lucky_tarot_dialog()
+
 
 
