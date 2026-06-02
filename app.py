@@ -1978,4 +1978,3 @@ DEMI_CUSTOMER_RULES = """
 
 
 
-\n
