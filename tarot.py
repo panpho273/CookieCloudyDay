@@ -84,6 +84,62 @@ def draw_random_card():
     return card
 
 
+
+# ===== CCD TAROT ORDER SUMMARY START =====
+def _ccd_render_tarot_order_summary():
+    promo = st.session_state.get("lucky_cookie_promo", {}) or {}
+
+    menu_name = (
+        promo.get("ordered_menu")
+        or promo.get("menu")
+        or promo.get("menu_name")
+        or promo.get("name")
+        or ""
+    )
+
+    quantity = (
+        promo.get("quantity")
+        or promo.get("qty")
+        or ""
+    )
+
+    total = (
+        promo.get("total")
+        or promo.get("saved_total")
+        or ""
+    )
+
+    if not menu_name and not quantity and not total:
+        return
+
+    try:
+        total_text = f"{int(total):,} บาท"
+    except Exception:
+        total_text = f"{total} บาท" if total else "-"
+
+    st.markdown(
+        f"""
+        <div class="tarot-order-summary">
+            <div class="tarot-order-title">🍪 สรุปออเดอร์ของคุณ</div>
+            <div class="tarot-order-row">
+                <span>เมนู</span>
+                <strong>{menu_name or "-"}</strong>
+            </div>
+            <div class="tarot-order-row">
+                <span>จำนวน</span>
+                <strong>{quantity or "-"} ชิ้น</strong>
+            </div>
+            <div class="tarot-order-total">
+                <span>รวมทั้งหมด</span>
+                <strong>{total_text}</strong>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+# ===== CCD TAROT ORDER SUMMARY END =====
+
+
 def render_lucky_cookie_tarot():
     if (
         not st.session_state.get("show_lucky_tarot")
@@ -222,7 +278,7 @@ def render_lucky_cookie_tarot():
                 st.rerun()
 
         with col2:
-            if st.button("ไม่รับโปร / เริ่มแชทใหม่", use_container_width=True):
+            if st.button("เริ่มแชทใหม่", use_container_width=True):
                 st.session_state["show_lucky_tarot"] = False
                 st.session_state.pop("lucky_tarot_card", None)
                 st.session_state.pop("lucky_cookie_promo", None)
@@ -230,3 +286,4 @@ def render_lucky_cookie_tarot():
                 st.rerun()
 
     lucky_tarot_dialog()
+

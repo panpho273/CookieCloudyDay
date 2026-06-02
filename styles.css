@@ -1394,3 +1394,50 @@ div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] button {
 }
 
 /* ===== CCD HERO QUICK BUTTONS END ===== */
+
+/* ===== TAROT ORDER SUMMARY START ===== */
+.tarot-order-summary {
+  max-width: 560px;
+  margin: 0 auto 1.15rem auto;
+  padding: 1.05rem 1.15rem;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f2ff 100%);
+  border: 1px solid rgba(125, 94, 219, 0.16);
+  box-shadow: 0 12px 30px rgba(86, 60, 140, 0.10);
+  color: #4a2e2a;
+  font-family: 'Mitr', sans-serif;
+}
+
+.tarot-order-title {
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+}
+
+.tarot-order-row,
+.tarot-order-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.42rem 0;
+  font-size: 0.96rem;
+}
+
+.tarot-order-row span,
+.tarot-order-total span {
+  color: rgba(74, 46, 42, 0.58);
+}
+
+.tarot-order-row strong,
+.tarot-order-total strong {
+  color: #4a2e2a;
+  font-weight: 800;
+  text-align: right;
+}
+
+.tarot-order-total {
+  margin-top: 0.4rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(125, 94, 219, 0.24);
+}
+/* ===== TAROT ORDER SUMMARY END ===== */
