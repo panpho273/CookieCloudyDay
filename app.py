@@ -1522,6 +1522,9 @@ def render_menu_order_popup():
             })
 
             st.session_state.show_menu_order_popup = False
+
+            # ถ้ายอดถึงโปร 150 บาท ให้ rerun เพื่อปิด popup เมนู แล้วเปิด Lucky Cookie Tarot ต่อ
+            st.rerun()
     
     with col2:
         if st.button("ยกเลิก", use_container_width=True):
@@ -1975,3 +1978,4 @@ DEMI_CUSTOMER_RULES = """
 
 
 
+\n
