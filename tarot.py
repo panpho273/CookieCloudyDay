@@ -53,9 +53,16 @@ def load_tarot_cards():
 
         if name:
             result.append({
+                "id": card.get("id"),
+                "type": card.get("type", ""),
+                "suit": card.get("suit", ""),
                 "name": str(name),
+                "emoji": card.get("emoji", "🍪"),
+                "cookie": card.get("cookie", "คุกกี้ช็อกโกแลตชิพ"),
+                "cookie_price": card.get("cookie_price", 0),
                 "meaning": str(meaning),
                 "keyword": str(keyword),
+                "freebie_text": card.get("freebie_text", ""),
             })
 
     return result
@@ -66,20 +73,52 @@ def draw_random_card():
 
     if not cards:
         return {
+            "id": "fallback",
             "name": "Lucky Cookie",
+            "cookie": "คุกกี้ช็อกโกแลตชิพ",
+            "cookie_price": 45,
             "meaning": "วันนี้เหมาะกับการเริ่มต้นสิ่งเล็ก ๆ ด้วยความตั้งใจดี",
             "keyword": "ความสดใส การเริ่มต้นเล็ก ๆ",
+            "freebie_text": "โปรเปิดร้าน: รับฟรี คุกกี้ช็อกโกแลตชิพ 1 ชิ้น",
         }
 
-    last_name = st.session_state.get("last_lucky_tarot_name")
+    def card_key(card):
+        key = card.get("id")
+        if key not in [None, ""]:
+            return f"id:{key}"
+        return "name:" + str(card.get("name", "")).strip()
 
-    if len(cards) > 1 and last_name:
-        choices = [card for card in cards if card.get("name") != last_name]
-        if choices:
-            cards = choices
+    if "lucky_tarot_draw_history" not in st.session_state:
+        st.session_state["lucky_tarot_draw_history"] = []
 
-    card = random.SystemRandom().choice(cards)
-    st.session_state["last_lucky_tarot_name"] = card.get("name")
+    history = list(st.session_state.get("lucky_tarot_draw_history", []))
+    last_key = st.session_state.get("last_lucky_tarot_key", "")
+
+    all_keys = [card_key(card) for card in cards]
+
+    # ถ้าสุ่มจนเกือบครบแล้ว ให้เริ่มรอบใหม่ แต่ยังกันใบล่าสุดไว้
+    if len(set(history)) >= max(len(all_keys) - 1, 1):
+        history = []
+        st.session_state["lucky_tarot_draw_history"] = []
+
+    available_cards = [
+        card for card in cards
+        if card_key(card) not in history
+        and card_key(card) != last_key
+    ]
+
+    # fallback กรณีเหลือใบเดียวจริง ๆ
+    if not available_cards:
+        available_cards = [
+            card for card in cards
+            if card_key(card) != last_key
+        ] or cards
+
+    card = random.SystemRandom().choice(available_cards)
+    key = card_key(card)
+
+    st.session_state["last_lucky_tarot_key"] = key
+    st.session_state["lucky_tarot_draw_history"] = history + [key]
 
     return card
 
@@ -141,6 +180,7 @@ def _ccd_render_tarot_order_summary():
 
 
 def render_lucky_cookie_tarot():
+    _ccd_render_tarot_order_summary()
     if (
         not st.session_state.get("show_lucky_tarot")
         or not st.session_state.get("lucky_cookie_promo")
@@ -271,8 +311,8 @@ def render_lucky_cookie_tarot():
                 
                 promo = st.session_state.get("lucky_cookie_promo", {})
                 promo["card_name"] = new_card.get("name")
-                promo["freebie_cookie"] = new_card.get("cookie")
-                promo["freebie_text"] = new_card.get("freebie_text")
+                promo["freebie_cookie"] = new_card.get("cookie", "คุกกี้ช็อกโกแลตชิพ")
+                promo["freebie_text"] = new_card.get("freebie_text", "")
                 st.session_state["lucky_cookie_promo"] = promo
                 
                 st.rerun()
@@ -282,8 +322,11 @@ def render_lucky_cookie_tarot():
                 st.session_state["show_lucky_tarot"] = False
                 st.session_state.pop("lucky_tarot_card", None)
                 st.session_state.pop("lucky_cookie_promo", None)
+                st.session_state.pop("lucky_tarot_draw_history", None)
+                st.session_state.pop("last_lucky_tarot_key", None)
                 st.session_state["messages"] = []
                 st.rerun()
 
     lucky_tarot_dialog()
+
 
